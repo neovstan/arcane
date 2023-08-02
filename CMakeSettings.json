@@ -18,7 +18,7 @@
         },
         {
           "name": "MariaDBClient_LIBRARY",
-          "value": "C:/Users/me/vcpkg/packages/libmariadb_x86-windows-static/lib",
+          "value": "C:/Users/me/vcpkg/packages/libmariadb_x86-windows-static/lib/libmariadb.lib",
           "type": "FILEPATH"
         }
       ]
