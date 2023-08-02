@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0B576844-07D4-395F-9A41-21002CCAF389}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>shared</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" />
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/me/source/repos/arcane/third-party/plugin-sdk/shared/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/me/source/repos/arcane -BC:/Users/me/source/repos/arcane --check-stamp-file C:/Users/me/source/repos/arcane/third-party/plugin-sdk/shared/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/me/source/repos/arcane/third-party/plugin-sdk/shared/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/me/source/repos/arcane -BC:/Users/me/source/repos/arcane --check-stamp-file C:/Users/me/source/repos/arcane/third-party/plugin-sdk/shared/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/me/source/repos/arcane/third-party/plugin-sdk/shared/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/me/source/repos/arcane -BC:/Users/me/source/repos/arcane --check-stamp-file C:/Users/me/source/repos/arcane/third-party/plugin-sdk/shared/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/me/source/repos/arcane/third-party/plugin-sdk/shared/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/me/source/repos/arcane -BC:/Users/me/source/repos/arcane --check-stamp-file C:/Users/me/source/repos/arcane/third-party/plugin-sdk/shared/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\ArgPicker.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Base.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Color.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Color.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\DynAddress.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\DynAddress.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Error.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\EventList.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Events.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Events.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Extender.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\GameVersion.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\GameVersion.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\GameVersionMessage.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Other.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Other.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Patch.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\Patch.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\PluginBase.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\PluginBase.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\RefList.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\RefListUtils.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\StringUtils.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\StringUtils.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\VersionsMacro.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\common_sdk.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\common_sdk.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\comp\PluginSupport.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\comp\PluginSupport.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\comp\PluginsCompatibility.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\comp\PluginsCompatibility.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\comp\plugins\LimitAdjusterSupport.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\comp\plugins\LimitAdjusterSupport.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extender\ObjectExtender.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extender\PedExtender.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extender\VehicleExtender.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\Config.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\Config.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\DynamicResource.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\DynamicResource.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\FontPrint.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\FontPrint.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\KeyCheck.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\KeyCheck.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\Paths.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\Paths.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\PoolIterator.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\Screen.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\Screen.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\ScriptCommands.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\ScriptCommands.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\Shader.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\Shader.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\extensions\scripting\ScriptCommandNames.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\game\CRGBA.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\game\CRGBA.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\game\CompressedVector.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\game\CompressedVector.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\game\CompressedVector2D.cpp">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\game\CompressedVector2D.h">
+    </None>
+    <None Include="C:\Users\me\source\repos\arcane\third-party\plugin-sdk\shared\plugin.h">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\me\source\repos\arcane\ZERO_CHECK.vcxproj">
+      <Project>{8C75832D-8972-351A-8C34-3FD73B540D85}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

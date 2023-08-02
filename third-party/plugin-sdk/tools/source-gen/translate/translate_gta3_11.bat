@@ -1,0 +1,1 @@
+address_translator %GTA_DATABASES% gta3 11en

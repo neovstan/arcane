@@ -1,0 +1,12 @@
+vmp("enable"), vmp("hit_rate"), vmp("max_angle_in_degrees"),
+    vmp("divide_angle_by_distance"), vmp("hold_target"),
+    vmp("check_for_obstacles"), vmp("check_for_distance"),
+    vmp("ignore_the_dead"), vmp("ignore_same_group"),
+    vmp("ignore_friendly_nicknames"), vmp("ignore_same_color"), vmp("head"),
+    vmp("neck"), vmp("right_shoulder"), vmp("left_shoulder"),
+    vmp("right_elbow"), vmp("left_elbow"), vmp("stomach"), vmp("right_knee"),
+    vmp("left_knee"), vmp("model_groups"), vmp("friendly_nicknames"),
+    vmp("pull_camera_toward_enemy"), vmp("turn_player_toward_enemy"),
+    vmp("display_triangle_above_enemy"), vmp("increase_hit_rate"),
+    vmp("min_distance"), vmp("step_to_increase_hit_rate"),
+    vmp("delay_between_target_changes")
