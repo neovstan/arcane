@@ -1,0 +1,5 @@
+add_subdirectory(psdk_utils)
+add_subdirectory(samp_utils)
+add_subdirectory(winapi_utils)
+add_subdirectory(configuration)
+add_subdirectory(data_representation)
