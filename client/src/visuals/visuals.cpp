@@ -133,7 +133,7 @@ void visuals::name(CPed* ped, ImColor color, bar health_bar, bar armor_bar) {
   }
 
   const auto origin_point_screen_pos = [dist_to_ped_head, ped_head_pos{ped_head_pos}]() mutable {
-    const float part_of_dist_for_comfortable_dynamic_offset{0.047f}, static_offset_from_head{0.4f};
+    const auto part_of_dist_for_comfortable_dynamic_offset = 0.047f, static_offset_from_head = 0.4f;
 
     ped_head_pos.z() +=
         dist_to_ped_head * part_of_dist_for_comfortable_dynamic_offset + static_offset_from_head;
@@ -243,7 +243,7 @@ void visuals::fov(CPed* ped, ImColor vector_aimbot_color, ImColor silent_aimbot_
       return angle;
     }();
 
-    auto& cam = psdk::get_active_cam();
+    const auto& cam = psdk::get_active_cam();
 
     const auto p1 = cam_pos.transit(
         psdk::polar_vector_3d{psdk::math::difference(nearest_bone.desired_angle.x() -
