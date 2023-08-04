@@ -9,8 +9,7 @@ class modification::client::plugin::initialization {
   }
 };
 
-BOOL WINAPI DllMain(const HMODULE module_handle, const DWORD reason_for_calling,
-                    const LPVOID reserved) {
+BOOL WINAPI DllMain(HMODULE module_handle, DWORD reason_for_calling, LPVOID reserved) {
   if (reason_for_calling == DLL_PROCESS_ATTACH) {
     const auto ntheader = reinterpret_cast<IMAGE_NT_HEADERS*>(
         reinterpret_cast<std::uintptr_t>(module_handle) +
