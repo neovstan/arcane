@@ -1,6 +1,8 @@
 #ifndef PSDK_UTILS_POLAR_VECTOR_H
 #define PSDK_UTILS_POLAR_VECTOR_H
 
+#include <iostream>
+
 namespace psdk_utils {
 class local_vector;
 
@@ -57,5 +59,7 @@ class polar_vector_3d {
 }  // namespace psdk_utils
 
 psdk_utils::polar_vector operator*(float lhs, const psdk_utils::polar_vector& rhs);
+std::ostream& operator<<(std::ostream& os, const psdk_utils::polar_vector& vec);
+std::ostream& operator<<(std::ostream& os, const psdk_utils::polar_vector_3d& vec);
 
 #endif  // PSDK_UTILS_POLAR_VECTOR_H

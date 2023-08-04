@@ -105,3 +105,13 @@ polar_vector_3d polar_vector_3d::operator/(float rhs) const {
 polar_vector_3d operator*(float lhs, const polar_vector_3d& rhs) {
   return rhs * lhs;
 }
+
+std::ostream& operator<<(std::ostream& os, const psdk_utils::polar_vector& vec) {
+  os << "polar_vector(" << vec.x() << ", " << vec.y() << ")";
+  return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const psdk_utils::polar_vector_3d& vec) {
+  os << "polar_vector_3d(" << vec.x() << ", " << vec.y() << ", " << vec.z() << ")";
+  return os;
+}

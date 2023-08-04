@@ -10,14 +10,17 @@
 namespace modification {
 namespace configuration {
 struct rpc {
-  std::string name{}, password{}, hwid{}, command{};
+  std::string name;
+  std::string password;
+  std::string hwid;
+  std::string command;
 };
 
 struct model_group {
-  std::uint32_t id{};
-  std::string name{};
-  std::list<int> models{};
-  bool active{false};
+  std::uint32_t id;
+  std::string name;
+  std::list<int> models;
+  bool active;
 };
 
 struct vector_aimbot {
@@ -25,18 +28,29 @@ struct vector_aimbot {
   float max_angle_in_degrees{50.0f};
 
   bool enable{false};
-  bool divide_angle_by_distance{true}, hold_target{true},
-      check_for_obstacles{true}, check_for_distance{true},
-      ignore_the_dead{true}, ignore_same_group{true},
-      ignore_friendly_nicknames{true}, ignore_same_color{false},
-      aim_only_when_shooting{true};
 
-  bool head{true}, neck{true}, right_shoulder{true}, left_shoulder{true},
-      right_elbow{true}, left_elbow{true}, stomach{true}, right_knee{true},
-      left_knee{true};
+  bool divide_angle_by_distance{true};
+  bool hold_target{true};
+  bool check_for_obstacles{true};
+  bool check_for_distance{true};
+  bool ignore_the_dead{true};
+  bool ignore_same_group{true};
+  bool ignore_friendly_nicknames{true};
+  bool ignore_same_color{false};
+  bool aim_only_when_shooting{true};
 
-  std::vector<model_group> model_groups{};
-  std::vector<std::string> friendly_nicknames{};
+  bool head{true};
+  bool neck{true};
+  bool right_shoulder{true};
+  bool left_shoulder{true};
+  bool right_elbow{true};
+  bool left_elbow{true};
+  bool stomach{true};
+  bool right_knee{true};
+  bool left_knee{true};
+
+  std::vector<model_group> model_groups;
+  std::vector<std::string> friendly_nicknames;
 
   float min_distance{6.0f};
   int delay_between_target_changes{1000};
@@ -48,22 +62,36 @@ struct silent_aimbot {
   float max_angle_in_degrees{35.0f};
 
   bool enable{false};
-  bool divide_angle_by_distance{true}, hold_target{true},
-      check_for_obstacles{true}, check_for_distance{true},
-      ignore_the_dead{true}, ignore_same_group{true},
-      ignore_friendly_nicknames{true}, ignore_same_color{false};
 
-  bool head{true}, neck{true}, right_shoulder{true}, left_shoulder{true},
-      right_elbow{true}, left_elbow{true}, stomach{true}, right_knee{true},
-      left_knee{true};
+  bool divide_angle_by_distance{true};
+  bool hold_target{true};
+  bool check_for_obstacles{true};
+  bool check_for_distance{true};
+  bool ignore_the_dead{true};
+  bool ignore_same_group{true};
+  bool ignore_friendly_nicknames{true};
+  bool ignore_same_color{false};
 
-  std::vector<model_group> model_groups{};
-  std::vector<std::string> friendly_nicknames{};
+  bool head{true};
+  bool neck{true};
+  bool right_shoulder{true};
+  bool left_shoulder{true};
+  bool right_elbow{true};
+  bool left_elbow{true};
+  bool stomach{true};
+  bool right_knee{true};
+  bool left_knee{true};
 
-  bool pull_camera_toward_enemy{true}, turn_player_toward_enemy{false},
-      display_triangle_above_enemy{true}, increase_hit_rate{true};
+  std::vector<model_group> model_groups;
+  std::vector<std::string> friendly_nicknames;
 
-  float min_distance{6.0f}, step_to_increase_hit_rate{12.0f};
+  bool pull_camera_toward_enemy{true};
+  bool turn_player_toward_enemy{false};
+  bool display_triangle_above_enemy{true};
+  bool increase_hit_rate{true};
+
+  float min_distance{6.0f};
+  float step_to_increase_hit_rate{12.0f};
   int delay_between_target_changes{1000};
 
   struct details {
@@ -72,10 +100,12 @@ struct silent_aimbot {
 };
 
 struct auto_cbug {
-  int duration_from_attack_to_squat{50}, duration_from_squat_to_attack{50},
-      key{'R'};
+  int duration_from_attack_to_squat{50};
+  int duration_from_squat_to_attack{50};
+  int key{'R'};
 
-  bool enable{false}, auto_repeat{true};
+  bool enable{false};
+  bool auto_repeat{true};
 };
 
 struct auto_shot {
@@ -83,8 +113,14 @@ struct auto_shot {
 };
 
 struct visuals {
-  bool flat_box{false}, three_dimensional_box{false}, line{false}, name{false},
-      hide_samp_nametag{false}, bones{false}, fov{false}, framerate{false};
+  bool flat_box{false};
+  bool three_dimensional_box{false};
+  bool line{false};
+  bool name{false};
+  bool hide_samp_nametag{false};
+  bool bones{false};
+  bool fov{false};
+  bool framerate{false};
 };
 }  // namespace configuration
 }  // namespace modification

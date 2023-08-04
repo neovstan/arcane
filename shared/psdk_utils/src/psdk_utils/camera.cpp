@@ -16,11 +16,12 @@ local_vector camera::crosshair_offset() {
   const auto& camera = get_camera();
   const auto mult = std::tan(math::deg2rad(get_active_cam().m_fFOV * 0.5f));
 
-  auto fx = math::pi() / 2.0f -
-            std::atan2(1.0f, mult * 2.0f * (camera.m_f3rdPersonCHairMultX - 0.5f)),
-       fz = math::pi() / 2.0f -
-            std::atan2(1.0f, mult * (2.0f * (0.5f - camera.m_f3rdPersonCHairMultY) *
-                                     (1.0f / CDraw::ms_fAspectRatio)));
+  auto fx =
+      math::pi() / 2.0f - std::atan2(1.0f, mult * 2.0f * (camera.m_f3rdPersonCHairMultX - 0.5f));
+
+  auto fz =
+      math::pi() / 2.0f - std::atan2(1.0f, mult * (2.0f * (0.5f - camera.m_f3rdPersonCHairMultY) *
+                                                   (1.0f / CDraw::ms_fAspectRatio)));
 
   if (is_widescreen_fix_on()) {
     const auto mult = 1.35f;

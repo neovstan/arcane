@@ -277,11 +277,11 @@ void injection_in_game_logic::thread_updating_settings() {
         return data_representation::sha256_string(str);
       };
 
-      const char* const text[]{vmp("vector_aimbot_pistols"),  vmp("vector_aimbot_shotguns"),
-                               vmp("vector_aimbot_semi"),     vmp("vector_aimbot_assault"),
-                               vmp("vector_aimbot_rifles"),   vmp("silent_aimbot_pistols"),
-                               vmp("silent_aimbot_shotguns"), vmp("silent_aimbot_semi"),
-                               vmp("silent_aimbot_assault"),  vmp("silent_aimbot_rifles")};
+      const char* text[]{vmp("vector_aimbot_pistols"),  vmp("vector_aimbot_shotguns"),
+                         vmp("vector_aimbot_semi"),     vmp("vector_aimbot_assault"),
+                         vmp("vector_aimbot_rifles"),   vmp("silent_aimbot_pistols"),
+                         vmp("silent_aimbot_shotguns"), vmp("silent_aimbot_semi"),
+                         vmp("silent_aimbot_assault"),  vmp("silent_aimbot_rifles")};
 
       from_json(document[sha(text[0])], vector_aimbot.settings[psdk_utils::weapon::mode::pistols]);
       from_json(document[sha(text[1])], vector_aimbot.settings[psdk_utils::weapon::mode::shotguns]);

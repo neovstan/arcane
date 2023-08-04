@@ -19,7 +19,7 @@ std::vector<CPed*> psdk_utils::peds_around() {
   std::vector<CPed*> peds{};
   auto& ped_pool = CPools::ms_pPedPool;
   for (auto i = 1; i < ped_pool->m_nSize; ++i) {
-    if (auto ped = ped_pool->GetAt(i)) {
+    if (const auto ped = ped_pool->GetAt(i)) {
       peds.push_back(ped);
     }
   }

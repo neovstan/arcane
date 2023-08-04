@@ -76,7 +76,8 @@ enemy_finder::target enemy_finder::produce_target(CPed* ped) const {
     const auto have_same_group = [&]() {
       for (const auto& [id, name, list, active] : settings_.model_groups) {
         if (!active) continue;
-        auto player_model_found = false, target_model_found = false;
+        auto player_model_found = false;
+        auto target_model_found = false;
 
         for (const auto i : list) {
           if (i == player_model) player_model_found = true;

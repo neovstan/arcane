@@ -2,13 +2,13 @@
 
 #include <CTimer.h>
 
-static unsigned char current_states[256]{};
-static unsigned char previous_states[256]{};
-static unsigned int time_delay_pressed[256]{};
+static unsigned char current_states[256];
+static unsigned char previous_states[256];
+static unsigned int time_delay_pressed[256];
 
 void psdk_utils::key::update() {
   memcpy(previous_states, current_states, 256);
-  GetKeyboardState(current_states);
+  const auto state = GetKeyboardState(current_states);
 }
 
 bool psdk_utils::key::down(unsigned int key) {

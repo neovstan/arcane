@@ -81,8 +81,9 @@ void visuals::three_dimensional_box(CPed* ped, ImColor color) {
   const psdk_utils::local_vector& ped_pos{ped->GetPosition()};
 
   constexpr auto pi = psdk_utils::math::pi();
-  const auto ped_rot = psdk_utils::math::rad2deg(ped->m_fCurrentRotation), radius = 0.3f,
-             height = 1.0f;
+  const auto ped_rot = psdk_utils::math::rad2deg(ped->m_fCurrentRotation);
+  const auto radius = 0.3f;
+  const auto height = 1.0f;
 
   draw_flat_box_in_space(ped_pos.transit(psdk_utils::polar_vector{ped_rot + 90.0f, radius}),
                          ped_rot, radius, height, line_width_, color);
@@ -100,8 +101,8 @@ void visuals::three_dimensional_box(CPed* ped, ImColor color) {
 void visuals::line(CPed* ped, ImColor color) {
   namespace psdk = psdk_utils;
 
-  const auto ped_pos = psdk::local_vector{ped->GetPosition()}.to_screen(),
-             player_pos = psdk::local_vector{psdk::player()->GetPosition()}.to_screen();
+  const auto ped_pos = psdk::local_vector{ped->GetPosition()}.to_screen();
+  const auto player_pos = psdk::local_vector{psdk::player()->GetPosition()}.to_screen();
 
   if (ped_pos.z() || player_pos.z()) return;
 
@@ -141,7 +142,7 @@ void visuals::name(CPed* ped, ImColor color, bar health_bar, bar armor_bar) {
     return ped_head_pos.to_screen();
   }();
 
-  if (origin_point_screen_pos.z() != 0.0f) return;
+  if (origin_point_screen_pos.z()) return;
 
   const auto text = std::format("{} ({})", name, id);
 
@@ -194,8 +195,9 @@ void visuals::bones(CPed* ped, ImColor color) {
       {BONE_LEFTELBOW, BONE_LEFTWRIST}};
 
   for (const auto& i : lines_between_bones) {
-    const auto first_bone_screen_pos = psdk::bone_position(ped, i.first).to_screen(),
-               second_bone_screen_pos = psdk::bone_position(ped, i.second).to_screen();
+    const auto first_bone_screen_pos = psdk::bone_position(ped, i.first).to_screen();
+    const auto second_bone_screen_pos = psdk::bone_position(ped, i.second).to_screen();
+
     if (first_bone_screen_pos.z() || second_bone_screen_pos.z()) continue;
     draw()->AddLine(imvec2(first_bone_screen_pos), imvec2(second_bone_screen_pos), color,
                     line_width_);
@@ -320,8 +322,8 @@ void visuals::draw_progress_bar(bar bar, psdk_utils::local_vector position, floa
 
 void visuals::draw_flat_box_in_space(const psdk_utils::local_vector& center, float angle,
                                      float radius, float height, float line_width_, ImColor color) {
-  const auto right = center.transit(psdk_utils::polar_vector{angle, radius}),
-             left = center.transit(psdk_utils::polar_vector{angle + 180.0f, radius});
+  const auto right = center.transit(psdk_utils::polar_vector{angle, radius});
+  const auto left = center.transit(psdk_utils::polar_vector{angle + 180.0f, radius});
 
   std::array<psdk_utils::local_vector, 4> points{
       psdk_utils::local_vector{right.x(), right.y(), center.z() + height},

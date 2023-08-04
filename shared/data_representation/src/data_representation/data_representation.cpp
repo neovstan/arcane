@@ -98,7 +98,7 @@ std::string data_representation::sha256_file(std::string_view path) {
 
 std::string data_representation::sha256_byte_array(const std::vector<unsigned char>& in) {
   const auto hash = [in]() {
-    unsigned char hash[SHA256_DIGEST_LENGTH]{};
+    unsigned char hash[SHA256_DIGEST_LENGTH];
 
     SHA256_CTX context{};
     SHA256_Init(&context);
