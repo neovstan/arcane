@@ -16,8 +16,7 @@ modification::client::socket::socket(const std::string& ip, const std::string& p
 
   const addrinfo hints{0, AF_UNSPEC, SOCK_STREAM, IPPROTO_TCP};
 
-  if (const auto result = getaddrinfo(ip.c_str(), port.c_str(), &hints, &address_info_);
-      result != 0) {
+  if (const auto result = getaddrinfo(ip.c_str(), port.c_str(), &hints, &address_info_); result) {
     throw exception{exception::failed::getaddrinfo, result};
   }
 
