@@ -9,7 +9,6 @@ auto_cbug::auto_cbug() : state_{}, state_update_time_{} {
 }
 
 void auto_cbug::process() {
-  using namespace std::chrono;
   namespace psdk = psdk_utils;
 
   auto player = psdk::player();
@@ -25,8 +24,10 @@ void auto_cbug::process() {
 
   auto& keys = player->GetPadFromPlayer()->NewState;
 
+  using namespace std::chrono;
+
   const auto time_elapsed_from_state_update =
-      duration_cast<milliseconds>(steady_clock::now() - state_update_time_).count();
+      duration_cast<milliseconds>(clock::now() - state_update_time_).count();
 
   const auto multiplier = 15.0f / psdk::math::sqrt(ImGui::GetIO().Framerate);
 
