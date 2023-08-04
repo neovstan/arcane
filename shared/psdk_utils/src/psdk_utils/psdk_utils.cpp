@@ -63,6 +63,10 @@ _D3DPRESENT_PARAMETERS_* psdk_utils::d3d_present_params() {
   return reinterpret_cast<_D3DPRESENT_PARAMETERS_*>(0xC9C040);
 }
 
+HWND psdk_utils::hwnd() {
+  return RsGlobal.ps->window;
+}
+
 psdk_utils::local_vector psdk_utils::resolution() {
   const auto params = d3d_present_params();
   return {static_cast<float>(params->BackBufferWidth), static_cast<float>(params->BackBufferHeight),

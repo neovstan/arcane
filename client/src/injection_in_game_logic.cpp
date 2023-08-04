@@ -214,7 +214,7 @@ void injection_in_game_logic::load_visuals() {
                                     const RECT* dest, HWND window, const RGNDATA* dirty_region) {
     static auto initialized = false;
     if (!initialized) {
-      ImGui_ImplWin32_Init(GetForegroundWindow());
+      ImGui_ImplWin32_Init(psdk_utils::hwnd());
       ImGui_ImplDX9_Init(device);
       visuals.initialize();
       initialized = true;

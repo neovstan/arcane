@@ -26,6 +26,7 @@ bool is_ped_stunned(CPed* ped);
 local_vector bone_position(CPed* ped, int bone, bool update = true);
 local_vector calc_screen_coors(const local_vector& in);
 _D3DPRESENT_PARAMETERS_* d3d_present_params();
+HWND hwnd();
 local_vector resolution();
 
 struct nearest_bone {
