@@ -131,7 +131,7 @@ void silent_aimbot::bullet_process(const psdk_utils::local_vector& origin,
                                       distribution(engine)};
     }(-0.2f, 0.2f);
 
-    target = target + offset_to_make_target_original;
+    target += offset_to_make_target_original;
     break;
   }
 }
