@@ -212,7 +212,7 @@ void injection_in_game_logic::load_visuals() {
 
   signals_.present.before += [this](const auto& hook, IDirect3DDevice9* device, const RECT* source,
                                     const RECT* dest, HWND window, const RGNDATA* dirty_region) {
-    static bool initialized{};
+    static auto initialized = false;
     if (!initialized) {
       ImGui_ImplWin32_Init(GetForegroundWindow());
       ImGui_ImplDX9_Init(device);
@@ -273,7 +273,7 @@ void injection_in_game_logic::thread_updating_settings() {
 
       std::unique_lock ul{mutex_};
 
-      auto sha = [](const char* const str) {
+      auto sha = [](const char* str) {
         return data_representation::sha256_string(str);
       };
 
