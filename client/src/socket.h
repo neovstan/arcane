@@ -1,5 +1,5 @@
-#ifndef ARCANE_CLIENT_SRC_SOCKET_SOCKET_H
-#define ARCANE_CLIENT_SRC_SOCKET_SOCKET_H
+#ifndef ARCANE_CLIENT_SRC_SOCKET_H
+#define ARCANE_CLIENT_SRC_SOCKET_H
 
 #include <winsock2.h>
 
@@ -28,7 +28,7 @@ class socket {
       shutdowning,
     };
 
-    exception(const failed reason, const int code = ::WSAGetLastError()) noexcept
+    explicit exception(const failed reason, const int code = ::WSAGetLastError()) noexcept
         : reason_{reason}, code_{code} {
     }
 
@@ -40,8 +40,8 @@ class socket {
     }
 
    private:
-    failed reason_{};
-    int code_{};
+    failed reason_;
+    int code_;
   };
 
   /**
@@ -54,11 +54,11 @@ class socket {
   std::string send(const std::string& message);
 
  private:
-  addrinfo* address_info_{};
-  ::SOCKET connect_socket_{};
-  std::string encryption_key_{};
+  addrinfo* address_info_;
+  SOCKET connect_socket_;
+  std::string encryption_key_;
 };
 }  // namespace client
 }  // namespace modification
 
-#endif  // ARCANE_LOADER_SRC_SOCKET_SOCKET_H
+#endif  // ARCANE_CLIENT_SRC_SOCKET_H

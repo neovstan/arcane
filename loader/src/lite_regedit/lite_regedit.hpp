@@ -105,7 +105,9 @@ class CLiteRegedit {
 
 class CLiteRegeditEasy : public CLiteRegedit {
  public:
-  CLiteRegeditEasy(HKEY hKey, LPCSTR lpSubKey) : CLiteRegedit(hKey, lpSubKey) { no_error = true; }
+  CLiteRegeditEasy(HKEY hKey, LPCSTR lpSubKey) : CLiteRegedit(hKey, lpSubKey) {
+    no_error = true;
+  }
 
   void WriteString(LPCSTR lpName, LPCSTR lpString, ...) {
     va_list ap;
@@ -123,14 +125,18 @@ class CLiteRegeditEasy : public CLiteRegedit {
     return szStr;
   }
 
-  void WriteInteger(LPCSTR lpName, int value) { no_error = GetRegister(lpName, REG_DWORD, &value); }
+  void WriteInteger(LPCSTR lpName, int value) {
+    no_error = GetRegister(lpName, REG_DWORD, &value);
+  }
   int ReadInteger(LPCSTR lpName) {
     int value;
     no_error = GetRegister(lpName, REG_DWORD, &value);
     return value;
   }
 
-  void WriteFloat(LPCSTR lpName, float value) { no_error = GetRegister(lpName, REG_DWORD, &value); }
+  void WriteFloat(LPCSTR lpName, float value) {
+    no_error = GetRegister(lpName, REG_DWORD, &value);
+  }
   float ReadFloat(LPCSTR lpName) {
     float value;
     no_error = GetRegister(lpName, REG_DWORD, &value);
@@ -155,7 +161,9 @@ class CLiteRegeditEasy : public CLiteRegedit {
     return value;
   }
 
-  bool IsError() { return !no_error; }
+  bool IsError() {
+    return !no_error;
+  }
 
  private:
   bool no_error;

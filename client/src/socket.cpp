@@ -5,12 +5,12 @@
 
 modification::client::socket::socket(const std::string& ip, const std::string& port,
                                      const std::string& encryption_key)
-    : encryption_key_{encryption_key} {
+    : address_info_{}, connect_socket_{}, encryption_key_{encryption_key} {
   VMProtectBeginUltra("modification::client::socket::socket()");
 
   WSADATA winsock_implementation_data{};
 
-  if (const auto result = WSAStartup(MAKEWORD(2u, 2u), &winsock_implementation_data); result != 0) {
+  if (const auto result = WSAStartup(MAKEWORD(2u, 2u), &winsock_implementation_data); result) {
     throw exception{exception::failed::wsa_startup, result};
   }
 
@@ -42,8 +42,7 @@ modification::client::socket::~socket() {
 std::string modification::client::socket::send(const std::string& message) {
   VMProtectBeginUltra("modification::client::socket::send()");
 
-  const std::string encrypted_message{
-      encryption::cbc{encryption_key_, encryption_key_}.encrypt(message)};
+  const auto encrypted_message = encryption::cbc{encryption_key_, encryption_key_}.encrypt(message);
 
   for (auto socket = address_info_; socket != nullptr; socket = socket->ai_next) {
     if (connect_socket_ = ::socket(socket->ai_family, socket->ai_socktype, socket->ai_protocol);
@@ -79,7 +78,7 @@ std::string modification::client::socket::send(const std::string& message) {
   recv(connect_socket_, buffer, sizeof(buffer), 0);
   closesocket(connect_socket_);
 
-  const std::string answer{encryption::cbc{encryption_key_, encryption_key_}.decrypt(buffer)};
+  const auto answer = encryption::cbc{encryption_key_, encryption_key_}.decrypt(buffer);
 
   VMProtectEnd();
 

@@ -57,7 +57,8 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE, PSTR cmdline, int cmdshow) {
   shutdown_window(window);
 }
 
-static void glfw_error_callback(int error, const char* description) {}
+static void glfw_error_callback(int error, const char* description) {
+}
 
 static GLFWwindow* create_window(int width, int height) {
   glfwSetErrorCallback(glfw_error_callback);

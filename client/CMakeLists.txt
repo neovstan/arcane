@@ -15,8 +15,8 @@ add_library(${PROJECT_NAME} SHARED
 	src/shooting/vector_aimbot.h
 	src/shooting/silent_aimbot.cpp
 	src/shooting/silent_aimbot.h
-	src/socket/socket.cpp
-	src/socket/socket.h
+	src/socket.cpp
+	src/socket.h
 	src/visuals/visuals.cpp
 	src/visuals/visuals.h
 	src/shooting/auto_cbug.cpp
@@ -25,7 +25,8 @@ add_library(${PROJECT_NAME} SHARED
 	src/shooting/auto_shot.h
 	src/game_logic_signals.hpp 
 	src/injection_in_game_logic.cpp
-	src/injection_in_game_logic.h)
+	src/injection_in_game_logic.h
+)
 
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)

@@ -75,7 +75,11 @@ struct auto_cbug {
   int duration_from_attack_to_squat{50}, duration_from_squat_to_attack{50},
       key{'R'};
 
-  bool enable{true}, auto_repeat{true};
+  bool enable{false}, auto_repeat{true};
+};
+
+struct auto_shot {
+  bool enable{false};
 };
 
 struct visuals {

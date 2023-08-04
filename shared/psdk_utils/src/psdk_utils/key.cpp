@@ -16,13 +16,11 @@ bool psdk_utils::key::down(unsigned int key) {
 }
 
 bool psdk_utils::key::pressed(unsigned int key) {
-  return key < 256 && (current_states[key] & 0x80) &&
-         !(previous_states[key] & 0x80);
+  return key < 256 && (current_states[key] & 0x80) && !(previous_states[key] & 0x80);
 }
 
 bool psdk_utils::key::released(unsigned int key) {
-  return key < 256 && !(current_states[key] & 0x80) &&
-         (previous_states[key] & 0x80);
+  return key < 256 && !(current_states[key] & 0x80) && (previous_states[key] & 0x80);
 }
 
 bool psdk_utils::key::down_delayed(unsigned int key, unsigned int time) {

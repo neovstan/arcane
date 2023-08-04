@@ -13,7 +13,9 @@ static void get_configuration(mariadb::result_set_ref result,
   using namespace modification;
   std::string json{result->get_string("json")};
 
-  auto sha = [](const char* const str) { return data_representation::sha256_string(str); };
+  auto sha = [](const char* const str) {
+    return data_representation::sha256_string(str);
+  };
 
   auto form_document = [sha]() {
     nlohmann::json document{};

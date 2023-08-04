@@ -14,7 +14,8 @@ class cbc {
  public:
   cbc(const std::string& key, const std::string& iv)
       : key_{reinterpret_cast<const CryptoPP::byte*>(key.c_str()), key.size()},
-        iv_{reinterpret_cast<const CryptoPP::byte*>(iv.c_str()), iv.size()} {}
+        iv_{reinterpret_cast<const CryptoPP::byte*>(iv.c_str()), iv.size()} {
+  }
 
   std::string encrypt(const std::string& plain);
   std::string decrypt(const std::string& cipher);

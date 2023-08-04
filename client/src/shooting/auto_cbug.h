@@ -7,18 +7,21 @@
 namespace modification::client::shooting {
 class auto_cbug {
  public:
+  auto_cbug();
+
   void process();
 
-  configuration::auto_cbug settings{};
+ public:
+  configuration::auto_cbug settings;
 
  private:
   enum class state { no, start, attack, aim_and_squat } state_;
-  std::chrono::steady_clock::time_point state_update_time_{};
 
-  void update_state(const state new_state) {
-    state_ = new_state;
-    state_update_time_ = std::chrono::steady_clock::now();
-  }
+ private:
+  void update_state(state new_state);
+
+ private:
+  std::chrono::steady_clock::time_point state_update_time_;
 };
 }  // namespace modification::client::shooting
 

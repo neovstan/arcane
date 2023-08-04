@@ -1,26 +1,20 @@
 #ifndef ARCANE_CLIENT_SRC_SHOOTING_ENEMY_FINDER_H
 #define ARCANE_CLIENT_SRC_SHOOTING_ENEMY_FINDER_H
 
-#include <chrono>
-#include <list>
-#include <map>
-#include <string>
-
-// plugin sdk
-#include <CPed.h>
-#include <CVector.h>
-#include <CVector2D.h>
-
+#include <vector>
+#include <psdk_utils/local_vector.h>
 #include <configuration/configuration.hpp>
+
+class CPed;
 
 namespace modification::client::shooting {
 class enemy_finder {
  public:
   struct target {
-    CPed* ped{};
-    CVector position{};
-    CVector2D angle{};
-    float difference{};
+    CPed* ped;
+    psdk_utils::local_vector position;
+    psdk_utils::local_vector angle;
+    float difference;
   };
 
   struct settings {
@@ -41,16 +35,20 @@ class enemy_finder {
     bool& use_target_range_instead_of_weapons;
   };
 
-  enemy_finder(const settings& settings) : settings_{settings} {}
+ public:
+  enemy_finder(const settings& settings);
 
   target get();
-  target produce_target(CPed* const ped) const;
+  target produce_target(CPed* ped) const;
+
+ private:
+  using clock = std::chrono::steady_clock;
 
  private:
   settings settings_;
-  target enemy_{};
-  std::chrono::steady_clock::time_point target_change_time_{};
-  CPed* previous_enemy_ped_{};
+  target enemy_;
+  clock::time_point target_change_time_;
+  CPed* previous_enemy_ped_;
 };
 }  // namespace modification::client::shooting
 

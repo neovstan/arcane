@@ -2,8 +2,8 @@
 #define ARCANE_CLIENT_SRC_GAME_LOGIC_SIGNALS_HPP
 
 #include <kthook/kthook.hpp>
+#include <psdk_utils/local_vector.h>
 
-class CVector;
 class CPlayerPed;
 class CColPoint;
 class CEntity;
@@ -13,12 +13,14 @@ class IDirect3DDevice9;
 namespace modification::client {
 class game_logic_signals {
   using CHud__DrawAfterFade_t = void(__cdecl*)();
-  using CBirds__HandleGunShot_t = void(__cdecl*)(CVector* start, CVector* end);
+  using CBirds__HandleGunShot_t = void(__cdecl*)(psdk_utils::local_vector* start,
+                                                 psdk_utils::local_vector* end);
 
   using CPlayerPed__Compute3rdPersonMouseTarget = void(__thiscall*)(CPlayerPed* player_ped,
                                                                     bool melee);
 
-  using CWorld__ProcessLineOfSight = bool(__cdecl*)(CVector* start, CVector* end,
+  using CWorld__ProcessLineOfSight = bool(__cdecl*)(psdk_utils::local_vector* start,
+                                                    psdk_utils::local_vector* end,
                                                     CColPoint* colpoint, CEntity** entity,
                                                     bool buildings, bool vehicles, bool peds,
                                                     bool objects, bool dummies, bool see_through,
@@ -40,6 +42,27 @@ class game_logic_signals {
   kthook::kthook_signal<CPad__UpdatePads> update_pads{0x541DD0};
   kthook::kthook_simple<CWorld__ProcessLineOfSight> aim_point{0x56BA00};
   kthook::kthook_simple<CPlaceable__SetHeading> set_heading{0x43E0C0};
+
+  void single_shot(auto func) {
+    main_loop.after += [func](const auto& hook) {
+      static auto done = false;
+      if (!done) {
+        if constexpr (!std::is_void_v<decltype(func())>) {
+          if (!func()) return;
+        } else {
+          func();
+        }
+        done = true;
+      }
+    };
+  }
+
+  void loop(auto func) {
+    single_shot([func]() {
+      func();
+      return false;
+    });
+  }
 
   const std::uintptr_t aim_point_return_address{0x60B83D};
   const std::uintptr_t set_heading_return_address{0x522C48};

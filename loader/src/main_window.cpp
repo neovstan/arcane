@@ -46,7 +46,8 @@ void modification::loader::main_window::update() {
   ImGui::End();
 }
 
-void error_handler(MANUALMAP_ERROR_CODE errorCode, NTSTATUS ntError) {}
+void error_handler(MANUALMAP_ERROR_CODE errorCode, NTSTATUS ntError) {
+}
 
 void modification::loader::main_window::inject() {
   VMProtectBeginUltra("main()");

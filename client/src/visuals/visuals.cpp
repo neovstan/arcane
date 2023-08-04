@@ -14,13 +14,14 @@ using namespace modification::client::visuals;
 
 CMRC_DECLARE(fonts);
 
-inline CVector2D operator+(const CVector2D& a, const CVector2D& b) {
-  return {a.x + b.x, a.y + b.y};
-}
-
-template <class T>
-inline CVector2D operator-(const CVector2D& a, const T& b) {
-  return {a.x - b.x, a.y - b.y};
+visuals::visuals::visuals()
+    : line_width_{1.5f},
+      vector_aimbot_fov_color_{0.09f, 0.92f, 0.59f, 1.0f},
+      silent_aimbot_fov_color_{0.09f, 0.92f, 0.88f, 1.0f},
+      nametags_font_{},
+      framerate_font_{},
+      framerate_{},
+      framerate_update_time_{} {
 }
 
 void visuals::initialize() {
@@ -56,9 +57,9 @@ void visuals::process() {
     if (settings.flat_box) flat_box(i, color);
     if (settings.three_dimensional_box) three_dimensional_box(i, color);
     if (settings.line) line(i, color);
-    if (!settings.name) name(i, color);
+    if (settings.name) name(i, color);
     if (settings.bones) bones(i, color);
-    if (settings.fov) fov(i, vector_aimbot_fov_color, silent_aimbot_fov_color);
+    if (settings.fov) fov(i, vector_aimbot_fov_color_, silent_aimbot_fov_color_);
   }
 
   if (settings.hide_samp_nametag) {
@@ -68,45 +69,46 @@ void visuals::process() {
     });
   }
 
-  if (!settings.framerate) framerate();
+  if (settings.framerate) framerate();
 }
 
-void visuals::flat_box(CPed* const ped, const ImU32 color) {
-  draw_flat_box_in_space(ped->GetPosition(), ped->m_fCurrentRotation, 0.4f, 1.0f, line_width_,
-                         color);
+void visuals::flat_box(CPed* ped, ImColor color) {
+  draw_flat_box_in_space(ped->GetPosition(), psdk_utils::math::rad2deg(ped->m_fCurrentRotation),
+                         0.4f, 1.0f, line_width_, color);
 }
 
-void visuals::three_dimensional_box(CPed* const ped, const ImU32 color) {
-  const auto& ped_pos = ped->GetPosition();
+void visuals::three_dimensional_box(CPed* ped, ImColor color) {
+  const psdk_utils::local_vector& ped_pos{ped->GetPosition()};
 
   constexpr auto pi = psdk_utils::math::pi();
-  const float ped_rot{ped->m_fCurrentRotation}, radius{0.3f}, height{1.0f};
+  const auto ped_rot = psdk_utils::math::rad2deg(ped->m_fCurrentRotation), radius = 0.3f,
+             height = 1.0f;
 
-  draw_flat_box_in_space(get_point_on_circumference(ped_pos, ped_rot + pi / 2.0f, radius), ped_rot,
-                         radius, height, line_width_, color);
-
-  draw_flat_box_in_space(get_point_on_circumference(ped_pos, ped_rot + 3.0f * pi / 2.0f, radius),
+  draw_flat_box_in_space(ped_pos.transit(psdk_utils::polar_vector{ped_rot + 90.0f, radius}),
                          ped_rot, radius, height, line_width_, color);
 
-  draw_flat_box_in_space(get_point_on_circumference(ped_pos, ped_rot + pi, radius),
-                         ped_rot + pi / 2.0f, radius, height, line_width_, color);
+  draw_flat_box_in_space(ped_pos.transit(psdk_utils::polar_vector{ped_rot + 270.0f, radius}),
+                         ped_rot, radius, height, line_width_, color);
 
-  draw_flat_box_in_space(get_point_on_circumference(ped_pos, ped_rot, radius), ped_rot + pi / 2.0f,
-                         radius, height, line_width_, color);
+  draw_flat_box_in_space(ped_pos.transit(psdk_utils::polar_vector{ped_rot + 180.0f, radius}),
+                         ped_rot + 90.0f, radius, height, line_width_, color);
+
+  draw_flat_box_in_space(ped_pos.transit(psdk_utils::polar_vector{ped_rot, radius}),
+                         ped_rot + 90.0f, radius, height, line_width_, color);
 }
 
-void visuals::line(CPed* const ped, const ImU32 color) {
+void visuals::line(CPed* ped, ImColor color) {
   namespace psdk = psdk_utils;
 
-  const auto ped_pos = psdk::calc_screen_coors(ped->GetPosition()),
-             player_pos = psdk::calc_screen_coors(psdk::player()->GetPosition());
+  const auto ped_pos = psdk::local_vector{ped->GetPosition()}.to_screen(),
+             player_pos = psdk::local_vector{psdk::player()->GetPosition()}.to_screen();
 
-  if (ped_pos.z != 0.0f || player_pos.z != 0.0f) return;
+  if (ped_pos.z() || player_pos.z()) return;
 
   draw()->AddLine(imvec2(ped_pos), imvec2(player_pos), color, line_width_);
 }
 
-void visuals::name(CPed* const ped, const ImU32 color, const bar health_bar, const bar armor_bar) {
+void visuals::name(CPed* ped, ImColor color, bar health_bar, bar armor_bar) {
   namespace psdk = psdk_utils;
 
   const auto [nametag_draw_distance, id, name, health, armor] = samp_utils::execute(
@@ -122,7 +124,7 @@ void visuals::name(CPed* const ped, const ImU32 color, const bar health_bar, con
 
   const auto ped_head_pos = psdk::bone_position(ped, BONE_HEAD);
   const auto dist_to_ped_head =
-      psdk::math::distance_between_points(ped_head_pos, psdk::player()->GetPosition());
+      (ped_head_pos - psdk::local_vector{psdk::player()->GetPosition()}).r();
 
   if (dist_to_ped_head < nametag_draw_distance &&
       psdk::world::is_line_of_sight_clear(psdk::get_camera().GetPosition(), ped_head_pos, true,
@@ -133,14 +135,13 @@ void visuals::name(CPed* const ped, const ImU32 color, const bar health_bar, con
   const auto origin_point_screen_pos = [dist_to_ped_head, ped_head_pos{ped_head_pos}]() mutable {
     const float part_of_dist_for_comfortable_dynamic_offset{0.047f}, static_offset_from_head{0.4f};
 
-    ped_head_pos.z +=
+    ped_head_pos.z() +=
         dist_to_ped_head * part_of_dist_for_comfortable_dynamic_offset + static_offset_from_head;
 
-    const auto result = psdk::calc_screen_coors(ped_head_pos);
-    return result;
+    return ped_head_pos.to_screen();
   }();
 
-  if (origin_point_screen_pos.z != 0.0f) return;
+  if (origin_point_screen_pos.z() != 0.0f) return;
 
   const auto text = std::format("{} ({})", name, id);
 
@@ -151,23 +152,23 @@ void visuals::name(CPed* const ped, const ImU32 color, const bar health_bar, con
     return result;
   }();
 
-  const ImVec2 nametag_screen_pos{origin_point_screen_pos.x - text_size.x / 2.0f,
-                                  origin_point_screen_pos.y};
+  const ImVec2 nametag_screen_pos{origin_point_screen_pos.x() - text_size.x / 2.0f,
+                                  origin_point_screen_pos.y()};
 
   draw()->AddText(nametags_font_.ptr, nametags_font_.size, nametag_screen_pos, color, text.c_str());
 
-  CVector2D bar_screen_pos{origin_point_screen_pos.x,
-                           origin_point_screen_pos.y + text_size.y + 2.0f};
+  psdk_utils::local_vector bar_screen_pos{origin_point_screen_pos.x(),
+                                          origin_point_screen_pos.y() + text_size.y + 2.0f, 0.0f};
 
   if (armor) {
     draw_progress_bar(armor_bar, bar_screen_pos, armor, 100.0f);
-    bar_screen_pos.y += armor_bar.size.y + armor_bar.border_width + 4.0f;
+    bar_screen_pos.y() += armor_bar.size.y() + armor_bar.border_width + 4.0f;
   }
 
   draw_progress_bar(health_bar, bar_screen_pos, health, 100.0f);
 }
 
-void visuals::bones(CPed* const ped, const ImU32 color) {
+void visuals::bones(CPed* ped, ImColor color) {
   namespace psdk = psdk_utils;
 
   static std::multimap<ePedBones, ePedBones> lines_between_bones{
@@ -193,22 +194,21 @@ void visuals::bones(CPed* const ped, const ImU32 color) {
       {BONE_LEFTELBOW, BONE_LEFTWRIST}};
 
   for (const auto& i : lines_between_bones) {
-    const auto first_bone_screen_pos = psdk::calc_screen_coors(psdk::bone_position(ped, i.first)),
-               second_bone_screen_pos = psdk::calc_screen_coors(psdk::bone_position(ped, i.second));
-    if (first_bone_screen_pos.z != 0.0f || second_bone_screen_pos.z != 0.0f) continue;
+    const auto first_bone_screen_pos = psdk::bone_position(ped, i.first).to_screen(),
+               second_bone_screen_pos = psdk::bone_position(ped, i.second).to_screen();
+    if (first_bone_screen_pos.z() || second_bone_screen_pos.z()) continue;
     draw()->AddLine(imvec2(first_bone_screen_pos), imvec2(second_bone_screen_pos), color,
                     line_width_);
   }
 }
 
-void visuals::fov(CPed* const ped, const ImU32 vector_aimbot_color,
-                  const ImU32 silent_aimbot_color) {
+void visuals::fov(CPed* ped, ImColor vector_aimbot_color, ImColor silent_aimbot_color) {
   namespace psdk = psdk_utils;
 
   const auto weapon_mode = psdk::weapon::get_mode(psdk::weapon_in_hand());
   if (weapon_mode == psdk::weapon::mode::unknown) return;
 
-  auto draw_fov = [this, ped](const shooting::enemy_finder::settings& settings, const ImU32 color) {
+  auto draw_fov = [this, ped](const shooting::enemy_finder::settings& settings, ImColor color) {
     if (settings.ignore_the_dead) {
       if (samp_utils::get_version() != samp_utils::version::unknown) {
         const auto is_alive = samp_utils::execute([&](auto version) {
@@ -232,32 +232,39 @@ void visuals::fov(CPed* const ped, const ImU32 vector_aimbot_color,
 
     if (!nearest_bone.existing) return;
 
-    const auto& cam_pos = psdk::get_camera().GetPosition();
-    const auto distance = psdk::math::distance_between_points(cam_pos, nearest_bone.world_position);
-    const auto angle =
-        psdk::math::angle_between_points(cam_pos, nearest_bone.world_position).x - psdk::math::pi();
+    const psdk::local_vector& cam_pos{psdk::get_camera().GetPosition()};
+    const auto difference_vector = cam_pos - nearest_bone.world_position;
 
-    const float max_angle{[&]() {
-      float angle{psdk::math::deg2rad(settings.max_angle_in_degrees)};
+    const auto max_angle = [&]() {
+      auto angle = settings.max_angle_in_degrees;
       if (settings.divide_angle_by_distance) {
-        angle /= distance;
+        angle /= difference_vector.r();
       }
       return angle;
-    }()};
+    }();
 
-    const auto bone_point_screen_pos =
-                   psdk::calc_screen_coors(get_point_on_circumference(cam_pos, angle, distance)),
-               max_angle_point_screen_pos = psdk::calc_screen_coors(
-                   get_point_on_circumference(cam_pos, angle - max_angle, distance));
+    auto& cam = psdk::get_active_cam();
 
-    if (bone_point_screen_pos.z != 0.0f || max_angle_point_screen_pos.z != 0.0f) return;
+    const auto p1 = cam_pos.transit(
+        psdk::polar_vector_3d{psdk::math::difference(nearest_bone.desired_angle.x() -
+                                                     psdk::camera::crosshair_offset().x() - 180.0f),
+                              psdk::math::difference(nearest_bone.desired_angle.y() -
+                                                     psdk::camera::crosshair_offset().y()),
+                              difference_vector.r()});
 
-    const auto nearest_bone_screen_pos = psdk::calc_screen_coors(nearest_bone.world_position);
-    if (nearest_bone_screen_pos.z != 0.0f) return;
+    const auto p2 = cam_pos.transit(
+        psdk::polar_vector_3d{psdk::math::difference(max_angle + nearest_bone.desired_angle.x() -
+                                                     psdk::camera::crosshair_offset().x() - 180.0f),
+                              psdk::math::difference(nearest_bone.desired_angle.y() -
+                                                     psdk::camera::crosshair_offset().y()),
+                              difference_vector.r()});
 
-    const auto radius =
-        psdk::math::distance_between_points(bone_point_screen_pos, max_angle_point_screen_pos);
-    draw()->AddCircle(imvec2(nearest_bone_screen_pos), radius, color, 0, line_width_);
+    const auto radius = (p2.to_screen() - p1.to_screen()).r();
+
+    const auto bone_screen_pos = nearest_bone.world_position.to_screen();
+    if (bone_screen_pos.z()) return;
+
+    draw()->AddCircle(imvec2(bone_screen_pos), radius, color, 0, line_width_);
   };
 
   const auto [vector_aimbot_enabled, vector_aimbot_settings] =
@@ -270,7 +277,7 @@ void visuals::fov(CPed* const ped, const ImU32 vector_aimbot_color,
   if (silent_aimbot_enabled) draw_fov(silent_aimbot_settings, silent_aimbot_color);
 }
 
-void visuals::framerate(const ImU32 color) {
+void visuals::framerate(ImColor color) {
   using namespace std::chrono;
 
   const auto now = steady_clock::now();
@@ -285,53 +292,59 @@ void visuals::framerate(const ImU32 color) {
   ImGui::PopFont();
 
   const auto resolution = psdk_utils::resolution();
-  auto position = resolution - text_size;
-  position.x -= 5.0f;
+  auto position = resolution - psdk_utils::local_vector{text_size.x, text_size.y, 0.0f};
+  position.x() -= 5.0f;
 
   draw()->AddText(framerate_font_.ptr, framerate_font_.size, imvec2(position), color, text.c_str());
 }
 
-void visuals::draw_progress_bar(const bar bar, CVector2D position, const float progress,
-                                const float max) {
-  position.x -= bar.size.x / 2.0f + bar.border_width;
-
-  draw()->AddRectFilled(imvec2(position),
-                        imvec2(position + CVector2D{bar.size.x + bar.border_width * 2.0f,
-                                                    bar.size.y + bar.border_width * 2.0f}),
-                        bar.background_color, bar.rounding);
-
-  position += {bar.border_width, bar.border_width};
+void visuals::draw_progress_bar(bar bar, psdk_utils::local_vector position, float progress,
+                                float max) {
+  position.x() -= bar.size.x() / 2.0f + bar.border_width;
 
   draw()->AddRectFilled(
       imvec2(position),
-      imvec2(position + CVector2D{std::min(progress / (max / bar.size.x), bar.size.x), bar.size.y}),
+      imvec2(position + psdk_utils::local_vector{bar.size.x() + bar.border_width * 2.0f,
+                                                 bar.size.y() + bar.border_width * 2.0f, 0.0f}),
+      bar.background_color, bar.rounding);
+
+  position += {bar.border_width, bar.border_width, 0.0f};
+
+  draw()->AddRectFilled(
+      imvec2(position),
+      imvec2(position +
+             psdk_utils::local_vector{std::min(progress / (max / bar.size.x()), bar.size.x()),
+                                      bar.size.y(), 0.0f}),
       bar.progress_color, progress > 0.0f ? bar.rounding : 0.0f);
 }
 
-void visuals::draw_flat_box_in_space(const CVector& center, const float angle, const float radius,
-                                     const float height, const float line_width_,
-                                     const ImU32 color) {
-  const CVector2D right{get_point_on_circumference(center, angle, radius)},
-      left{get_point_on_circumference(center, angle + psdk_utils::math::pi(), radius)};
+void visuals::draw_flat_box_in_space(const psdk_utils::local_vector& center, float angle,
+                                     float radius, float height, float line_width_, ImColor color) {
+  const auto right = center.transit(psdk_utils::polar_vector{angle, radius}),
+             left = center.transit(psdk_utils::polar_vector{angle + 180.0f, radius});
 
-  std::array<CVector, 4> points{CVector{right.x, right.y, center.z + height},
-                                {right.x, right.y, center.z - height},
-                                {left.x, left.y, center.z - height},
-                                {left.x, left.y, center.z + height}};
+  std::array<psdk_utils::local_vector, 4> points{
+      psdk_utils::local_vector{right.x(), right.y(), center.z() + height},
+      {right.x(), right.y(), center.z() - height},
+      {left.x(), left.y(), center.z() - height},
+      {left.x(), left.y(), center.z() + height}};
 
-  for (int i{0}; i < points.size(); ++i) {
+  for (auto i = 0; i < points.size(); ++i) {
     auto& point = points[i];
-    point = psdk_utils::calc_screen_coors(point);
-    if (point.z != 0.0f) return;
+    point = point.to_screen();
+    if (point.z()) return;
     if (i > 0) {
-      draw()->AddLine(imvec2(points[i - 1]), imvec2(point), color, line_width_);
+      draw()->AddLine(imvec2(points.at(i - 1)), imvec2(point), color, line_width_);
     }
   }
 
-  draw()->AddLine(imvec2(points[0]), imvec2(points[points.size() - 1]), color, line_width_);
+  draw()->AddLine(imvec2(points.at(0)), imvec2(points.at(points.size() - 1)), color, line_width_);
 }
 
-CVector visuals::get_point_on_circumference(const CVector& center, const float angle,
-                                            const float radius) {
-  return center + CVector{radius * std::cos(angle), radius * std::sin(angle), 0.0f};
+ImDrawList* visuals::draw() {
+  return ImGui::GetForegroundDrawList();
+}
+
+ImVec2 visuals::imvec2(const psdk_utils::local_vector& in) {
+  return ImVec2{in.x(), in.y()};
 }

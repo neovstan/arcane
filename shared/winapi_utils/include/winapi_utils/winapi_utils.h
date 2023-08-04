@@ -8,8 +8,7 @@
 
 namespace winapi_utils {
 HANDLE find_process_handle_by_sha256_hash(std::string_view hash);
-HANDLE find_process_handle_by_pattern(std::uintptr_t address,
-                                      std::string_view pattern);
+HANDLE find_process_handle_by_pattern(std::uintptr_t address, std::string_view pattern);
 std::string hwid();
 }  // namespace winapi_utils
 

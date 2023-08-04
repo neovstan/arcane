@@ -4,16 +4,11 @@ project(samp_utils)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_library(${PROJECT_NAME} "include/${PROJECT_NAME}/samp_utils.h" "src/${PROJECT_NAME}/samp_utils.cpp")
-
-target_include_directories(${PROJECT_NAME} PRIVATE include/${PROJECT_NAME})
-
-target_include_directories(${PROJECT_NAME}
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
-  PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+add_library(samp_utils
+    include/samp_utils/samp_utils.h
+    src/samp_utils/samp_utils.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} sampapi)
+target_include_directories(samp_utils PRIVATE include/samp_utils PUBLIC include)
+
+target_link_libraries(samp_utils sampapi)

@@ -36,8 +36,7 @@ enum class MANUALMAP_ERROR_CODE {
 };
 
 namespace manualmap {
-using MANUALMAP_ERROR_HANDLER = void (*)(MANUALMAP_ERROR_CODE errorCode,
-                                         ::NTSTATUS ntError);
+using MANUALMAP_ERROR_HANDLER = void (*)(MANUALMAP_ERROR_CODE errorCode, ::NTSTATUS ntError);
 bool inject(::HANDLE targetProcess, const std::uint8_t* libraryBytecode,
             MANUALMAP_ERROR_HANDLER errorHandler, std::string_view data);
 }  // namespace manualmap

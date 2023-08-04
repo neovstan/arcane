@@ -28,12 +28,16 @@ class socket {
       shutdowning,
     };
 
-    exception(const failed reason,
-              const int code = ::WSAGetLastError()) noexcept
-        : reason_{reason}, code_{code} {}
+    exception(const failed reason, const int code = ::WSAGetLastError()) noexcept
+        : reason_{reason}, code_{code} {
+    }
 
-    failed reason() const noexcept { return reason_; }
-    int code() const noexcept { return code_; }
+    failed reason() const noexcept {
+      return reason_;
+    }
+    int code() const noexcept {
+      return code_;
+    }
 
    private:
     failed reason_{};
@@ -43,8 +47,7 @@ class socket {
   /**
    * @brief Constructor of the Socket class. Contains an invariant.
    */
-  socket(const std::string& ip, const std::string& port,
-         const std::string& encryption_key);
+  socket(const std::string& ip, const std::string& port, const std::string& encryption_key);
 
   ~socket();
 

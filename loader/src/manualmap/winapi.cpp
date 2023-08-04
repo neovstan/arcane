@@ -6,37 +6,37 @@
     auto getCurrentProcessFunc{getProcAddress(kernel32, "GetCurrentProcess")};
 
     if (NULL != getCurrentProcessFunc) {
-      return reinterpret_cast<::HANDLE(WINAPI *)()>(getCurrentProcessFunc)();
+      return reinterpret_cast<::HANDLE(WINAPI*)()>(getCurrentProcessFunc)();
     }
   }
 
   return NULL;
 }
 
-std::uintptr_t win32::getProcAddress(::HMODULE hModule, const char *szAPIName) {
-  unsigned char *lpBase = reinterpret_cast<unsigned char *>(hModule);
-  IMAGE_DOS_HEADER *idhDosHeader = reinterpret_cast<IMAGE_DOS_HEADER *>(lpBase);
+std::uintptr_t win32::getProcAddress(::HMODULE hModule, const char* szAPIName) {
+  unsigned char* lpBase = reinterpret_cast<unsigned char*>(hModule);
+  IMAGE_DOS_HEADER* idhDosHeader = reinterpret_cast<IMAGE_DOS_HEADER*>(lpBase);
 
   if (idhDosHeader->e_magic == 0x5A4D) {
-    IMAGE_NT_HEADERS32 *inhNtHeader =
-        reinterpret_cast<IMAGE_NT_HEADERS32 *>(lpBase + idhDosHeader->e_lfanew);
+    IMAGE_NT_HEADERS32* inhNtHeader =
+        reinterpret_cast<IMAGE_NT_HEADERS32*>(lpBase + idhDosHeader->e_lfanew);
 
     if (inhNtHeader->Signature == 0x4550) {
-      IMAGE_EXPORT_DIRECTORY *iedExportDirectory = reinterpret_cast<IMAGE_EXPORT_DIRECTORY *>(
+      IMAGE_EXPORT_DIRECTORY* iedExportDirectory = reinterpret_cast<IMAGE_EXPORT_DIRECTORY*>(
           lpBase +
           inhNtHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
 
       for (unsigned int uiIter = 0; uiIter < iedExportDirectory->NumberOfNames; ++uiIter) {
-        char *szNames = reinterpret_cast<char *>(
+        char* szNames = reinterpret_cast<char*>(
             lpBase +
-            reinterpret_cast<unsigned long *>(lpBase + iedExportDirectory->AddressOfNames)[uiIter]);
+            reinterpret_cast<unsigned long*>(lpBase + iedExportDirectory->AddressOfNames)[uiIter]);
 
         if (!strcmp(szNames, szAPIName)) {
-          unsigned short usOrdinal = reinterpret_cast<unsigned short *>(
+          unsigned short usOrdinal = reinterpret_cast<unsigned short*>(
               lpBase + iedExportDirectory->AddressOfNameOrdinals)[uiIter];
 
           return reinterpret_cast<std::uintptr_t>(
-              lpBase + reinterpret_cast<unsigned long *>(
+              lpBase + reinterpret_cast<unsigned long*>(
                            lpBase + iedExportDirectory->AddressOfFunctions)[usOrdinal]);
         }
       }
@@ -46,16 +46,16 @@ std::uintptr_t win32::getProcAddress(::HMODULE hModule, const char *szAPIName) {
   return 0;
 }
 
-wchar_t *GetFileNameFromPath(wchar_t *Path) {
-  wchar_t *LastSlash = NULL;
+wchar_t* GetFileNameFromPath(wchar_t* Path) {
+  wchar_t* LastSlash = NULL;
   for (DWORD i = 0; Path[i] != NULL; i++) {
     if (Path[i] == '\\') LastSlash = &Path[i + 1];
   }
   return LastSlash;
 }
 
-wchar_t *RemoveFileExtension(wchar_t *FullFileName, wchar_t *OutputBuffer, DWORD OutputBufferSize) {
-  wchar_t *LastDot = NULL;
+wchar_t* RemoveFileExtension(wchar_t* FullFileName, wchar_t* OutputBuffer, DWORD OutputBufferSize) {
+  wchar_t* LastDot = NULL;
   for (DWORD i = 0; FullFileName[i] != NULL; i++)
     if (FullFileName[i] == '.') LastDot = &FullFileName[i];
 
@@ -103,7 +103,7 @@ HMODULE WINAPI GetModuleW(_In_opt_ LPCWSTR lpModuleName) {
     };
     HANDLE Mutant;
     PVOID ImageBaseAddress;
-    PEB_LDR_DATA *Ldr;
+    PEB_LDR_DATA* Ldr;
     //...
   };
 
@@ -118,7 +118,7 @@ HMODULE WINAPI GetModuleW(_In_opt_ LPCWSTR lpModuleName) {
     CLIENT_ID ClientId;
     PVOID ActiveRpcHandle;
     PVOID ThreadLocalStoragePointer;
-    struct PEB *ProcessEnvironmentBlock;
+    struct PEB* ProcessEnvironmentBlock;
     //...
   };
 
@@ -143,27 +143,27 @@ HMODULE WINAPI GetModuleW(_In_opt_ LPCWSTR lpModuleName) {
     //...
   };
 
-  PEB *ProcessEnvironmentBlock = ((PEB *)((TEB *)((TEB *)NtCurrentTeb())->ProcessEnvironmentBlock));
+  PEB* ProcessEnvironmentBlock = ((PEB*)((TEB*)((TEB*)NtCurrentTeb())->ProcessEnvironmentBlock));
   if (lpModuleName == nullptr) return (HMODULE)(ProcessEnvironmentBlock->ImageBaseAddress);
 
-  PEB_LDR_DATA *Ldr = ProcessEnvironmentBlock->Ldr;
+  PEB_LDR_DATA* Ldr = ProcessEnvironmentBlock->Ldr;
 
-  LIST_ENTRY *ModuleLists[3] = {0, 0, 0};
+  LIST_ENTRY* ModuleLists[3] = {0, 0, 0};
   ModuleLists[0] = &Ldr->InLoadOrderModuleList;
   ModuleLists[1] = &Ldr->InMemoryOrderModuleList;
   ModuleLists[2] = &Ldr->InInitializationOrderModuleList;
   for (int j = 0; j < 3; j++) {
-    for (LIST_ENTRY *pListEntry = ModuleLists[j]->Flink; pListEntry != ModuleLists[j];
+    for (LIST_ENTRY* pListEntry = ModuleLists[j]->Flink; pListEntry != ModuleLists[j];
          pListEntry = pListEntry->Flink) {
-      LDR_DATA_TABLE_ENTRY *pEntry =
-          (LDR_DATA_TABLE_ENTRY *)((BYTE *)pListEntry -
-                                   sizeof(LIST_ENTRY) *
-                                       j);  //= CONTAINING_RECORD( pListEntry, LDR_DATA_TABLE_ENTRY,
-                                            //InLoadOrderLinks );
+      LDR_DATA_TABLE_ENTRY* pEntry =
+          (LDR_DATA_TABLE_ENTRY*)((BYTE*)pListEntry -
+                                  sizeof(LIST_ENTRY) *
+                                      j);  //= CONTAINING_RECORD( pListEntry, LDR_DATA_TABLE_ENTRY,
+                                           // InLoadOrderLinks );
 
       if (_wcsicmp(pEntry->BaseDllName.Buffer, lpModuleName) == 0) return (HMODULE)pEntry->DllBase;
 
-      wchar_t *FileName = GetFileNameFromPath(pEntry->FullDllName.Buffer);
+      wchar_t* FileName = GetFileNameFromPath(pEntry->FullDllName.Buffer);
       if (!FileName) continue;
 
       if (_wcsicmp(FileName, lpModuleName) == 0) return (HMODULE)pEntry->DllBase;
@@ -177,14 +177,14 @@ HMODULE WINAPI GetModuleW(_In_opt_ LPCWSTR lpModuleName) {
   return nullptr;
 }
 
-::HMODULE win32::getModuleBase(const char *lpModuleName) {
+::HMODULE win32::getModuleBase(const char* lpModuleName) {
   if (!lpModuleName) return GetModuleW(NULL);
 
   DWORD ModuleNameLength = (DWORD)strlen(lpModuleName) + 1;
 
   // allocate buffer for the string on the stack:
   DWORD NewBufferSize = sizeof(wchar_t) * ModuleNameLength;
-  wchar_t *W_ModuleName = (wchar_t *)_malloca(NewBufferSize);
+  wchar_t* W_ModuleName = (wchar_t*)_malloca(NewBufferSize);
   for (DWORD i = 0; i < ModuleNameLength; i++) W_ModuleName[i] = lpModuleName[i];
 
   HMODULE hReturnModule = GetModuleW(W_ModuleName);

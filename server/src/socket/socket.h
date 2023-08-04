@@ -31,11 +31,18 @@ class socket {
 
     exception(const failed reason, const std::string& text = "",
               const int code = ::WSAGetLastError()) noexcept
-        : reason_{reason}, text_{text}, code_{code} {}
+        : reason_{reason}, text_{text}, code_{code} {
+    }
 
-    failed reason() const noexcept { return reason_; }
-    int code() const noexcept { return code_; }
-    const char* what() const noexcept override { return text_.c_str(); }
+    failed reason() const noexcept {
+      return reason_;
+    }
+    int code() const noexcept {
+      return code_;
+    }
+    const char* what() const noexcept override {
+      return text_.c_str();
+    }
 
    private:
     failed reason_{};

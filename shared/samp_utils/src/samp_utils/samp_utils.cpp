@@ -35,10 +35,8 @@ void samp_utils::patch_anticheat() {
     std::memset(second_instruction, 0x90, 5);
   } else if (version == version::r3) {
     DWORD old_prot{};
-    VirtualProtect(reinterpret_cast<void*>(base + 0x60EEB), 1, PAGE_READWRITE,
-                   &old_prot);
-    VirtualProtect(reinterpret_cast<void*>(base + 0xC4DC7), 1, PAGE_READWRITE,
-                   &old_prot);
+    VirtualProtect(reinterpret_cast<void*>(base + 0x60EEB), 1, PAGE_READWRITE, &old_prot);
+    VirtualProtect(reinterpret_cast<void*>(base + 0xC4DC7), 1, PAGE_READWRITE, &old_prot);
 
     *reinterpret_cast<std::uint8_t*>(base + 0x60EEB) = 0xEB;
     *reinterpret_cast<std::uint8_t*>(base + 0xC4DC7) = 0xEB;

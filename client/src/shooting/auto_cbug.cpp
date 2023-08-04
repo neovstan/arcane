@@ -5,6 +5,9 @@
 
 using namespace modification::client::shooting;
 
+auto_cbug::auto_cbug() : state_{}, state_update_time_{} {
+}
+
 void auto_cbug::process() {
   using namespace std::chrono;
   namespace psdk = psdk_utils;
@@ -25,7 +28,7 @@ void auto_cbug::process() {
   const auto time_elapsed_from_state_update =
       duration_cast<milliseconds>(steady_clock::now() - state_update_time_).count();
 
-  const auto multiplier = 15.0f / std::sqrt(ImGui::GetIO().Framerate);
+  const auto multiplier = 15.0f / psdk::math::sqrt(ImGui::GetIO().Framerate);
 
   const auto duration_from_squat_to_attack = settings.duration_from_squat_to_attack * multiplier,
              duration_from_attack_to_squat = settings.duration_from_attack_to_squat * multiplier;
@@ -42,4 +45,9 @@ void auto_cbug::process() {
   } else if (state_ == state::aim_and_squat) {
     state_ = state::no;
   }
+}
+
+void auto_cbug::update_state(state new_state) {
+  state_ = new_state;
+  state_update_time_ = std::chrono::steady_clock::now();
 }

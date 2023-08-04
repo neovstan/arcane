@@ -7,8 +7,7 @@
 // SHA256_Init, SHA256_Update, SHA256_Final
 #include <openssl/sha.h>
 
-std::string data_representation::byte_array_as_hex_string(
-    const std::vector<unsigned char>& in) {
+std::string data_representation::byte_array_as_hex_string(const std::vector<unsigned char>& in) {
   std::ostringstream stream{};
 
   stream << std::hex << std::setfill('0');
@@ -20,8 +19,7 @@ std::string data_representation::byte_array_as_hex_string(
   return stream.str();
 }
 
-std::vector<unsigned char> data_representation::hex_string_as_byte_array(
-    std::string_view in) {
+std::vector<unsigned char> data_representation::hex_string_as_byte_array(std::string_view in) {
   std::vector<unsigned char> out{};
 
   std::istringstream input_stream{in.data()};
@@ -98,8 +96,7 @@ std::string data_representation::sha256_file(std::string_view path) {
   return byte_array_as_hex_string(hash);
 }
 
-std::string data_representation::sha256_byte_array(
-    const std::vector<unsigned char>& in) {
+std::string data_representation::sha256_byte_array(const std::vector<unsigned char>& in) {
   const auto hash = [in]() {
     unsigned char hash[SHA256_DIGEST_LENGTH]{};
 

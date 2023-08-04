@@ -12,7 +12,9 @@
 class CPed;
 
 namespace samp_utils {
-constexpr sampapi::ID invalid_id() { return 65535; }
+constexpr sampapi::ID invalid_id() {
+  return 65535;
+}
 
 enum class version { unknown, r1, r3 };
 version get_version();
@@ -47,9 +49,8 @@ class invoke {
     if (!input) return false;
     const auto death_window = RefDeathWindow(Version{});
     if (!death_window) return false;
-    return netgame->GetRakClient() && netgame->GetVehiclePool() &&
-           netgame->GetActorPool() && netgame->GetObjectPool() &&
-           netgame->GetPlayerPool() && netgame->GetMenuPool() &&
+    return netgame->GetRakClient() && netgame->GetVehiclePool() && netgame->GetActorPool() &&
+           netgame->GetObjectPool() && netgame->GetPlayerPool() && netgame->GetMenuPool() &&
            netgame->GetPickupPool();
   }
 
@@ -76,24 +77,18 @@ class invoke {
 
   static bool is_player_playing(const sampapi::ID id) {
     if (id == invalid_id() || !is_initialized()) return false;
-    const auto remote_player =
-        RefNetGame(Version{})->GetPlayerPool()->GetPlayer(id);
-    return remote_player && remote_player->m_pPed &&
-           remote_player->m_pPed->m_pGamePed;
+    const auto remote_player = RefNetGame(Version{})->GetPlayerPool()->GetPlayer(id);
+    return remote_player && remote_player->m_pPed && remote_player->m_pPed->m_pGamePed;
   }
 
   static bool is_player_alive(const sampapi::ID id) {
     if (!is_player_playing(id)) return false;
-    return RefNetGame(Version{})
-               ->GetPlayerPool()
-               ->GetPlayer(id)
-               ->m_onfootData.m_nHealth != 0;
+    return RefNetGame(Version{})->GetPlayerPool()->GetPlayer(id)->m_onfootData.m_nHealth != 0;
   }
 
   static bool is_player_afk(const sampapi::ID id) {
     if (!is_player_playing(id)) return false;
-    return RefNetGame(Version{})->GetPlayerPool()->GetPlayer(id)->m_nStatus ==
-           2;
+    return RefNetGame(Version{})->GetPlayerPool()->GetPlayer(id)->m_nStatus == 2;
   }
 
   static float get_nametag_draw_distance() {
@@ -109,26 +104,17 @@ class invoke {
 
   static std::uint8_t get_health(const sampapi::ID id) {
     if (!is_player_playing(id)) return {};
-    return RefNetGame(Version{})
-        ->GetPlayerPool()
-        ->GetPlayer(id)
-        ->m_onfootData.m_nHealth;
+    return RefNetGame(Version{})->GetPlayerPool()->GetPlayer(id)->m_onfootData.m_nHealth;
   }
 
   static std::uint8_t get_armor(const sampapi::ID id) {
     if (!is_player_playing(id)) return {};
-    return RefNetGame(Version{})
-        ->GetPlayerPool()
-        ->GetPlayer(id)
-        ->m_onfootData.m_nArmor;
+    return RefNetGame(Version{})->GetPlayerPool()->GetPlayer(id)->m_onfootData.m_nArmor;
   }
 
   static std::uint32_t get_color_as_argb(const sampapi::ID id) {
     if (!is_player_playing(id)) return {};
-    return RefNetGame(Version{})
-        ->GetPlayerPool()
-        ->GetPlayer(id)
-        ->GetColorAsARGB();
+    return RefNetGame(Version{})->GetPlayerPool()->GetPlayer(id)->GetColorAsARGB();
   }
 
   static void set_nametag_visibility_status(const bool status) {

@@ -20,7 +20,7 @@ struct stLoaderParams {
 };
 
 MANUALMAP_ERROR_CODE WINAPI LibraryInitializationRemoteThread(::LPVOID lpThreadParameter) {
-  auto loaderParams{reinterpret_cast<stLoaderParams *>(lpThreadParameter)};
+  auto loaderParams{reinterpret_cast<stLoaderParams*>(lpThreadParameter)};
 
   auto dwGetProcAddress{loaderParams->dwGetProcAddress};
   auto dwLoadLibrary{loaderParams->dwLoadLibrary};
@@ -91,8 +91,8 @@ MANUALMAP_ERROR_CODE WINAPI LibraryInitializationRemoteThread(::LPVOID lpThreadP
     return MANUALMAP_ERROR_CODE::MODULE_HAS_NO_ENTRYPOINT;
   }
 
-  using DllMain_t = ::BOOL(WINAPI *)(::HMODULE, ::DWORD, const char *);
-  using RtlZeroMemory_t = void(WINAPI *)(::LPVOID, ::SIZE_T);
+  using DllMain_t = ::BOOL(WINAPI*)(::HMODULE, ::DWORD, const char*);
+  using RtlZeroMemory_t = void(WINAPI*)(::LPVOID, ::SIZE_T);
 
   auto dllMain{reinterpret_cast<DllMain_t>(
       moduleBase + loaderParams->imageNtHeader->OptionalHeader.AddressOfEntryPoint)};
@@ -108,7 +108,7 @@ MANUALMAP_ERROR_CODE WINAPI LibraryInitializationRemoteThread(::LPVOID lpThreadP
   return MANUALMAP_ERROR_CODE::EVERYTHING_IS_OK;
 }
 
-bool manualmap::inject(::HANDLE targetProcess, const std::uint8_t *staticBytecode,
+bool manualmap::inject(::HANDLE targetProcess, const std::uint8_t* staticBytecode,
                        MANUALMAP_ERROR_HANDLER errorHandler, std::string_view data) {
 #ifdef VMP_API
   VMProtectBeginUltra("manualmap::inject");
@@ -121,14 +121,14 @@ bool manualmap::inject(::HANDLE targetProcess, const std::uint8_t *staticBytecod
   }
 
   using ZwAllocateVirtualMemory_t =
-      ::NTSTATUS(NTAPI *)(::HANDLE, ::LPVOID *, ::ULONG_PTR, ::PSIZE_T, ::ULONG, ::ULONG);
+      ::NTSTATUS(NTAPI*)(::HANDLE, ::LPVOID*, ::ULONG_PTR, ::PSIZE_T, ::ULONG, ::ULONG);
 
-  using ZwFreeVirtualMemory_t = ::NTSTATUS(NTAPI *)(::HANDLE, ::LPVOID *, ::PSIZE_T, ::ULONG);
+  using ZwFreeVirtualMemory_t = ::NTSTATUS(NTAPI*)(::HANDLE, ::LPVOID*, ::PSIZE_T, ::ULONG);
   using NtCreateThreadEx_t =
-      ::NTSTATUS(NTAPI *)(::PHANDLE, ::ACCESS_MASK, ::PVOID, ::HANDLE, ::PVOID, ::PVOID, ::ULONG,
-                          ::SIZE_T, ::SIZE_T, ::SIZE_T, ::PVOID);
+      ::NTSTATUS(NTAPI*)(::PHANDLE, ::ACCESS_MASK, ::PVOID, ::HANDLE, ::PVOID, ::PVOID, ::ULONG,
+                         ::SIZE_T, ::SIZE_T, ::SIZE_T, ::PVOID);
 
-  using ZwWaitForSingleObject_t = ::NTSTATUS(NTAPI *)(::HANDLE, ::BOOLEAN, ::PLARGE_INTEGER);
+  using ZwWaitForSingleObject_t = ::NTSTATUS(NTAPI*)(::HANDLE, ::BOOLEAN, ::PLARGE_INTEGER);
 
   auto zwAllocateVirtualMemory{ZwAllocateVirtualMemory_t(
       win32::getProcAddress(ntdllLibrary, MMAP_STRING("ZwAllocateVirtualMemory")))};
@@ -155,7 +155,7 @@ bool manualmap::inject(::HANDLE targetProcess, const std::uint8_t *staticBytecod
     return false;
   }
 
-  auto libraryBytecode = const_cast<std::uint8_t *>(staticBytecode);
+  auto libraryBytecode = const_cast<std::uint8_t*>(staticBytecode);
 
   if (!libraryBytecode) {
     errorHandler(MANUALMAP_ERROR_CODE::MODULE_DOES_NOT_EXIST, NULL);

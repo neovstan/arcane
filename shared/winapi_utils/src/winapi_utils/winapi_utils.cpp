@@ -15,8 +15,7 @@ HANDLE winapi_utils::find_process_handle_by_sha256_hash(std::string_view hash) {
   HANDLE snapshot{CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL)};
   if (Process32First(snapshot, &process_entry)) {
     while (Process32Next(snapshot, &process_entry)) {
-      handle =
-          OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_entry.th32ProcessID);
+      handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_entry.th32ProcessID);
 
       if (!handle) continue;
 
@@ -45,15 +44,14 @@ HANDLE winapi_utils::find_process_handle_by_pattern(std::uintptr_t address,
   HANDLE snapshot{CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL)};
   if (Process32First(snapshot, &process_entry)) {
     while (Process32Next(snapshot, &process_entry)) {
-      handle =
-          OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_entry.th32ProcessID);
+      handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_entry.th32ProcessID);
 
       if (!handle) continue;
 
       std::vector<std::uint8_t> bytes(pattern.size() - 1);
 
-      if (!ReadProcessMemory(handle, reinterpret_cast<LPCVOID>(address),
-                             bytes.data(), bytes.size(), nullptr)) {
+      if (!ReadProcessMemory(handle, reinterpret_cast<LPCVOID>(address), bytes.data(), bytes.size(),
+                             nullptr)) {
         handle = nullptr;
         continue;
       }

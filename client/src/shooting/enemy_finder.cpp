@@ -10,10 +10,11 @@
 
 using namespace modification::client::shooting;
 
-enemy_finder::target enemy_finder::get() {
-  using namespace std::chrono;
-  namespace psdk = psdk_utils;
+enemy_finder::enemy_finder(const settings& settings)
+    : settings_{settings}, enemy_{}, target_change_time_{}, previous_enemy_ped_{} {
+}
 
+enemy_finder::target enemy_finder::get() {
   const auto previous_enemy_ped = enemy_.ped;
 
   if (settings_.hold_target) {
@@ -27,16 +28,17 @@ enemy_finder::target enemy_finder::get() {
 
   if (previous_enemy_ped && !enemy_.ped) {
     previous_enemy_ped_ = previous_enemy_ped;
-    target_change_time_ = steady_clock::now();
+    target_change_time_ = clock::now();
   }
 
-  enemy_.difference = psdk::math::deg2rad(settings_.max_angle_in_degrees);
+  enemy_.difference = settings_.max_angle_in_degrees;
 
-  for (const auto& i : psdk::peds_around()) {
+  for (const auto& i : psdk_utils::peds_around()) {
     const auto target = produce_target(i);
     if (target.ped && target.difference < enemy_.difference) {
+      using namespace std::chrono;
       if (target.ped != previous_enemy_ped_ &&
-          duration_cast<milliseconds>(steady_clock::now() - target_change_time_).count() <
+          duration_cast<milliseconds>(clock::now() - target_change_time_).count() <
               settings_.delay_between_target_changes) {
         continue;
       }
@@ -48,7 +50,7 @@ enemy_finder::target enemy_finder::get() {
   return enemy_;
 }
 
-enemy_finder::target enemy_finder::produce_target(CPed* const ped) const {
+enemy_finder::target enemy_finder::produce_target(CPed* ped) const {
   namespace psdk = psdk_utils;
 
   if (!ped || !ped->IsPointerValid() || !ped->GetIsOnScreen() ||
@@ -56,8 +58,8 @@ enemy_finder::target enemy_finder::produce_target(CPed* const ped) const {
     return {};
   }
 
-  const bool is_samp_found{samp_utils::get_version() != samp_utils::version::unknown};
-  sampapi::ID ped_samp_id{samp_utils::invalid_id()};
+  const auto is_samp_found = samp_utils::get_version() != samp_utils::version::unknown;
+  auto ped_samp_id = samp_utils::invalid_id();
 
   if (is_samp_found) {
     ped_samp_id = samp_utils::execute([ped](auto version) {
@@ -74,7 +76,7 @@ enemy_finder::target enemy_finder::produce_target(CPed* const ped) const {
     const auto have_same_group = [&]() {
       for (const auto& [id, name, list, active] : settings_.model_groups) {
         if (!active) continue;
-        bool player_model_found{}, target_model_found{};
+        auto player_model_found = false, target_model_found = false;
 
         for (const auto i : list) {
           if (i == player_model) player_model_found = true;
@@ -110,15 +112,10 @@ enemy_finder::target enemy_finder::produce_target(CPed* const ped) const {
       using samp = samp_utils::invoke<decltype(version)>;
 
       const auto player_pool = RefNetGame(version)->GetPlayerPool();
-      const char* const name{player_pool->GetName(ped_samp_id)};
+      const auto name = player_pool->GetName(ped_samp_id);
 
-      for (const auto& friendly_name : settings_.friendly_nicknames) {
-        if (friendly_name == name) {
-          return true;
-        }
-      }
-
-      return false;
+      const auto& vec = settings_.friendly_nicknames;
+      return std::find(vec.begin(), vec.end(), name) != vec.end();
     });
 
     if (is_samp_found && has_friendly_nickname) return {};
@@ -144,6 +141,6 @@ enemy_finder::target enemy_finder::produce_target(CPed* const ped) const {
       settings_.left_elbow, settings_.stomach, settings_.right_knee, settings_.left_knee);
 
   if (!nearest_bone.existing) return {};
-  return {ped, nearest_bone.world_position, nearest_bone.desired_angle,
-          nearest_bone.angle_to_sight};
+  return target{ped, nearest_bone.world_position, nearest_bone.desired_angle,
+                nearest_bone.angle_to_sight};
 }

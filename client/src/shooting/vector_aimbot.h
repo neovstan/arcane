@@ -12,45 +12,17 @@
 namespace modification::client::shooting {
 class vector_aimbot {
  public:
+  vector_aimbot();
+
   void process();
+  enemy_finder::settings get_settings(psdk_utils::weapon::mode number);
 
-  std::unordered_map<psdk_utils::weapon::mode, configuration::vector_aimbot> settings{};
-
-  enemy_finder::settings get_settings(const psdk_utils::weapon::mode number) {
-    return {settings[number].max_angle_in_degrees,
-            settings[number].min_distance,
-            settings[number].delay_between_target_changes,
-            settings[number].divide_angle_by_distance,
-            settings[number].hold_target,
-            settings[number].check_for_obstacles,
-            settings[number].check_for_distance,
-            settings[number].ignore_the_dead,
-            settings[number].ignore_same_group,
-            settings[number].ignore_friendly_nicknames,
-            settings[number].ignore_same_color,
-            settings[number].head,
-            settings[number].neck,
-            settings[number].right_shoulder,
-            settings[number].left_shoulder,
-            settings[number].right_elbow,
-            settings[number].left_elbow,
-            settings[number].stomach,
-            settings[number].right_knee,
-            settings[number].left_knee,
-            settings[number].model_groups,
-            settings[number].friendly_nicknames,
-            use_target_range_instead_of_weapons_};
-  }
+ public:
+  std::unordered_map<psdk_utils::weapon::mode, configuration::vector_aimbot> settings;
 
  private:
-  std::unordered_map<psdk_utils::weapon::mode, enemy_finder> finder_{
-      {psdk_utils::weapon::mode::pistols, {get_settings(psdk_utils::weapon::mode::pistols)}},
-      {psdk_utils::weapon::mode::shotguns, {get_settings(psdk_utils::weapon::mode::shotguns)}},
-      {psdk_utils::weapon::mode::semi, {get_settings(psdk_utils::weapon::mode::semi)}},
-      {psdk_utils::weapon::mode::assault, {get_settings(psdk_utils::weapon::mode::assault)}},
-      {psdk_utils::weapon::mode::rifles, {get_settings(psdk_utils::weapon::mode::rifles)}}};
-
-  bool use_target_range_instead_of_weapons_{false};
+  std::unordered_map<psdk_utils::weapon::mode, enemy_finder> finder_;
+  bool use_target_range_instead_of_weapons_;
 };
 
 }  // namespace modification::client::shooting

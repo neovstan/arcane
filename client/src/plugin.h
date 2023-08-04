@@ -50,8 +50,6 @@ class singleton {
 
   singleton(const singleton&) = delete;
   singleton(singleton&&) = delete;
-  void operator=(const singleton&) = delete;
-  void operator=(singleton&&) = delete;
 
   class instancing_in_global_object_exception final : public std::exception {
    public:
