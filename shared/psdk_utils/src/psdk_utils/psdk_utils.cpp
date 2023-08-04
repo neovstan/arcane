@@ -83,7 +83,7 @@ psdk_utils::nearest_bone psdk_utils::find_bone_making_minimum_angle_with_camera(
   nearest_bone data{};
   data.angle_to_sight = max_angle_in_degrees;
 
-  auto bone = [](const bool enabled = false, const int id = 0) {
+  auto bone = [](bool enabled = false, int id = 0) {
     return enabled ? id : 0;
   };
 
