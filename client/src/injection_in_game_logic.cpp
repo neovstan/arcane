@@ -244,10 +244,6 @@ void injection_in_game_logic::load_visuals() {
 
 void injection_in_game_logic::load_actor() {
   signals_.loop([this]() {
-    if (psdk_utils::key::pressed(VK_INSERT)) {
-      actor.settings.air_walking.enable ^= true;
-    }
-
     actor.process();
   });
 }
