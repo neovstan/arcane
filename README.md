@@ -87,6 +87,10 @@ Because it provides great opportunities to separate modules, thus allowing to si
   * Bones
   * FOV
   * Framerate
+* **Actor**
+  * Air Walking
+    * Speed
+    * Acceleration time
 ### Media
 * [Website](https://arcane.su)
 * [Main page of the project](https://vk.com/arcanesamp)
