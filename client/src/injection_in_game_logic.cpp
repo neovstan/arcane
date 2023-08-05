@@ -52,6 +52,7 @@ injection_in_game_logic::injection_in_game_logic()
   load_auto_shot();
   load_auto_cbug();
   load_visuals();
+  load_actor();
 }
 
 void injection_in_game_logic::load_debug_console() {
@@ -239,6 +240,16 @@ void injection_in_game_logic::load_visuals() {
   plugin::Events::d3dLostEvent += []() {
     ImGui_ImplDX9_InvalidateDeviceObjects();
   };
+}
+
+void injection_in_game_logic::load_actor() {
+  signals_.loop([this]() {
+    if (psdk_utils::key::pressed(VK_INSERT)) {
+      actor.settings.air_walking.enable ^= true;
+    }
+
+    actor.process();
+  });
 }
 
 void injection_in_game_logic::thread_updating_settings() {

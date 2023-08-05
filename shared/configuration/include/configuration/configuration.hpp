@@ -3,9 +3,10 @@
 
 #include <list>
 #include <map>
-#include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
+
+#include <nlohmann/json.hpp>
 
 namespace modification {
 namespace configuration {
@@ -121,6 +122,24 @@ struct visuals {
   bool bones{false};
   bool fov{false};
   bool framerate{false};
+};
+
+struct actor {
+  struct air_walking_data {
+    bool enable{false};
+
+    float speed{30.0f};
+    float acceleration_time{1.0f};
+
+    struct movement_keys {
+      int forward{'W'};
+      int backward{'S'};
+      int left{'A'};
+      int right{'D'};
+      int up{0xA0};
+      int down{0xA2};
+    } keys;
+  } air_walking;
 };
 }  // namespace configuration
 }  // namespace modification

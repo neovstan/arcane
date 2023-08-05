@@ -11,6 +11,7 @@
 #include "shooting/vector_aimbot.h"
 
 #include "visuals/visuals.h"
+#include "actor/actor.h"
 
 namespace modification::client {
 class injection_in_game_logic {
@@ -28,6 +29,9 @@ class injection_in_game_logic {
  public:
   visuals::visuals visuals;
 
+ public:
+  actor::actor actor;
+
  private:
   void load_debug_console();
   void load_imgui_context();
@@ -40,6 +44,7 @@ class injection_in_game_logic {
   void load_auto_shot();
   void load_auto_cbug();
   void load_visuals();
+  void load_actor();
 
  private:
   void thread_updating_settings();
