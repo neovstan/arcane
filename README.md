@@ -92,6 +92,7 @@ Because it provides great opportunities to separate modules, thus allowing to si
     * Speed
     * Acceleration time
 ### Media
+* [Developer blog](https://t.me/arcanedev)
 * [Website](https://arcane.su)
 * [Main page of the project](https://vk.com/arcanesamp)
 * [User chat](https://vk.me/join/AJQ1d0FBaxjsqxH21BTDia9L)
