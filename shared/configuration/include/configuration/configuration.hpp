@@ -150,6 +150,11 @@ struct actor {
     bool enable{false};
     float speed{2.0f};
   } fast_run;
+
+  struct spread_control_data {
+    bool enable{false};
+    float spread{0.5f};
+  } spread_control;
 };
 }  // namespace configuration
 }  // namespace modification

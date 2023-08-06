@@ -34,6 +34,8 @@ add_library(client SHARED
 	src/actor/anti_stun.h
 	src/actor/fast_run.cpp
 	src/actor/fast_run.h
+	src/actor/spread_control.cpp
+	src/actor/spread_control.h
 )
 
 find_package(nlohmann_json CONFIG REQUIRED)

@@ -125,47 +125,45 @@ void injection_in_game_logic::load_silent_aimbot() {
     mutex_.unlock();
   });
 
-  signals_.gun_shot.before += [this](const auto& hook, psdk_utils::local_vector*& origin,
-                                     psdk_utils::local_vector*& target) {
+  signals_.gun_shot.before += [this](const auto& hook, auto& origin, auto& target) {
     while (!mutex_.try_lock()) continue;
     silent_aimbot.bullet_process(*origin, *target);
     mutex_.unlock();
     return true;
   };
 
-  signals_.compute_mouse_target.before +=
-      [this](const auto& hook, CPlayerPed*& player_ped, bool& melee) {
-        was_last_compute_mouse_target_caller_local_player_ = player_ped == psdk_utils::player();
-        return true;
-      };
+  signals_.compute_mouse_target.before += [this](const auto& hook, auto player_ped, auto& melee) {
+    was_last_compute_mouse_target_caller_local_player_ = player_ped == psdk_utils::player();
+    return true;
+  };
 
-  signals_.aim_point.set_cb(
-      [this](const auto& hook, psdk_utils::local_vector* start, psdk_utils::local_vector* end,
-             CColPoint* colpoint, CEntity** entity, bool buildings, bool vehicles, bool peds,
-             bool objects, bool dummies, bool see_through, bool camera_ignore, bool shoot_through) {
-        auto call_trampoline = [&]() {
-          return hook.get_trampoline()(start, end, colpoint, entity, buildings, vehicles, peds,
-                                       objects, dummies, see_through, camera_ignore, shoot_through);
-        };
+  signals_.aim_point.set_cb([this](const auto& hook, auto start, auto end, auto colpoint,
+                                   auto entity, auto buildings, auto vehicles, auto peds,
+                                   auto objects, auto dummies, auto see_through, auto camera_ignore,
+                                   auto shoot_through) {
+    auto call_trampoline = [&]() {
+      return hook.get_trampoline()(start, end, colpoint, entity, buildings, vehicles, peds, objects,
+                                   dummies, see_through, camera_ignore, shoot_through);
+    };
 
-        const auto result = call_trampoline();
+    const auto result = call_trampoline();
 
-        if (hook.get_return_address() == signals_.aim_point_return_address &&
-            was_last_compute_mouse_target_caller_local_player_ && mutex_.try_lock()) {
-          is_aiming_at_person_ =
-              result && psdk_utils::find_bone_making_minimum_angle_with_camera(
-                            reinterpret_cast<CPed*>(*entity), true, true, false, 1000.0f, 0.0f)
-                            .existing;
+    if (hook.get_return_address() == signals_.aim_point_return_address &&
+        was_last_compute_mouse_target_caller_local_player_ && mutex_.try_lock()) {
+      is_aiming_at_person_ =
+          result && psdk_utils::find_bone_making_minimum_angle_with_camera(
+                        reinterpret_cast<CPed*>(*entity), true, true, false, 1000.0f, 0.0f)
+                        .existing;
 
-          silent_aimbot.aim_look_process(*end);
-          mutex_.unlock();
-          return call_trampoline();
-        }
+      silent_aimbot.aim_look_process(*end);
+      mutex_.unlock();
+      return call_trampoline();
+    }
 
-        return result;
-      });
+    return result;
+  });
 
-  signals_.set_heading.set_cb([this](const auto& hook, CPlaceable* placeable, float heading) {
+  signals_.set_heading.set_cb([this](const auto& hook, auto placeable, auto heading) {
     if (hook.get_return_address() == signals_.set_heading_return_address &&
         was_last_compute_mouse_target_caller_local_player_ && mutex_.try_lock()) {
       silent_aimbot.heading_process(heading);
@@ -180,7 +178,7 @@ void injection_in_game_logic::load_silent_aimbot() {
 }
 
 void injection_in_game_logic::load_auto_shot() {
-  signals_.update_pads.after += [this](const auto& hook, const bool& result) {
+  signals_.update_pads.after += [this](const auto& hook, const auto& result) {
     if (!mutex_.try_lock()) return;
     if (psdk_utils::camera::is_player_aiming() && is_aiming_at_person_) auto_shot.process();
     mutex_.unlock();
@@ -188,7 +186,7 @@ void injection_in_game_logic::load_auto_shot() {
 }
 
 void injection_in_game_logic::load_auto_cbug() {
-  signals_.update_pads.after += [this](const auto& hook, const bool& result) {
+  signals_.update_pads.after += [this](const auto& hook, const auto& result) {
     if (!mutex_.try_lock()) return;
     auto_cbug.process();
     mutex_.unlock();
@@ -211,8 +209,8 @@ void injection_in_game_logic::load_visuals() {
     return true;
   });
 
-  signals_.present.before += [this](const auto& hook, IDirect3DDevice9* device, const RECT* source,
-                                    const RECT* dest, HWND window, const RGNDATA* dirty_region) {
+  signals_.present.before += [this](const auto& hook, auto device, auto source, auto dest,
+                                    auto window, auto dirty_region) {
     static auto initialized = false;
     if (!initialized) {
       ImGui_ImplWin32_Init(psdk_utils::hwnd());
@@ -244,24 +242,34 @@ void injection_in_game_logic::load_visuals() {
 
 void injection_in_game_logic::load_actor() {
   signals_.loop([this]() {
+    if (!mutex_.try_lock()) return;
     actor.process();
+    mutex_.unlock();
   });
 
   signals_.get_button_sprint_results.after +=
-      [this](const auto& hook, double& return_value, CPlayerPed* player, int sprint_type) {
-        if (sprint_type == 0) actor.process_fast_run(return_value);
+      [this](const auto& hook, auto& return_value, auto player, auto sprint_type) {
+        if (sprint_type == 0 && mutex_.try_lock()) {
+          actor.process_fast_run(return_value);
+          mutex_.unlock();
+        }
       };
 
-  signals_.compute_damage_anim.set_cb(
-      [this](const auto& hook, CEventDamage* event, CPed* ped, bool flag) {
-        if (ped == psdk_utils::player() &&
-            actor.process_anti_stun() ==
-                actor::anti_stun::order::not_execute_compute_damage_anim_for_local_player) {
-          return;
-        }
+  signals_.compute_damage_anim.set_cb([this](const auto& hook, auto event, auto ped, auto flag) {
+    if (ped == psdk_utils::player()) {
+      while (!mutex_.try_lock()) {
+      }
 
-        hook.get_trampoline()(event, ped, flag);
-      });
+      const auto order = actor.process_anti_stun();
+      mutex_.unlock();
+
+      if (order == decltype(order)::not_execute_compute_damage_anim_for_local_player) {
+        return;
+      }
+    }
+
+    hook.get_trampoline()(event, ped, flag);
+  });
 
   signals_.compute_damage_anim.install();
 }

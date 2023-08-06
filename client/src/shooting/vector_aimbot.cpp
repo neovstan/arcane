@@ -48,7 +48,7 @@ void vector_aimbot::process() {
 }
 
 enemy_finder::settings vector_aimbot::get_settings(psdk_utils::weapon::mode number) {
-  auto& s = settings.at(number);
+  auto& s = settings[number];
   return {s.max_angle_in_degrees,
           s.min_distance,
           s.delay_between_target_changes,

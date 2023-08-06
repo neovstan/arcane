@@ -6,6 +6,7 @@
 #include "air_walking.h"
 #include "anti_stun.h"
 #include "fast_run.h"
+#include "spread_control.h"
 
 namespace modification::client::actor {
 class actor {
@@ -21,6 +22,7 @@ class actor {
   air_walking air_walking;
   anti_stun anti_stun;
   fast_run fast_run;
+  spread_control spread_control;
 };
 }  // namespace modification::client::actor
 
