@@ -145,6 +145,11 @@ struct actor {
     bool enable{false};
     int chance{50};
   } anti_stun;
+
+  struct fast_run_data {
+    bool enable{false};
+    float speed{2.0f};
+  } fast_run;
 };
 }  // namespace configuration
 }  // namespace modification

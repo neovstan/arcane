@@ -247,6 +247,11 @@ void injection_in_game_logic::load_actor() {
     actor.process();
   });
 
+  signals_.get_button_sprint_results.after +=
+      [this](const auto& hook, double& return_value, CPlayerPed* player, int sprint_type) {
+        if (sprint_type == 0) actor.process_fast_run(return_value);
+      };
+
   signals_.compute_damage_anim.set_cb(
       [this](const auto& hook, CEventDamage* event, CPed* ped, bool flag) {
         if (ped == psdk_utils::player() &&

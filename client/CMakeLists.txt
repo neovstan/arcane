@@ -32,6 +32,8 @@ add_library(client SHARED
 	src/actor/air_walking.h
 	src/actor/anti_stun.cpp
 	src/actor/anti_stun.h
+	src/actor/fast_run.cpp
+	src/actor/fast_run.h
 )
 
 find_package(nlohmann_json CONFIG REQUIRED)
