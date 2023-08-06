@@ -93,6 +93,8 @@ Because it provides great opportunities to separate modules, thus allowing to si
     * Acceleration time
   * Anti-stun
     * Chance
+  * Fast run
+    * Speed
 ### Media
 * [Developer blog](https://t.me/arcanedev)
 * [Website](https://arcane.su)
