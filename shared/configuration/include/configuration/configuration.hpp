@@ -140,6 +140,11 @@ struct actor {
       int down{0xA2};
     } keys;
   } air_walking;
+
+  struct anti_stun_data {
+    bool enable{false};
+    int chance{50};
+  } anti_stun;
 };
 }  // namespace configuration
 }  // namespace modification

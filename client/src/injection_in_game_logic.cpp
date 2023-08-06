@@ -246,6 +246,19 @@ void injection_in_game_logic::load_actor() {
   signals_.loop([this]() {
     actor.process();
   });
+
+  signals_.compute_damage_anim.set_cb(
+      [this](const auto& hook, CEventDamage* event, CPed* ped, bool flag) {
+        if (ped == psdk_utils::player() &&
+            actor.process_anti_stun() ==
+                actor::anti_stun::order::not_execute_compute_damage_anim_for_local_player) {
+          return;
+        }
+
+        hook.get_trampoline()(event, ped, flag);
+      });
+
+  signals_.compute_damage_anim.install();
 }
 
 void injection_in_game_logic::thread_updating_settings() {

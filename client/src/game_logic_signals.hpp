@@ -4,7 +4,9 @@
 #include <kthook/kthook.hpp>
 #include <psdk_utils/local_vector.h>
 
+class CPed;
 class CPlayerPed;
+class CEventDamage;
 class CColPoint;
 class CEntity;
 class CPlaceable;
@@ -33,6 +35,8 @@ class game_logic_signals {
                                                        const RGNDATA* dirty_region);
 
   using CPad__UpdatePads = bool(__cdecl*)();
+  using CEventDamage__ComputeDamageAnim = void(__thiscall*)(CEventDamage* event, CPed* ped,
+                                                            bool flag);
 
  public:
   kthook::kthook_signal<CHud__DrawAfterFade_t> main_loop{0x58D490};
@@ -42,6 +46,7 @@ class game_logic_signals {
   kthook::kthook_signal<CPad__UpdatePads> update_pads{0x541DD0};
   kthook::kthook_simple<CWorld__ProcessLineOfSight> aim_point{0x56BA00};
   kthook::kthook_simple<CPlaceable__SetHeading> set_heading{0x43E0C0};
+  kthook::kthook_simple<CEventDamage__ComputeDamageAnim> compute_damage_anim{0x4B3FC0};
 
   void single_shot(auto func) {
     main_loop.after += [func](const auto& hook) {
