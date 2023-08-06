@@ -91,9 +91,9 @@ Because it provides great opportunities to separate modules, thus allowing to si
   * Air Walking
     * Speed
     * Acceleration time
-  * Anti-stun
+  * Anti-Stun
     * Chance
-  * Fast run
+  * Fast Run
     * Speed
 ### Media
 * [Developer blog](https://t.me/arcanedev)
