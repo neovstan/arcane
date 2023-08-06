@@ -41,8 +41,6 @@ add_library(client SHARED
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(CMakeRC CONFIG REQUIRED)
-find_package(Lua REQUIRED)
-find_package(sol2 CONFIG REQUIRED)
 
 target_include_directories(client PRIVATE ${LUA_INCLUDE_DIR})
 
@@ -69,8 +67,6 @@ target_link_libraries(client PRIVATE
 	configuration
 	vmprotect-sdk
 	fonts
-	${LUA_LIBRARIES}
-	sol2
 )
 
 if (VMP_DEBUG)
