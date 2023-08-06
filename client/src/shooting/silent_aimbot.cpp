@@ -1,7 +1,8 @@
 #include "silent_aimbot.h"
 
-#include <random>
 #include <CWorld.h>
+
+#include <utils/randomizer.hpp>
 #include <psdk_utils/psdk_utils.h>
 
 using namespace modification::client::shooting;
@@ -120,18 +121,8 @@ void silent_aimbot::bullet_process(const psdk_utils::local_vector& origin,
 
     target = new_target + offset_to_make_target_closer_to_enemy;
 
-    const auto offset_to_make_target_original = [](float min, float max) {
-      std::default_random_engine engine;
-      engine.seed(std::chrono::duration_cast<std::chrono::seconds>(
-                      std::chrono::system_clock::now().time_since_epoch())
-                      .count());
-
-      std::uniform_real_distribution<float> distribution{min, max};
-      return psdk_utils::local_vector{distribution(engine), distribution(engine),
-                                      distribution(engine)};
-    }(-0.2f, 0.2f);
-
-    target += offset_to_make_target_original;
+    utils::randomizer<float> random_offset{-0.2f, 0.2f};
+    target += {random_offset(), random_offset(), random_offset()};
     break;
   }
 }

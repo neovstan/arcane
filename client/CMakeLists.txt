@@ -54,6 +54,7 @@ target_link_libraries(client PRIVATE
 	psdk_utils
 	samp_utils
 	winapi_utils
+	utils
 	encryption
 	configuration
 	vmprotect-sdk
