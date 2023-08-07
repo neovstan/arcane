@@ -10,6 +10,3 @@
 [submodule "third-party/plog"]
 	path = third-party/plog
 	url = https://github.com/SergiusTheBest/plog
-[submodule "cryptopp-cmake"]
-	path = cryptopp-cmake
-	url = https://github.com/abdes/cryptopp-cmake
