@@ -4,7 +4,7 @@
 ## What's unique?
 The modification has an exclusively remote configuration system, thanks to which hacking of the module's licensing system to the user's computer is severely limited, since in this case there is no possibility to conveniently configure and share settings with other users.
 ## What libraries are used?
-You can see some of it in the third-party folder. Some modules are connected via **vcpkg** (see CMakeLists.txt).
+You can see some of it in the third-party folder. Some modules are connected via **conan** (see conanfile.txt).
 > [!WARNING]
 > Only libraries that are represented as submodules are listed here
 * **encryption**
@@ -23,6 +23,16 @@ You can see some of it in the third-party folder. Some modules are connected via
   > Self-designed to ensure that functions are definable even if VMProtect did not apply to the final module
 ## Why CMake?
 Because it provides great opportunities to separate modules, thus allowing to simplify the architecture of the project and not to mix parts that should not overlap and know something about each other.
+## How can I build?
+Just clone this repo and run the following command (you have to select a conan profile with platform x86):
+```
+conan install . --output-folder=build --build=missing
+```
+You can then run the CMake build configuration with the desired generator (Visual Studio 17 2022 is recommended).  
+Don't forget to specify in the cmake call parameters:
+```
+-DCMAKE_TOOLCHAIN_FILE="build/conan_toolchain.cmake"
+```
 ## 
 ### Available functionality
 * **Shooting**
