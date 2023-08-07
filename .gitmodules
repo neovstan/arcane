@@ -1,6 +1,3 @@
-[submodule "third-party/kthook"]
-	path = third-party/kthook
-	url = https://github.com/kin4stat/kthook
 [submodule "third-party/sampapi"]
 	path = third-party/sampapi
 	url = https://github.com/kin4stat/SAMP-API
@@ -10,3 +7,9 @@
 [submodule "third-party/plog"]
 	path = third-party/plog
 	url = https://github.com/SergiusTheBest/plog
+[submodule "third-party/cryptopp-cmake"]
+	path = third-party/cryptopp-cmake
+	url = https://github.com/abdes/cryptopp-cmake
+[submodule "third-party/imgui"]
+	path = third-party/imgui
+	url = https://github.com/ocornut/imgui.git
