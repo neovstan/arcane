@@ -24,7 +24,7 @@ You can see some of it in the third-party folder. Some modules are connected via
 ## Why CMake?
 Because it provides great opportunities to separate modules, thus allowing to simplify the architecture of the project and not to mix parts that should not overlap and know something about each other.
 ## How can I build?
-Just clone this repo and run the following command:
+Just clone this repo and run the following command (you have to select a conan profile with platform x86):
 ```
 conan install . --output-folder=build --build=missing
 ```
