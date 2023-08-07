@@ -27,14 +27,14 @@ void samp_utils::patch_anticheat() {
     const auto first_instruction = reinterpret_cast<void*>(base + 0x7165E),
                second_instruction = reinterpret_cast<void*>(base + 0x71680);
 
-    DWORD old_prot{};
+    DWORD old_prot;
     VirtualProtect(first_instruction, 5, PAGE_READWRITE, &old_prot);
     VirtualProtect(second_instruction, 5, PAGE_READWRITE, &old_prot);
 
     std::memset(first_instruction, 0x90, 5);
     std::memset(second_instruction, 0x90, 5);
   } else if (version == version::r3) {
-    DWORD old_prot{};
+    DWORD old_prot;
     VirtualProtect(reinterpret_cast<void*>(base + 0x60EEB), 1, PAGE_READWRITE, &old_prot);
     VirtualProtect(reinterpret_cast<void*>(base + 0xC4DC7), 1, PAGE_READWRITE, &old_prot);
 

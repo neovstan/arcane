@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(client)
 
+include(cmake/CMakeRC.cmake)
+
 set(CMAKE_CXX_STANDARD 20)
 
 add_library(client SHARED
@@ -14,6 +16,10 @@ add_library(client SHARED
 	src/game_logic_signals.hpp 
 	src/injection_in_game_logic.cpp
 	src/injection_in_game_logic.h
+	src/backends/imgui_impl_dx9.cpp
+	src/backends/imgui_impl_dx9.h
+	src/backends/imgui_impl_win32.cpp
+	src/backends/imgui_impl_win32.h
 	src/shooting/enemy_finder.cpp
 	src/shooting/enemy_finder.h
 	src/shooting/vector_aimbot.cpp
@@ -38,11 +44,8 @@ add_library(client SHARED
 	src/actor/spread_control.h
 )
 
-find_package(nlohmann_json CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
-find_package(CMakeRC CONFIG REQUIRED)
-
-target_include_directories(client PRIVATE ${LUA_INCLUDE_DIR})
+find_package(nlohmann_json REQUIRED)
+find_package(imgui REQUIRED)
 
 cmrc_add_resource_library(
 	fonts
@@ -72,9 +75,9 @@ target_link_libraries(client PRIVATE
 if (VMP_DEBUG)
 	set_target_properties(client
 		PROPERTIES
-		ARCHIVE_OUTPUT_DIRECTORY "C:/Users/me/Games/GTA San Andreas"
-		LIBRARY_OUTPUT_DIRECTORY "C:/Users/me/Games/GTA San Andreas"
-		RUNTIME_OUTPUT_DIRECTORY "C:/Users/me/Games/GTA San Andreas"
+		ARCHIVE_OUTPUT_DIRECTORY "C:/Users/me/Games/"
+		LIBRARY_OUTPUT_DIRECTORY "C:/Users/me/Games/"
+		RUNTIME_OUTPUT_DIRECTORY "C:/Users/me/Games/"
 		SUFFIX ".asi"
 	)
 endif()

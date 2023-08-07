@@ -8,12 +8,16 @@ set(CMAKE_CXX_STANDARD 20)
 set(VMPROTECT_SDK_INCLUDE_PATH "C:/Program Files/VMProtect Ultimate/Include/C")
 set(VMPROTECT_SDK_LIBRARY_PATH "C:/Program Files/VMProtect Ultimate/Lib/Windows/VMProtectSDK32.lib")
 
-find_package(glfw3 CONFIG REQUIRED)
-find_package(nlohmann_json CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
+find_package(glfw3 REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(imgui REQUIRED)
 
 add_executable(${PROJECT_NAME} WIN32
 	src/main.cpp
+	src/backends/imgui_impl_glfw.cpp
+	src/backends/imgui_impl_glfw.h
+	src/backends/imgui_impl_opengl2.cpp
+	src/backends/imgui_impl_opengl2.h
 	src/socket/socket.cpp
 	src/socket/socket.h
 	src/manualmap/manualmap.cpp

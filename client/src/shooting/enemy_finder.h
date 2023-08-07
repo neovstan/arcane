@@ -1,7 +1,9 @@
 #ifndef ARCANE_CLIENT_SRC_SHOOTING_ENEMY_FINDER_H
 #define ARCANE_CLIENT_SRC_SHOOTING_ENEMY_FINDER_H
 
+#include <chrono>
 #include <vector>
+
 #include <psdk_utils/local_vector.h>
 #include <configuration/configuration.hpp>
 

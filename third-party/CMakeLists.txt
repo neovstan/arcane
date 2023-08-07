@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 3.16)
 # 2. After that the subdirectory becomes visible to all projects
 # 3. In order to connect the library to the project, we have to call target_link_libraries(${PROJECT_NAME} PRIVATE <name>)
 
+add_subdirectory(cryptopp-cmake)
 add_subdirectory(plugin-sdk)
 add_subdirectory(kthook)
 add_subdirectory(sampapi)

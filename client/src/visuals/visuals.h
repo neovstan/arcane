@@ -1,6 +1,8 @@
 #ifndef ARCANE_CLIENT_SRC_VISUALS_VISUALS_H
 #define ARCANE_CLIENT_SRC_VISUALS_VISUALS_H
 
+#include <chrono>
+
 #include <imgui.h>
 #include <psdk_utils/local_vector.h>
 #include <configuration/configuration.hpp>

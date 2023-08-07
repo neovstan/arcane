@@ -183,36 +183,7 @@ struct _RwInt128
  * Keep true calls to these functions since
  * some x86 runtime libraries do not support _CIpow() etc
  */
-#pragma function( acos, asin, cosh, fmod, pow, sinh , tanh ) 
-
-#if (!defined(RWINT32FROMFLOAT))
-
-static __inline RwInt32
-int32fromreal(RwReal x)
-{
-    RwInt16 savemode;
-    RwInt16 workmode;
-    RwInt32 res;
-    
-    _asm
-    {
-        fnstcw    savemode      ; get fpu mode
-        fld dword ptr[x]        ; load rwreal x  
-  
-        mov       ax,savemode   ; put fpu mode in register
-        or        ah,0ch        ; or-in truncate mode
-  
-        mov       workmode,ax   ; make ready to set fpu mode
-        fldcw     workmode      ; set fpu to truncate mode
-        fistp     dword ptr[res]; store the rwint32eger result 
-        fldcw     savemode      ; restore fpu mode
-    }
-
-    return res;
-}
-#define RwInt32FromRealMacro(x) int32fromreal(x)
-
-#endif /* (!defined(RWINT32FROMFLOAT)) */
+#pragma function( acos, asin, cosh, fmod, pow, sinh , tanh )
 
 #if (!defined(NOASM) && !defined(__GNUC__) && !defined(__clang__))
 static __inline RwUInt32 
