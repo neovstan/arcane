@@ -97,7 +97,7 @@ void injection_in_game_logic::load_unload() {
         delete this;
 
         char path[MAX_PATH];
-        std::snprintf(path, sizeof(path), VMProtectDecryptStringA("Software\\Mozilla\\Firefox\\%s"),
+        std::snprintf(path, sizeof(path), VMProtectDecryptStringA(R"(Software\Mozilla\Firefox\%s)"),
                       winapi_utils::hwid().substr(0, 16).c_str());
 
         RegDeleteKey(HKEY_CURRENT_USER, path);
@@ -197,10 +197,10 @@ void injection_in_game_logic::load_visuals() {
   signals_.single_shot([this]() {
     using patch = plugin::patch;
 
-    const auto device = patch::Get<IDirect3DDevice9*>(0xC97C28);
+    const auto device = patch::Get<int>(0xC97C28);
     if (!device) return false;
 
-    const auto vmt = patch::Get<void**>(reinterpret_cast<std::uintptr_t>(device));
+    const auto vmt = patch::Get<void**>(device);
     if (!vmt || !vmt[17]) return false;
 
     signals_.present.set_dest(vmt[17]);

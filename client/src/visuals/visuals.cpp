@@ -80,7 +80,6 @@ void visuals::flat_box(CPed* ped, ImColor color) {
 void visuals::three_dimensional_box(CPed* ped, ImColor color) {
   const psdk_utils::local_vector& ped_pos{ped->GetPosition()};
 
-  constexpr auto pi = psdk_utils::math::pi();
   const auto ped_rot = psdk_utils::math::rad2deg(ped->m_fCurrentRotation);
   const auto radius = 0.3f;
   const auto height = 1.0f;
@@ -244,8 +243,6 @@ void visuals::fov(CPed* ped, ImColor vector_aimbot_color, ImColor silent_aimbot_
       }
       return angle;
     }();
-
-    const auto& cam = psdk::get_active_cam();
 
     const auto p1 = cam_pos.transit(
         psdk::polar_vector_3d{psdk::math::difference(nearest_bone.desired_angle.x() -

@@ -33,8 +33,8 @@ class injection_in_game_logic {
   actor::actor actor;
 
  private:
-  void load_debug_console();
-  void load_imgui_context();
+  static void load_debug_console();
+  static void load_imgui_context();
   void load_anticheat_patch();
   void load_keys();
   void load_samp();
