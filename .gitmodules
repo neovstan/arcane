@@ -10,6 +10,6 @@
 [submodule "third-party/cryptopp-cmake"]
 	path = third-party/cryptopp-cmake
 	url = https://github.com/abdes/cryptopp-cmake
-[submodule "third-party/imgui"]
-	path = third-party/imgui
-	url = https://github.com/ocornut/imgui.git
+[submodule "third-party/kthook"]
+	path = third-party/kthook
+	url = https://github.com/neovstan/kthook.git
