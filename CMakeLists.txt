@@ -28,7 +28,6 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 add_subdirectory(shared)
 add_subdirectory(third-party)
 add_subdirectory(client)
-add_subdirectory(server)
 add_subdirectory(loader)
 
 unset(VMP_DEBUG CACHE)
