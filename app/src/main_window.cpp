@@ -2,8 +2,6 @@
 
 #include <QMouseEvent>
 #include <QPropertyAnimation>
-#include <QGraphicsDropShadowEffect>
-#include <QDebug>
 
 #include "ui_main_window.h"
 
@@ -14,7 +12,7 @@ MainWindow::MainWindow() : QMainWindow(), ui(new Ui::MainWindow), allowed_(false
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
 
     ui->setupUi(this);
-    
+
     connect(ui->buttonClose, &QPushButton::clicked, this, &MainWindow::closeButtonClicked);
     connect(ui->buttonMinimize, &QPushButton::clicked, this, &MainWindow::minimizeButtonClicked);
 }
@@ -91,6 +89,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 void MainWindow::animatedlyClose()
 {
     setDisabled(true);
+
     const auto anim = new QPropertyAnimation(this, "windowOpacity");
 
     connect(anim, &QPropertyAnimation::finished, this, [this]() { QApplication::exit(); });
