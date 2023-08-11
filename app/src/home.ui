@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Home</class>
+ <widget class="QWidget" name="Home">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Home</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>601</width>
+     <height>401</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QFrame#frame {
+background-color: qlineargradient(spread:pad, x1:0.5, y1:0, x2:0.499, y2:1, stop:0 rgba(88, 115, 93, 140), stop:1 rgba(42, 42, 42, 0));
+border: 0;
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="labelProfile">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>120</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+      <pointsize>-1</pointsize>
+      <weight>87</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Helvetica';
+font-style: normal;
+font-weight: 700;
+font-size: 15px;
+line-height: 15px;
+color: white;
+background-color: 0;</string>
+    </property>
+    <property name="text">
+     <string>Profile</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelNickname">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>150</y>
+      <width>321</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+      <pointsize>-1</pointsize>
+      <weight>87</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Helvetica';
+font-style: normal;
+font-size: 52px;
+line-height: 52px;
+color: white;
+background-color: 0;</string>
+    </property>
+    <property name="text">
+     <string>nickname</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="avatar">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>100</y>
+      <width>191</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../rc/app.qrc">:/images/avatar.png</pixmap>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelDaysRemaining">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>120</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+      <pointsize>-1</pointsize>
+      <weight>87</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Helvetica';
+font-style: normal;
+font-weight: 700;
+font-size: 13px;
+line-height: 13px;
+color: rgb(235, 235, 235);
+background-color: 0;</string>
+    </property>
+    <property name="text">
+     <string>%1 days remaining</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonLoad">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>230</y>
+      <width>130</width>
+      <height>49</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>130</width>
+      <height>45</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 22px;
+	line-height: 22px;
+	border-radius: 22px;
+	color: white;
+	background-color: rgb(65, 184, 77);
+}
+QPushButton:hover {
+	background-color: rgb(60, 177, 72);
+}</string>
+    </property>
+    <property name="text">
+     <string>Load</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../rc/app.qrc"/>
+ </resources>
+ <connections/>
+</ui>

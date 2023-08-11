@@ -7,8 +7,10 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    QApplication::setApplicationName("arcane");
+    app.setApplicationName("arcane");
+
     QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Helvetica-Bold.ttf");
 
     arcane::app::MainWindow w;
     w.show();

@@ -13,3 +13,6 @@
 [submodule "third-party/kthook"]
 	path = third-party/kthook
 	url = https://github.com/neovstan/kthook.git
+[submodule "third-party/infoware"]
+	path = third-party/infoware
+	url = https://github.com/ThePhD/infoware

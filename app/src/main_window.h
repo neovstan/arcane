@@ -9,8 +9,18 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-namespace arcane {
-namespace app {
+class QSvgWidget;
+class QGraphicsOpacityEffect;
+
+namespace arcane::app {
+class Client;
+class Authorization;
+class Home;
+
+namespace packets {
+class Initialization;
+}
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -20,6 +30,9 @@ public:
     ~MainWindow() override;
 
 private slots:
+    void initialization(const packets::Initialization &packet);
+    void load();
+    void loadFinished();
     void closeButtonClicked();
     void minimizeButtonClicked();
 
@@ -33,16 +46,29 @@ private:
     void animatedlyClose();
     void animatedlyMinimize();
     void animatedlyMaximize();
+    void animatedlyChangeWidgetVisibility(QWidget *widget, QGraphicsOpacityEffect *opacity,
+                                          bool show, int msecs);
+
+private:
+    const int defaultAnimationDuration;
 
 private:
     Ui::MainWindow *ui;
+
+private:
+    Client *client_;
+
+private:
+    Authorization *authorization_;
+    Home *home_;
+    QSvgWidget *loading_;
+    QGraphicsOpacityEffect *loadingOpacityEffect_;
 
 private:
     bool allowed_;
     bool minimized_;
     QPoint mousePos_;
 };
-} // namespace app
-} // namespace arcane
+} // namespace arcane::app
 
 #endif // ARCANE_APP_MAIN_WINDOW_H

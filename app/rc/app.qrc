@@ -3,6 +3,10 @@
     <qresource>
         <file>images/line.png</file>
         <file>images/cross.png</file>
+        <file>images/avatar.png</file>
+        <file>animations/loading.gif</file>
+        <file>animations/loading.svg</file>
         <file>fonts/Roboto-Bold.ttf</file>
+        <file>fonts/Helvetica-Bold.ttf</file>
     </qresource>
 </RCC>

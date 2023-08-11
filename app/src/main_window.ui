@@ -17,222 +17,10 @@
    <string>arcane</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:0, stop:0 rgba(18, 18, 18, 255), stop:1 rgba(42, 42, 42, 255))</string>
-  </property>
-  <widget class="QFrame" name="authorization">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>90</y>
-     <width>371</width>
-     <height>251</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(23, 23, 23);
-border-radius: 20px;</string>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>371</width>
-      <height>251</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>0</width>
-      <height>0</height>
-     </size>
-    </property>
-    <layout class="QVBoxLayout" name="layout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="sizeConstraint">
-      <enum>QLayout::SetDefaultConstraint</enum>
-     </property>
-     <property name="leftMargin">
-      <number>20</number>
-     </property>
-     <property name="rightMargin">
-      <number>20</number>
-     </property>
-     <item>
-      <widget class="QLineEdit" name="inputNickname">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>70</height>
-        </size>
-       </property>
-       <property name="contextMenuPolicy">
-        <enum>Qt::NoContextMenu</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: qlineargradient(spread:pad, x1:0.619, y1:0.334773, x2:0.278727, y2:0.761, stop:0 rgba(29, 29, 29, 255), stop:1 rgba(16, 16, 16, 255));
-border-radius: 15px;
-
-
-/* Текст */
-
-width: 161px;
-height: 37px;
-
-font-family: 'Roboto';
-font-style: normal;
-font-weight: 700;
-font-size: 22px;
-line-height: 22px;
-
-/* identical to box height */
-qproperty-alignment: AlignCenter;
-color: #FFFFFF;</string>
-       </property>
-       <property name="inputMethodHints">
-        <set>Qt::ImhNone</set>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="placeholderText">
-        <string>Nickname</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="inputPassword">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>70</height>
-        </size>
-       </property>
-       <property name="contextMenuPolicy">
-        <enum>Qt::NoContextMenu</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: qlineargradient(spread:pad, x1:0.619, y1:0.334773, x2:0.278727, y2:0.761, stop:0 rgba(29, 29, 29, 255), stop:1 rgba(16, 16, 16, 255));
-border-radius: 15px;
-
-
-/* Текст */
-
-width: 161px;
-height: 37px;
-
-font-family: 'Roboto';
-font-style: normal;
-font-weight: 700;
-font-size: 22px;
-line-height: 22px;
-
-/* identical to box height */
-qproperty-alignment: AlignCenter;
-color: #FFFFFF;</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="echoMode">
-        <enum>QLineEdit::Password</enum>
-       </property>
-       <property name="placeholderText">
-        <string>Password</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QFrame" name="frame">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>70</height>
-        </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <widget class="QWidget" name="horizontalLayoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>10</y>
-          <width>331</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="sizeConstraint">
-          <enum>QLayout::SetDefaultConstraint</enum>
-         </property>
-         <item>
-          <widget class="QPushButton" name="buttonSignin">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>150</width>
-             <height>45</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton {
-	font-family: 'Roboto';
-	font-style: normal;
-	font-weight: 700;
-	font-size: 22px;
-	line-height: 22px;
-	border-radius: 22px;
-	color: white;
-	background-color: rgb(65, 184, 77);
-}
-QPushButton:hover {
-	background-color: rgb(60, 177, 72);
+   <string notr="true">QWidget#MainWindow {
+	background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:0, stop:0 rgba(18, 18, 18, 255), stop:1 rgba(42, 42, 42, 255))
 }</string>
-           </property>
-           <property name="text">
-            <string>Sign in</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
+  </property>
   <widget class="QFrame" name="titleBar">
    <property name="geometry">
     <rect>
@@ -243,8 +31,10 @@ QPushButton:hover {
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #171717;
-border-color: rgba(0, 0, 0, 0);</string>
+    <string notr="true">QFrame#titleBar {
+	background-color: #171717;
+	border-color: rgba(0, 0, 0, 0);
+}</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -262,11 +52,13 @@ border-color: rgba(0, 0, 0, 0);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: white;
+     <string notr="true">QLabel#title {
+color: white;
 background-color: rgba(0, 0, 0, 0);
 font-family: 'Roboto';
 font-style: normal;
-font-size: 16px;</string>
+font-size: 16px;
+}</string>
     </property>
     <property name="text">
      <string>arcane</string>
@@ -282,8 +74,10 @@ font-size: 16px;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(0,0,0,0);
-border-color: rgba(0,0,0,0);</string>
+     <string notr="true">QPushButton#buttonMinimize {
+background-color: rgba(0,0,0,0);
+border-color: rgba(0,0,0,0);
+}</string>
     </property>
     <property name="text">
      <string/>
@@ -303,8 +97,10 @@ border-color: rgba(0,0,0,0);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(0,0,0,0);
-border-color: rgba(0,0,0,0);</string>
+     <string notr="true">QPushButton#buttonClose {
+background-color: rgba(0,0,0,0);
+border-color: rgba(0,0,0,0);
+}</string>
     </property>
     <property name="text">
      <string/>
