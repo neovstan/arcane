@@ -16,7 +16,7 @@
 #include "ui_main_window.h"
 
 using namespace arcane::app;
-#include <QDebug>
+
 MainWindow::MainWindow()
     : QMainWindow(),
       defaultAnimationDuration(200),
