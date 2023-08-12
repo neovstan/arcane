@@ -15,8 +15,6 @@
 
 #include "ui_main_window.h"
 
-#include "notification.h"
-
 using namespace arcane::app;
 
 MainWindow::MainWindow()
