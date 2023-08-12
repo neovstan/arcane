@@ -18,7 +18,7 @@
 #include "notification.h"
 
 using namespace arcane::app;
-#include <QTimer>
+
 MainWindow::MainWindow()
     : QMainWindow(),
       defaultAnimationDuration(200),
