@@ -7,13 +7,13 @@ option(VMP_DEBUG "" ON)
 
 if (VMP_DEBUG)
     add_compile_definitions(VMP_DEBUG)
-    add_compile_definitions(ARCANE_SERVER_IP="localhost")
+    add_compile_definitions(ARCANE_SERVER_IP="45.141.100.44")
 else ()
-    add_compile_definitions(ARCANE_SERVER_IP="45.136.204.97")
+    add_compile_definitions(ARCANE_SERVER_IP="45.141.100.44")
 endif ()
 
-add_compile_definitions(ARCANE_SERVER_KEY="KsbnIQ8th5n9ua9O")
-add_compile_definitions(ARCANE_SERVER_PORT="86724")
+add_compile_definitions(ARCANE_SERVER_KEY="Ebm09q37v3EMX8Z3")
+add_compile_definitions(ARCANE_SERVER_PORT=4289)
 
 # To compile a static MSVC runtime environment
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

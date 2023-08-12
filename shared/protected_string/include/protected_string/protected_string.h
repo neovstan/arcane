@@ -11,7 +11,7 @@ class scoped {
   scoped(scoped&&) = delete;
   ~scoped();
 
-  operator const char*();
+  operator const char*() const;
 
  private:
   const char* p_;

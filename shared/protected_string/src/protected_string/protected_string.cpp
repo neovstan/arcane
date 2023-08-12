@@ -7,6 +7,6 @@ protected_string::scoped::~scoped() {
   VMProtectFreeString(p_);
 }
 
-protected_string::scoped::operator const char*() {
+protected_string::scoped::operator const char*() const {
   return p_;
 }

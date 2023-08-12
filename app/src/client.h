@@ -24,8 +24,8 @@ private slots:
     void readyRead();
 
 private:
-    QString host_;
-    quint16 port_;
+    const QString host_;
+    const quint16 port_;
     QTcpSocket *socket_;
     QByteArray query_;
     QByteArray buffer_;
