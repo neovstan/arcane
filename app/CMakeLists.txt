@@ -18,7 +18,7 @@ find_package(Qt5 COMPONENTS
 
 find_package(nlohmann_json REQUIRED)
 
-add_executable(app
+add_executable(app WIN32
         rc/app.rc
         rc/app.qrc
         src/main.cpp
@@ -43,6 +43,7 @@ add_executable(app
         src/inline_syscall.h
         src/packets/initialization.hpp
         src/packets/load.hpp
+        src/packets/update.hpp
 )
 
 target_link_libraries(app

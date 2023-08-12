@@ -1,5 +1,6 @@
 #include "main_window.h"
 
+#include <QProcess>
 #include <QSvgWidget>
 #include <QMouseEvent>
 #include <QPropertyAnimation>
@@ -7,11 +8,15 @@
 
 #include <protected_string/protected_string.h>
 
+#include "query.h"
+
 #include "client.h"
 #include "authorization.h"
 #include "home.h"
+#include "notification.h"
 
 #include "packets/initialization.hpp"
+#include "packets/update.hpp"
 
 #include "ui_main_window.h"
 
@@ -47,14 +52,61 @@ MainWindow::MainWindow()
     connect(ui->buttonClose, &QPushButton::clicked, this, &MainWindow::closeButtonClicked);
     connect(ui->buttonMinimize, &QPushButton::clicked, this, &MainWindow::minimizeButtonClicked);
 
+    connect(authorization_, &Authorization::update, this, &MainWindow::update);
     connect(authorization_, &Authorization::initialization, this, &MainWindow::initialization);
+
     connect(home_, &Home::load, this, &MainWindow::load);
     connect(home_, &Home::loadFinished, this, &MainWindow::loadFinished);
+
+    connect(client_, &Client::read, this, &MainWindow::packetHandler);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::packetHandler(const QString &answer)
+{
+    try {
+        const auto json = nlohmann::json::parse(answer.toStdString());
+        const auto &id = json["id"];
+
+        if (id == std::string(scoped_protected_string("update"))) {
+            updatePacket(json);
+        }
+    } catch (...) {
+    }
+}
+
+void MainWindow::updatePacket(const packets::Update &packet)
+{
+    const auto data = QByteArray::fromHex(packet.binary.c_str());
+
+    QFile binary("new_app.exe");
+    binary.open(QIODevice::WriteOnly);
+    binary.write(data);
+    binary.close();
+
+    const auto process = new QProcess(this);
+    process->setProgram(QString(scoped_protected_string("updater.exe")));
+    process->setArguments(QStringList() << "--old"
+                                        << "app.exe"
+                                        << "--new"
+                                        << "new_app.exe");
+    process->startDetached();
+
+    QApplication::exit();
+}
+
+void MainWindow::update()
+{
+    animatedlyChangeWidgetVisibility(authorization_, authorization_->getOpacityEffect(), false,
+                                     defaultAnimationDuration);
+    animatedlyChangeWidgetVisibility(loading_, loadingOpacityEffect_, true,
+                                     defaultAnimationDuration);
+
+    Query::send(client_, std::string(scoped_protected_string("update")));
 }
 
 void MainWindow::initialization(const packets::Initialization &packet)

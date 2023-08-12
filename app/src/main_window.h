@@ -19,7 +19,8 @@ class Home;
 
 namespace packets {
 class Initialization;
-}
+class Update;
+} // namespace packets
 
 class MainWindow : public QMainWindow
 {
@@ -30,6 +31,9 @@ public:
     ~MainWindow() override;
 
 private slots:
+    void packetHandler(const QString &answer);
+    void updatePacket(const packets::Update &packet);
+    void update();
     void initialization(const packets::Initialization &packet);
     void load();
     void loadFinished();

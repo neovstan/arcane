@@ -27,6 +27,7 @@ public:
     ~Authorization() override;
 
 signals:
+    Q_SIGNAL void update();
     Q_SIGNAL void initialization(const packets::Initialization &packet);
 
 public:

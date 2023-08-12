@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.26)
 
 # The main solution containing server and client projects
 project(arcane)
@@ -29,5 +29,6 @@ add_subdirectory(shared)
 add_subdirectory(third-party)
 add_subdirectory(client)
 add_subdirectory(app)
+add_subdirectory(updater)
 
 unset(VMP_DEBUG CACHE)

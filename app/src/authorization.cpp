@@ -63,6 +63,11 @@ void Authorization::packetHandler(const QString &answer)
 
 void Authorization::initializationPacket(const packets::Initialization &packet)
 {
+    if (packet.actualAppVersion > QApplication::applicationVersion().toInt()) {
+        Q_EMIT update();
+        return;
+    }
+
     QSettings settings;
     settings.setValue("nickname", ui->inputNickname->text());
     settings.setValue("password", ui->inputPassword->text());
