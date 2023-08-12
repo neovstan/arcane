@@ -59,7 +59,7 @@ void Home::packetHandler(const QString &answer)
         const auto json = nlohmann::json::parse(answer.toStdString());
         const auto &id = json["id"];
 
-        if (id == std::string(scoped_protected_string("load"))) {
+        if (id == scoped_protected_std_string("load")) {
             loadPacket(json);
             Q_EMIT loadFinished();
         }
@@ -100,7 +100,7 @@ void Home::loadButtonClicked()
     }
 
     Q_EMIT load();
-    Query::send(client_, std::string(scoped_protected_string("load")));
+    Query::send(client_, scoped_protected_std_string("load"));
 }
 
 void *Home::getGameProcessHandle()

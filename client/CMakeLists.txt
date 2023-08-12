@@ -70,6 +70,7 @@ target_link_libraries(client PRIVATE
         configuration
         vmprotect-sdk
         fonts
+        protected_string
 )
 
 if (VMP_DEBUG)

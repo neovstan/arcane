@@ -23,4 +23,14 @@ class scoped {
     VMProtectDecryptStringA(p)     \
   }
 
+#define scoped_protected_std_string(p) \
+  std::string {                        \
+    scoped_protected_string(p)         \
+  }
+
+#define scoped_protected_qstring(p) \
+  QString {                         \
+    scoped_protected_string(p)      \
+  }
+
 #endif  // PROTECTED_STRING_H

@@ -73,7 +73,7 @@ void MainWindow::packetHandler(const QString &answer)
         const auto json = nlohmann::json::parse(answer.toStdString());
         const auto &id = json["id"];
 
-        if (id == std::string(scoped_protected_string("update"))) {
+        if (id == scoped_protected_std_string("update")) {
             updatePacket(json);
         }
     } catch (...) {
@@ -90,7 +90,7 @@ void MainWindow::updatePacket(const packets::Update &packet)
     binary.close();
 
     const auto process = new QProcess(this);
-    process->setProgram(QString(scoped_protected_string("updater.exe")));
+    process->setProgram(scoped_protected_qstring("updater.exe"));
     process->setArguments(QStringList() << "--old"
                                         << "app.exe"
                                         << "--new"
@@ -107,7 +107,7 @@ void MainWindow::update()
     animatedlyChangeWidgetVisibility(loading_, loadingOpacityEffect_, true,
                                      defaultAnimationDuration);
 
-    Query::send(client_, std::string(scoped_protected_string("update")));
+    Query::send(client_, scoped_protected_std_string("update"));
 }
 
 void MainWindow::initialization(const packets::Initialization &packet)

@@ -11,8 +11,6 @@
 #include <windows.h>
 #include <ws2tcpip.h>
 
-#include <ktsignal/ktsignal.hpp>
-
 namespace modification {
 namespace client {
 class socket {

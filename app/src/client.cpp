@@ -18,10 +18,8 @@ Client::Client(const QString &host, quint16 port, QObject *parent)
 
 void Client::send(const QByteArray &query)
 {
-    const auto protectedKeyString = scoped_protected_string(ARCANE_SERVER_KEY);
-    const char *const key = protectedKeyString;
-
-    encryption::cbc encryption(key, key);
+    encryption::cbc encryption(scoped_protected_std_string(ARCANE_SERVER_KEY),
+                               scoped_protected_std_string(ARCANE_SERVER_KEY));
 
     query_ = encryption.encrypt(query.toStdString()).c_str();
     socket_->connectToHost(host_, port_);
@@ -40,10 +38,8 @@ void Client::disconnected()
 {
     query_ = {};
 
-    const auto protectedKeyString = scoped_protected_string(ARCANE_SERVER_KEY);
-    const char *const key = protectedKeyString;
-
-    encryption::cbc encryption(key, key);
+    encryption::cbc encryption(scoped_protected_std_string(ARCANE_SERVER_KEY),
+                               scoped_protected_std_string(ARCANE_SERVER_KEY));
 
     buffer_ = encryption.decrypt(buffer_.toStdString()).c_str();
 
