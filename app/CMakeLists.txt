@@ -31,6 +31,8 @@ add_executable(app
         src/home.ui
         src/home.cpp
         src/home.h
+        src/notification.cpp
+        src/notification.h
         src/client.cpp
         src/client.h
         src/query.cpp
@@ -54,6 +56,7 @@ target_link_libraries(app
         winapi_utils
         protected_string
         vmprotect-sdk
+        encryption
 )
 
 set_target_properties(app PROPERTIES CXX_STANDARD 17)

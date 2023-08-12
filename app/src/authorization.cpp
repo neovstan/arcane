@@ -1,7 +1,7 @@
 #include "authorization.h"
 
 #include <QTimer>
-#include <QDebug>
+#include <QSettings>
 #include <QCryptographicHash>
 #include <QGraphicsOpacityEffect>
 
@@ -10,6 +10,7 @@
 
 #include "query.h"
 #include "client.h"
+#include "notification.h"
 
 #include "packets/initialization.hpp"
 
@@ -29,6 +30,11 @@ Authorization::Authorization(Client *client, QWidget *parent)
 
     connect(ui->buttonSignin, &QPushButton::clicked, this, &Authorization::signinButtonClicked);
     connect(client_, &Client::read, this, &Authorization::packetHandler);
+
+    QSettings settings;
+
+    ui->inputNickname->setText(settings.value("nickname").toString());
+    ui->inputPassword->setText(settings.value("password").toString());
 }
 
 Authorization::~Authorization()
@@ -51,11 +57,16 @@ void Authorization::packetHandler(const QString &answer)
             initializationPacket(json);
         }
     } catch (...) {
+        new Notification(tr("The data you entered is incorrect"), parentWidget());
     }
 }
 
 void Authorization::initializationPacket(const packets::Initialization &packet)
 {
+    QSettings settings;
+    settings.setValue("nickname", ui->inputNickname->text());
+    settings.setValue("password", ui->inputPassword->text());
+
     Q_EMIT initialization(packet);
 }
 

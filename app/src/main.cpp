@@ -7,7 +7,9 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    app.setApplicationName("arcane");
+    app.setOrganizationName("arcane");
+    app.setOrganizationDomain("arcane.su");
+    app.setApplicationName("app");
 
     QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Helvetica-Bold.ttf");

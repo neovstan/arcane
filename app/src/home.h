@@ -32,7 +32,7 @@ signals:
     Q_SIGNAL void loadFinished();
 
 public:
-    void setDaysRemaining(int days);
+    void setDaysRemaining(unsigned int days);
     void setNickname(const QString &nickname);
 
 public:

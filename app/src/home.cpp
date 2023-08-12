@@ -9,6 +9,7 @@
 #include "query.h"
 #include "client.h"
 #include "manual_map.h"
+#include "notification.h"
 
 #include "packets/load.hpp"
 
@@ -36,7 +37,7 @@ Home::~Home()
     delete ui;
 }
 
-void Home::setDaysRemaining(int days)
+void Home::setDaysRemaining(unsigned int days)
 {
     const auto text = ui->labelDaysRemaining;
     text->setText(text->text().arg(days));
@@ -60,33 +61,46 @@ void Home::packetHandler(const QString &answer)
 
         if (id == std::string(scoped_protected_string("load"))) {
             loadPacket(json);
+            Q_EMIT loadFinished();
         }
     } catch (...) {
     }
-
-    Q_EMIT loadFinished();
 }
 
 void Home::loadPacket(const packets::Load &packet)
 {
+    if (packet.dll.empty()) {
+        new Notification(tr("You have no subscription"), parentWidget());
+        return;
+    }
+
     const auto dll = QByteArray::fromHex(packet.dll.c_str());
 
     try {
         const auto handle = getGameProcessHandle();
         if (!handle) {
+            new Notification(tr("Run GTA: San Andreas"), parentWidget());
             return;
         }
 
         ManualMap injection(handle, dll);
         injection.give();
+
+        new Notification(tr("The module is loaded. Enjoy the game!"), parentWidget());
     } catch (const ManualMap::Exception &e) {
     }
 }
 
 void Home::loadButtonClicked()
 {
+    const auto handle = getGameProcessHandle();
+    if (!handle) {
+        new Notification(tr("Run GTA: San Andreas"), parentWidget());
+        return;
+    }
+
     Q_EMIT load();
-    Query::send(client_, "load");
+    Query::send(client_, std::string(scoped_protected_string("load")));
 }
 
 void *Home::getGameProcessHandle()

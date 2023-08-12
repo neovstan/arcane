@@ -15,13 +15,15 @@
 
 #include "ui_main_window.h"
 
-using namespace arcane::app;
+#include "notification.h"
 
+using namespace arcane::app;
+#include <QTimer>
 MainWindow::MainWindow()
     : QMainWindow(),
       defaultAnimationDuration(200),
       ui(new Ui::MainWindow),
-      client_(new Client(QString(scoped_protected_string("localhost")), 4289, this)),
+      client_(new Client(QString(scoped_protected_string("45.141.100.44")), 4289, this)),
       authorization_(new Authorization(client_, this)),
       loading_(new QSvgWidget(":/animations/loading.svg", this)),
       loadingOpacityEffect_(new QGraphicsOpacityEffect),
