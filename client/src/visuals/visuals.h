@@ -5,7 +5,7 @@
 
 #include <imgui.h>
 #include <psdk_utils/local_vector.h>
-#include <configuration/configuration.hpp>
+#include <arcane_packets/configuration.hpp>
 
 class CPed;
 
@@ -42,7 +42,7 @@ class visuals {
                               float height, float line_width, ImColor color);
 
  public:
-  configuration::visuals settings;
+  struct packets::configuration::visuals settings;
 
  private:
   ImDrawList* draw();

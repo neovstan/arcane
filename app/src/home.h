@@ -34,6 +34,7 @@ signals:
 public:
     void setDaysRemaining(unsigned int days);
     void setNickname(const QString &nickname);
+    void setPassword(const QString &password);
 
 public:
     QGraphicsOpacityEffect *getOpacityEffect() const;
@@ -57,6 +58,10 @@ private:
 
 private:
     Client *client_;
+
+private:
+    QString nickname_;
+    QString password_;
 };
 } // namespace arcane::app
 

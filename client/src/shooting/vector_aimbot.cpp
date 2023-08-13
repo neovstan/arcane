@@ -3,6 +3,8 @@
 #include <imgui.h>
 #include <psdk_utils/psdk_utils.h>
 
+#include <iostream>
+
 using namespace modification::client::shooting;
 
 vector_aimbot::vector_aimbot()
@@ -35,7 +37,7 @@ void vector_aimbot::process() {
     using namespace psdk_utils;
     auto& cam = get_active_cam();
 
-    const auto smooth = settings.smooth * ImGui::GetIO().Framerate / 100.0f;
+    const auto smooth = settings.smooth * std::max(1.0f, ImGui::GetIO().Framerate) / 100.0f;
 
     cam.m_fHorizontalAngle += math::deg2rad(
         math::difference(enemy.angle.x() - math::rad2deg(cam.m_fHorizontalAngle)) / smooth);

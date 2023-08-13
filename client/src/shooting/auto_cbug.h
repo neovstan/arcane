@@ -2,7 +2,7 @@
 #define ARCANE_CLIENT_SRC_SHOOTING_AUTO_CBUG_H
 
 #include <chrono>
-#include <configuration/configuration.hpp>
+#include <arcane_packets/configuration.hpp>
 
 namespace modification::client::shooting {
 class auto_cbug {
@@ -12,7 +12,7 @@ class auto_cbug {
   void process();
 
  public:
-  configuration::auto_cbug settings;
+  struct packets::configuration::auto_cbug settings;
 
  private:
   using clock = std::chrono::steady_clock;

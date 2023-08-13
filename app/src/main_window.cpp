@@ -71,7 +71,7 @@ void MainWindow::packetHandler(const QString &answer)
 {
     try {
         const auto json = nlohmann::json::parse(answer.toStdString());
-        const auto &id = json["id"];
+        const auto &id = json["query"];
 
         if (id == scoped_protected_std_string("update")) {
             updatePacket(json);
@@ -114,6 +114,7 @@ void MainWindow::initialization(const packets::Initialization &packet)
 {
     home_->setDaysRemaining(packet.daysRemaining);
     home_->setNickname(packet.username.c_str());
+    home_->setPassword(Query::password_.c_str());
 
     animatedlyChangeWidgetVisibility(authorization_, authorization_->getOpacityEffect(), false,
                                      defaultAnimationDuration);

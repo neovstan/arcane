@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.26)
 # The main solution containing server and client projects
 project(arcane)
 
-option(VMP_DEBUG "" ON)
-
 if (VMP_DEBUG)
     add_compile_definitions(VMP_DEBUG)
     add_compile_definitions(ARCANE_SERVER_IP="45.141.100.44")
@@ -14,6 +12,8 @@ endif ()
 
 add_compile_definitions(ARCANE_SERVER_KEY="Ebm09q37v3EMX8Z3")
 add_compile_definitions(ARCANE_SERVER_PORT=4289)
+
+add_compile_definitions(USE_PROTECTED_STRINGS=1)
 
 # To compile a static MSVC runtime environment
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
@@ -30,5 +30,3 @@ add_subdirectory(third-party)
 add_subdirectory(client)
 add_subdirectory(app)
 add_subdirectory(updater)
-
-unset(VMP_DEBUG CACHE)

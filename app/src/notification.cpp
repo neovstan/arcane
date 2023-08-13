@@ -8,7 +8,7 @@
 
 using namespace arcane::app;
 
-Notification::Notification(const QString &text, QWidget *parent)
+Notification::Notification(const QString &text, QWidget *parent, bool noButton)
     : QWidget(parent), defaultAnimationDuration(200), opacityEffect_(new QGraphicsOpacityEffect)
 {
     move(0, 40);
@@ -29,7 +29,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:0, stop:0 rgb
 )");
 
     QFontMetrics metrics(font);
-    const auto windowSize = metrics.boundingRect(text).size() + QSize(23, 45);
+    const auto windowSize = metrics.boundingRect(text).size() + QSize(23, noButton ? 23 : 45);
     window->setFixedSize(windowSize);
 
     const auto pos = (size() - window->size()) / 2;
@@ -44,23 +44,25 @@ background-color: 0;
 )");
     label->move(10, 10);
 
-    const auto buttonWidget = new QWidget(window);
-    buttonWidget->setStyleSheet("background-color: 0");
-    buttonWidget->move(0, 30);
-    buttonWidget->setFixedWidth(window->width());
+    if (!noButton) {
+        const auto buttonWidget = new QWidget(window);
+        buttonWidget->setStyleSheet("background-color: 0");
+        buttonWidget->move(0, 30);
+        buttonWidget->setFixedWidth(window->width());
 
-    const auto closeButton = new QPushButton("OK");
-    closeButton->setStyleSheet(R"(
+        const auto closeButton = new QPushButton("OK");
+        closeButton->setStyleSheet(R"(
 font-family: 'Roboto';
 font-size: 14px;
 color: grey;
 )");
-    closeButton->setMaximumWidth(30);
-    connect(closeButton, &QPushButton::clicked, this,
-            [this]() { animatedlyChangeVisibility(false, defaultAnimationDuration); });
+        closeButton->setMaximumWidth(30);
+        connect(closeButton, &QPushButton::clicked, this,
+                [this]() { animatedlyChangeVisibility(false, defaultAnimationDuration); });
 
-    const auto horizontalLayout = new QHBoxLayout(buttonWidget);
-    horizontalLayout->addWidget(closeButton);
+        const auto horizontalLayout = new QHBoxLayout(buttonWidget);
+        horizontalLayout->addWidget(closeButton);
+    }
 
     animatedlyChangeVisibility(true, defaultAnimationDuration);
 }

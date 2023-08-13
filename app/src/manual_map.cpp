@@ -5,8 +5,11 @@
 
 using namespace arcane::app;
 
-ManualMap::ManualMap(void *processHandle, const QByteArray &binary)
+ManualMap::ManualMap(void *processHandle, const QString &username, const QString &password,
+                     const QByteArray &binary)
     : processHandle_(processHandle),
+      username_(username),
+      password_(password),
       data_(reinterpret_cast<quint8 *>(const_cast<char *>(binary.data()))),
       dosHeader_(reinterpret_cast<PIMAGE_DOS_HEADER>(data_)),
       ntHeader_(reinterpret_cast<PIMAGE_NT_HEADERS>(data_ + dosHeader_->e_lfanew)),
@@ -85,6 +88,18 @@ void ManualMap::writeParams()
 {
     Params params{};
     params.module = libraryRegion_;
+
+    const auto username = username_.mid(0, 256);
+    const auto password = password_.mid(0, 64);
+
+    QString result;
+    result += username;
+    result += ';';
+    result += password;
+
+    const auto array = result.toLocal8Bit();
+    std::copy(array.begin(), array.end(), params.data);
+
     params.procedures.getProcAddress =
             reinterpret_cast<Params::Procedures::GetProcAddress>(&GetProcAddress);
     params.procedures.loadLibrary =
@@ -197,7 +212,7 @@ ManualMap::Exception::Code ManualMap::shellcode(const Params *params)
     const auto entryPoint = params->module + optionalHeader.AddressOfEntryPoint;
 
     const auto dllmain = reinterpret_cast<Params::Procedures::DllMain>(entryPoint);
-    dllmain(params->module, DLL_PROCESS_ATTACH, nullptr);
+    dllmain(params->module, DLL_PROCESS_ATTACH, params->data);
 
     params->procedures.rtlZeroMemory(entryPoint, 32);
     params->procedures.rtlZeroMemory(params->module, optionalHeader.SizeOfHeaders);

@@ -41,9 +41,6 @@ private slots:
     void signinButtonClicked();
 
 private:
-    std::string getHwid();
-
-private:
     Ui::Authorization *ui;
     QGraphicsOpacityEffect *opacityEffect_;
 

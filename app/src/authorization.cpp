@@ -5,7 +5,7 @@
 #include <QCryptographicHash>
 #include <QGraphicsOpacityEffect>
 
-#include <infoware/infoware.hpp>
+#include <utils/utils.h>
 #include <protected_string/protected_string.h>
 
 #include "query.h"
@@ -51,9 +51,9 @@ void Authorization::packetHandler(const QString &answer)
 {
     try {
         const auto json = nlohmann::json::parse(answer.toStdString());
-        const auto &id = json["id"];
+        const auto &id = json["query"];
 
-        if (id == std::string(scoped_protected_string("initialization"))) {
+        if (id == scoped_protected_std_string("initialization")) {
             initializationPacket(json);
         }
     } catch (...) {
@@ -82,26 +82,8 @@ void Authorization::signinButtonClicked()
                                                    QCryptographicHash::Sha256)
                                   .toHex()
                                   .toStdString();
-    const auto hwid = getHwid();
+    const auto hwid = utils::hwid();
 
     Query::init(username, password, hwid);
     Query::send(client_, std::string(scoped_protected_string("initialization")));
-}
-
-std::string Authorization::getHwid()
-{
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-
-    stream << iware::system::OS_info().full_name.c_str();
-    stream << iware::cpu::model_name().c_str();
-    stream << iware::system::memory().physical_total;
-
-    for (const auto &gpu : iware::gpu::device_properties()) {
-        stream << gpu.name.c_str();
-        stream << gpu.memory_size;
-    }
-
-    const auto hash = QCryptographicHash::hash(data, QCryptographicHash::Sha256);
-    return hash.toHex().toStdString();
 }

@@ -5,11 +5,11 @@
 
 #include <psdk_utils/local_vector.h>
 
-#include <configuration/configuration.hpp>
+#include <arcane_packets/configuration.hpp>
 
 namespace modification::client::actor {
 class air_walking {
-  using data = configuration::actor::air_walking_data;
+  using data = packets::configuration::actor::air_walking_data;
 
  public:
   void process(const data& settings);

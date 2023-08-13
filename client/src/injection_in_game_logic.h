@@ -2,6 +2,7 @@
 #define ARCANE_CLIENT_SRC_INJECTION_IN_GAME_LOGIC_H
 
 #include <mutex>
+#include <string_view>
 
 #include "game_logic_signals.hpp"
 
@@ -13,10 +14,14 @@
 #include "visuals/visuals.h"
 #include "actor/actor.h"
 
+#include "client.h"
+
 namespace modification::client {
 class injection_in_game_logic {
+  friend class client;
+
  public:
-  injection_in_game_logic();
+  injection_in_game_logic(std::string_view username, std::string_view password);
   injection_in_game_logic(const injection_in_game_logic&) = delete;
   injection_in_game_logic(injection_in_game_logic&&) = delete;
 
@@ -39,15 +44,12 @@ class injection_in_game_logic {
   void load_keys();
   void load_samp();
   void load_unload();
-  void load_vector_aimbot();
-  void load_silent_aimbot();
-  void load_auto_shot();
-  void load_auto_cbug();
+  void load_vector();
+  void load_silent();
+  void load_auto_s();
+  void load_auto_c();
   void load_visuals();
   void load_actor();
-
- private:
-  void thread_updating_settings();
 
  private:  // details of loads
   game_logic_signals signals_;
@@ -57,6 +59,10 @@ class injection_in_game_logic {
  private:  // things for multithreading
   std::mutex mutex_;
   std::atomic_bool has_to_break_thread_;
+
+ private:
+  const std::string username_;
+  const std::string password_;
 };
 }  // namespace modification::client
 

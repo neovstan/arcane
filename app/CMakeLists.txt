@@ -53,7 +53,7 @@ target_link_libraries(app
         Qt5::Network
         Qt5::Svg
         nlohmann_json::nlohmann_json
-        infoware
+        utils
         winapi_utils
         protected_string
         vmprotect-sdk

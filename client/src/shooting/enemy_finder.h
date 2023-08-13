@@ -5,7 +5,7 @@
 #include <vector>
 
 #include <psdk_utils/local_vector.h>
-#include <configuration/configuration.hpp>
+#include <arcane_packets/configuration.hpp>
 
 class CPed;
 
@@ -31,7 +31,7 @@ class enemy_finder {
     bool &head, &neck, &right_shoulder, &left_shoulder, &right_elbow, &left_elbow, &stomach,
         &right_knee, &left_knee;
 
-    std::vector<configuration::model_group>& model_groups;
+    std::vector<packets::configuration::model_group>& model_groups;
     std::vector<std::string>& friendly_nicknames;
 
     bool& use_target_range_instead_of_weapons;

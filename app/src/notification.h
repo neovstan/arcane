@@ -11,9 +11,8 @@ class Notification : public QWidget
     Q_OBJECT
 
 public:
-    explicit Notification(const QString &text, QWidget *parent = nullptr);
+    explicit Notification(const QString &text, QWidget *parent = nullptr, bool noButton = false);
 
-private:
     void animatedlyChangeVisibility(bool show, int msecs);
 
 private:

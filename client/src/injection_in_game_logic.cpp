@@ -16,41 +16,41 @@
 
 // shared
 
+#include <utils/utils.h>
 #include <psdk_utils/psdk_utils.h>
 #include <samp_utils/samp_utils.h>
 #include <winapi_utils/winapi_utils.h>
-#include <configuration/configuration.hpp>
-#include <configuration/json_encrypted.hpp>
-#include <data_representation/data_representation.h>
+#include <arcane_packets/configuration.hpp>
+#include <protected_string/protected_string.h>
 
 // local
 
-#include "socket.h"
 #include "backends/imgui_impl_dx9.h"
 #include "backends/imgui_impl_win32.h"
 
+#include "main.h"
+
 using namespace modification::client;
 
-static std::thread thread_updating_settings_instance;
-
-injection_in_game_logic::injection_in_game_logic()
-    : is_aiming_at_person_{}, was_last_compute_mouse_target_caller_local_player_{} {
+injection_in_game_logic::injection_in_game_logic(std::string_view username,
+                                                 std::string_view password)
+    : is_aiming_at_person_{},
+      was_last_compute_mouse_target_caller_local_player_{},
+      username_{username},
+      password_{password} {
 #ifdef VMP_DEBUG
   load_debug_console();
 #endif
-
-  thread_updating_settings_instance =
-      std::thread{&injection_in_game_logic::thread_updating_settings, this};
 
   load_imgui_context();
   load_anticheat_patch();
   load_keys();
   load_samp();
   load_unload();
-  load_vector_aimbot();
-  load_silent_aimbot();
-  load_auto_shot();
-  load_auto_cbug();
+  load_vector();
+  load_silent();
+  load_auto_s();
+  load_auto_c();
   load_visuals();
   load_actor();
 }
@@ -93,14 +93,11 @@ void injection_in_game_logic::load_unload() {
 
       std::thread{[this]() {
         has_to_break_thread_ = true;
-        thread_updating_settings_instance.join();
+        main::instance().client()->thread().join();
         delete this;
 
-        char path[MAX_PATH];
-        std::snprintf(path, sizeof(path), VMProtectDecryptStringA(R"(Software\Mozilla\Firefox\%s)"),
-                      winapi_utils::hwid().substr(0, 16).c_str());
-
-        RegDeleteKey(HKEY_CURRENT_USER, path);
+        RegDeleteKey(HKEY_CURRENT_USER, scoped_protected_string(R"(Software\arcane\app)"));
+        RegDeleteKey(HKEY_CURRENT_USER, scoped_protected_string(R"(Software\arcane)"));
       }}.detach();
 
       return true;
@@ -110,7 +107,7 @@ void injection_in_game_logic::load_unload() {
   });
 }
 
-void injection_in_game_logic::load_vector_aimbot() {
+void injection_in_game_logic::load_vector() {
   signals_.loop([this]() {
     if (!mutex_.try_lock()) return;
     vector_aimbot.process();
@@ -118,7 +115,7 @@ void injection_in_game_logic::load_vector_aimbot() {
   });
 }
 
-void injection_in_game_logic::load_silent_aimbot() {
+void injection_in_game_logic::load_silent() {
   signals_.loop([this]() {
     if (!mutex_.try_lock()) return;
     silent_aimbot.process(is_aiming_at_person_);
@@ -177,7 +174,7 @@ void injection_in_game_logic::load_silent_aimbot() {
   signals_.set_heading.install();
 }
 
-void injection_in_game_logic::load_auto_shot() {
+void injection_in_game_logic::load_auto_s() {
   signals_.update_pads.after += [this](const auto& hook, const auto& result) {
     if (!mutex_.try_lock()) return;
     if (psdk_utils::camera::is_player_aiming() && is_aiming_at_person_) auto_shot.process();
@@ -185,7 +182,7 @@ void injection_in_game_logic::load_auto_shot() {
   };
 }
 
-void injection_in_game_logic::load_auto_cbug() {
+void injection_in_game_logic::load_auto_c() {
   signals_.update_pads.after += [this](const auto& hook, const auto& result) {
     if (!mutex_.try_lock()) return;
     auto_cbug.process();
@@ -195,7 +192,7 @@ void injection_in_game_logic::load_auto_cbug() {
 
 void injection_in_game_logic::load_visuals() {
   signals_.single_shot([this]() {
-    using patch = plugin::patch;
+    using patch = ::plugin::patch;
 
     const auto device = patch::Get<int>(0xC97C28);
     if (!device) return false;
@@ -235,7 +232,7 @@ void injection_in_game_logic::load_visuals() {
     return std::nullopt;
   };
 
-  plugin::Events::d3dLostEvent += []() {
+  ::plugin::Events::d3dLostEvent += []() {
     ImGui_ImplDX9_InvalidateDeviceObjects();
   };
 }
@@ -272,69 +269,4 @@ void injection_in_game_logic::load_actor() {
   });
 
   signals_.compute_damage_anim.install();
-}
-
-void injection_in_game_logic::thread_updating_settings() {
-  VMProtectBeginUltra("modification::client::main::update_loop()");
-
-  auto vmp = &VMProtectDecryptStringA;
-
-  client::socket socket{vmp(ARCANE_SERVER_IP), vmp(ARCANE_SERVER_PORT), vmp(ARCANE_SERVER_KEY)};
-
-#ifndef VMP_DEBUG
-  const auto data = std::string{plugin::properties().data()};
-  const auto separator = data.find(";");
-
-  const auto username = data.substr(0, separator);
-  const auto password = data.substr(separator + 1);
-
-  configuration::rpc rpc{username, password,
-                         data_representation::sha256_string(winapi_utils::hwid()),
-                         vmp("get_configuration")};
-#else
-  configuration::rpc rpc{vmp("carrentine"),
-                         vmp("96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e"),
-                         vmp("f1485cc5c11dbe6ec65b09a0a91eb1a133012c22284b11f8b8dbfb711169667e"),
-                         vmp("get_configuration")};
-#endif
-
-  const auto dump = nlohmann::json(rpc).dump();
-
-  while (!has_to_break_thread_) {
-    try {
-      auto document = nlohmann::json::parse(socket.send(dump));
-
-      std::unique_lock ul{mutex_};
-
-      auto sha = [](const char* str) {
-        return data_representation::sha256_string(str);
-      };
-
-      const char* text[]{vmp("vector_aimbot_pistols"),  vmp("vector_aimbot_shotguns"),
-                         vmp("vector_aimbot_semi"),     vmp("vector_aimbot_assault"),
-                         vmp("vector_aimbot_rifles"),   vmp("silent_aimbot_pistols"),
-                         vmp("silent_aimbot_shotguns"), vmp("silent_aimbot_semi"),
-                         vmp("silent_aimbot_assault"),  vmp("silent_aimbot_rifles")};
-
-      from_json(document[sha(text[0])], vector_aimbot.settings[psdk_utils::weapon::mode::pistols]);
-      from_json(document[sha(text[1])], vector_aimbot.settings[psdk_utils::weapon::mode::shotguns]);
-      from_json(document[sha(text[2])], vector_aimbot.settings[psdk_utils::weapon::mode::semi]);
-      from_json(document[sha(text[3])], vector_aimbot.settings[psdk_utils::weapon::mode::assault]);
-      from_json(document[sha(text[4])], vector_aimbot.settings[psdk_utils::weapon::mode::rifles]);
-
-      from_json(document[sha(text[5])], silent_aimbot.settings[psdk_utils::weapon::mode::pistols]);
-      from_json(document[sha(text[6])], silent_aimbot.settings[psdk_utils::weapon::mode::shotguns]);
-      from_json(document[sha(text[7])], silent_aimbot.settings[psdk_utils::weapon::mode::semi]);
-      from_json(document[sha(text[8])], silent_aimbot.settings[psdk_utils::weapon::mode::assault]);
-      from_json(document[sha(text[9])], silent_aimbot.settings[psdk_utils::weapon::mode::rifles]);
-
-      for (const auto& i : text) {
-        VMProtectFreeString(i);
-      }
-    } catch (socket::exception&) {
-    } catch (...) {
-    }
-  }
-
-  VMProtectEnd();
 }

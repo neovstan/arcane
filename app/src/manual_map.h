@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 
+#include <QString>
 #include <QByteArray>
 
 struct _IMAGE_NT_HEADERS;
@@ -48,7 +49,8 @@ public:
     };
 
 public:
-    ManualMap(void *processHandle, const QByteArray &binary);
+    ManualMap(void *processHandle, const QString &username, const QString &password,
+              const QByteArray &binary);
 
     void give() const;
 
@@ -56,13 +58,15 @@ private:
     struct Params
     {
         quint8 *module;
+        char data[256 + 1 + 64 + 1];
 
         struct Procedures
         {
             using LoadLibraryA = quint8 *(__stdcall *)(const char *filename);
             using GetProcAddress = quintptr(__stdcall *)(quint8 *module, const char *procname);
             using RtlZeroMemoryA = void(__stdcall *)(quint8 *data, quint32 size);
-            using DllMain = quint32(__stdcall *)(quint8 *module, quint32 reason, void *reserved);
+            using DllMain = quint32(__stdcall *)(quint8 *module, quint32 reason,
+                                                 const char *reserved);
 
             LoadLibraryA loadLibrary;
             GetProcAddress getProcAddress;
@@ -97,6 +101,8 @@ private:
 
 private:
     void *processHandle_;
+    const QString username_;
+    const QString password_;
     quint8 *data_;
 
 private:

@@ -20,7 +20,7 @@ class silent_aimbot {
   enemy_finder::settings get_settings(psdk_utils::weapon::mode number);
 
  public:
-  std::unordered_map<psdk_utils::weapon::mode, configuration::silent_aimbot> settings;
+  std::unordered_map<psdk_utils::weapon::mode, packets::configuration::silent_aimbot> settings;
 
  private:
   std::unordered_map<psdk_utils::weapon::mode, enemy_finder> finder_;

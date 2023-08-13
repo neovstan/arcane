@@ -16,3 +16,6 @@
 [submodule "third-party/infoware"]
 	path = third-party/infoware
 	url = https://github.com/ThePhD/infoware
+[submodule "shared/arcane_packets"]
+	path = shared/arcane_packets
+	url = https://github.com/neovstan/arcane_packets

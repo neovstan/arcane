@@ -1,5 +1,6 @@
 #include "home.h"
 
+#include <QTimer>
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
 
@@ -46,6 +47,12 @@ void Home::setDaysRemaining(unsigned int days)
 void Home::setNickname(const QString &nickname)
 {
     ui->labelNickname->setText(nickname);
+    nickname_ = nickname;
+}
+
+void Home::setPassword(const QString &password)
+{
+    password_ = password;
 }
 
 QGraphicsOpacityEffect *Home::getOpacityEffect() const
@@ -57,7 +64,7 @@ void Home::packetHandler(const QString &answer)
 {
     try {
         const auto json = nlohmann::json::parse(answer.toStdString());
-        const auto &id = json["id"];
+        const auto &id = json["query"];
 
         if (id == scoped_protected_std_string("load")) {
             loadPacket(json);
@@ -78,15 +85,31 @@ void Home::loadPacket(const packets::Load &packet)
 
     try {
         const auto handle = getGameProcessHandle();
-        if (!handle) {
-            new Notification(tr("Run GTA: San Andreas"), parentWidget());
+        if (handle) {
+            new Notification(tr("Close GTA: San Andreas"), parentWidget());
             return;
         }
 
-        ManualMap injection(handle, dll);
-        injection.give();
+        const auto notification =
+                new Notification(tr("Run GTA: San Andreas"), parentWidget(), true);
 
-        new Notification(tr("The module is loaded. Enjoy the game!"), parentWidget());
+        const auto timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, [this, timer, notification, dll]() {
+            const auto handle = getGameProcessHandle();
+            if (!handle) {
+                return;
+            }
+
+            ManualMap injection(handle, nickname_, password_, dll);
+            injection.give();
+
+            notification->animatedlyChangeVisibility(false, defaultAnimationDuration);
+            new Notification(tr("The module is loaded. Enjoy the game!"), parentWidget());
+
+            timer->stop();
+            timer->deleteLater();
+        });
+        timer->start(100);
     } catch (const ManualMap::Exception &e) {
     }
 }
@@ -94,15 +117,14 @@ void Home::loadPacket(const packets::Load &packet)
 void Home::loadButtonClicked()
 {
     const auto handle = getGameProcessHandle();
-    if (!handle) {
-        new Notification(tr("Run GTA: San Andreas"), parentWidget());
+    if (handle) {
+        new Notification(tr("Close GTA: San Andreas"), parentWidget());
         return;
     }
 
     Q_EMIT load();
     Query::send(client_, scoped_protected_std_string("load"));
 }
-
 void *Home::getGameProcessHandle()
 {
     return winapi_utils::find_process_handle_by_pattern(

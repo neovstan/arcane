@@ -56,13 +56,13 @@ std::string data_representation::file_as_hex_string(std::string_view path) {
   return stream.str();
 }
 
-std::string data_representation::sha256_string(std::string_view in) {
+std::string data_representation::sha256_string(const char* in) {
   const auto hash = [in]() {
     unsigned char hash[SHA256_DIGEST_LENGTH]{};
 
     SHA256_CTX context{};
     SHA256_Init(&context);
-    SHA256_Update(&context, in.data(), in.length());
+    SHA256_Update(&context, in, std::strlen(in));
     SHA256_Final(hash, &context);
 
     return std::vector<unsigned char>(hash, hash + sizeof(hash));

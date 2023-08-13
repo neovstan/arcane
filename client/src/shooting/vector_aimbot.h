@@ -3,7 +3,7 @@
 
 #include <psdk_utils/psdk_utils.h>
 
-#include <configuration/configuration.hpp>
+#include <arcane_packets/configuration.hpp>
 #include <nlohmann/json.hpp>
 #include <unordered_map>
 
@@ -18,7 +18,7 @@ class vector_aimbot {
   enemy_finder::settings get_settings(psdk_utils::weapon::mode number);
 
  public:
-  std::unordered_map<psdk_utils::weapon::mode, configuration::vector_aimbot> settings;
+  std::unordered_map<psdk_utils::weapon::mode, packets::configuration::vector_aimbot> settings;
 
  private:
   std::unordered_map<psdk_utils::weapon::mode, enemy_finder> finder_;

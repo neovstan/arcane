@@ -1,7 +1,7 @@
 #ifndef ARCANE_CLIENT_SRC_ACTOR_ACTOR_H
 #define ARCANE_CLIENT_SRC_ACTOR_ACTOR_H
 
-#include <configuration/configuration.hpp>
+#include <arcane_packets/configuration.hpp>
 
 #include "air_walking.h"
 #include "anti_stun.h"
@@ -16,7 +16,7 @@ class actor {
   void process_fast_run(double& out_run_speed);
 
  public:
-  configuration::actor settings;
+  struct packets::configuration::actor settings;
 
  private:
   air_walking air_walking;

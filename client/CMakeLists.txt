@@ -13,6 +13,10 @@ add_library(client SHARED
         src/plugin.h
         src/socket.cpp
         src/socket.h
+        src/query.cpp
+        src/query.h
+        src/client.cpp
+        src/client.h
         src/game_logic_signals.hpp
         src/injection_in_game_logic.cpp
         src/injection_in_game_logic.h
@@ -67,10 +71,11 @@ target_link_libraries(client PRIVATE
         winapi_utils
         utils
         encryption
-        configuration
+        arcane_packets
         vmprotect-sdk
         fonts
         protected_string
+        infoware
 )
 
 if (VMP_DEBUG)
@@ -79,6 +84,6 @@ if (VMP_DEBUG)
             ARCHIVE_OUTPUT_DIRECTORY "C:/Users/me/Games/"
             LIBRARY_OUTPUT_DIRECTORY "C:/Users/me/Games/"
             RUNTIME_OUTPUT_DIRECTORY "C:/Users/me/Games/"
-            SUFFIX ".asi"
+            SUFFIX ".dll"
     )
 endif ()

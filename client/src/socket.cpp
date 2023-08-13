@@ -73,11 +73,12 @@ std::string modification::client::socket::send(const std::string& message) {
     throw exception{exception::failed::shutdowning};
   }
 
-  static char buffer[16 * 1024 * 1024]{};
-  recv(connect_socket_, buffer, sizeof(buffer), 0);
+  std::vector<char> buffer(512 * 512);
+
+  recv(connect_socket_, buffer.data(), buffer.size(), MSG_WAITALL);
   closesocket(connect_socket_);
 
-  const auto answer = encryption::cbc{encryption_key_, encryption_key_}.decrypt(buffer);
+  const auto answer = encryption::cbc{encryption_key_, encryption_key_}.decrypt(buffer.data());
 
   VMProtectEnd();
 
