@@ -63,7 +63,7 @@ void silent_aimbot::bullet_process(const psdk_utils::local_vector& origin,
   const auto weapon_mode = psdk_utils::weapon::get_mode(psdk_utils::weapon_in_hand());
   if (weapon_mode == psdk_utils::weapon::mode::unknown) return;
 
-  auto& settings = this->settings.at(weapon_mode);
+  const auto& settings = this->settings.at(weapon_mode);
   auto& missed_hits = missed_hits_[weapon_mode];
 
   const auto enemy = get_enemy();

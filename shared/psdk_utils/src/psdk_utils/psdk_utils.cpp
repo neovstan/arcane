@@ -122,9 +122,9 @@ psdk_utils::nearest_bone psdk_utils::find_bone_making_minimum_angle_with_camera(
                        camera::crosshair_offset();
 
     const auto difference =
-        math::difference((angle - local_vector{math::rad2deg(cam.m_fHorizontalAngle),
-                                               math::rad2deg(cam.m_fVerticalAngle)})
-                             .r());
+        math::abs(math::difference((angle - local_vector{math::rad2deg(cam.m_fHorizontalAngle),
+                                                         math::rad2deg(cam.m_fVerticalAngle)})
+                                       .r()));
 
     const auto max_angle = [&]() {
       auto angle = max_angle_in_degrees;
