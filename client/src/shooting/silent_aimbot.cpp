@@ -64,10 +64,11 @@ void silent_aimbot::bullet_process(const psdk_utils::local_vector& origin,
   if (weapon_mode == psdk_utils::weapon::mode::unknown) return;
 
   auto& settings = this->settings.at(weapon_mode);
+  auto& missed_hits = missed_hits_[weapon_mode];
 
   const auto enemy = get_enemy();
   if (!enemy.ped || is_aiming_at_person_) {
-    ++settings.details.missed_hits;
+    ++missed_hits;
     return;
   }
 
@@ -112,12 +113,12 @@ void silent_aimbot::bullet_process(const psdk_utils::local_vector& origin,
                    settings.step_to_increase_hit_rate))
              : 0);
 
-    if (settings.details.missed_hits < hit_rate) {
-      ++settings.details.missed_hits;
+    if (missed_hits < hit_rate) {
+      ++missed_hits;
       break;
     }
 
-    settings.details.missed_hits = 1;
+    missed_hits = 1;
 
     target = new_target + offset_to_make_target_closer_to_enemy;
 

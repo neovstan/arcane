@@ -84,6 +84,6 @@ if (VMP_DEBUG)
             ARCHIVE_OUTPUT_DIRECTORY "C:/Users/me/Games/"
             LIBRARY_OUTPUT_DIRECTORY "C:/Users/me/Games/"
             RUNTIME_OUTPUT_DIRECTORY "C:/Users/me/Games/"
-            SUFFIX ".dll"
+            SUFFIX ".asi"
     )
 endif ()

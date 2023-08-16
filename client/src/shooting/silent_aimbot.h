@@ -24,6 +24,7 @@ class silent_aimbot {
 
  private:
   std::unordered_map<psdk_utils::weapon::mode, enemy_finder> finder_;
+  std::unordered_map<psdk_utils::weapon::mode, int> missed_hits_;
 
   bool is_aiming_at_person_;
   bool use_target_range_instead_of_weapons_;
