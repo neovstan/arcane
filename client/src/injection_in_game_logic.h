@@ -44,10 +44,10 @@ class injection_in_game_logic {
   void load_keys();
   void load_samp();
   void load_unload();
-  void load_vector();
-  void load_silent();
-  void load_auto_s();
-  void load_auto_c();
+  void load_vector_aimbot();
+  void load_silent_aimbot();
+  void load_auto_shot();
+  void load_auto_cbug();
   void load_visuals();
   void load_actor();
 

@@ -47,10 +47,10 @@ injection_in_game_logic::injection_in_game_logic(std::string_view username,
   load_keys();
   load_samp();
   load_unload();
-  load_vector();
-  load_silent();
-  load_auto_s();
-  load_auto_c();
+  load_vector_aimbot();
+  load_silent_aimbot();
+  load_auto_shot();
+  load_auto_cbug();
   load_visuals();
   load_actor();
 }
@@ -107,7 +107,7 @@ void injection_in_game_logic::load_unload() {
   });
 }
 
-void injection_in_game_logic::load_vector() {
+void injection_in_game_logic::load_vector_aimbot() {
   signals_.loop([this]() {
     if (!mutex_.try_lock()) return;
     vector_aimbot.process();
@@ -115,7 +115,7 @@ void injection_in_game_logic::load_vector() {
   });
 }
 
-void injection_in_game_logic::load_silent() {
+void injection_in_game_logic::load_silent_aimbot() {
   signals_.loop([this]() {
     if (!mutex_.try_lock()) return;
     silent_aimbot.process(is_aiming_at_person_);
@@ -174,7 +174,7 @@ void injection_in_game_logic::load_silent() {
   signals_.set_heading.install();
 }
 
-void injection_in_game_logic::load_auto_s() {
+void injection_in_game_logic::load_auto_shot() {
   signals_.update_pads.after += [this](const auto& hook, const auto& result) {
     if (!mutex_.try_lock()) return;
     if (psdk_utils::camera::is_player_aiming() && is_aiming_at_person_) auto_shot.process();
@@ -182,7 +182,7 @@ void injection_in_game_logic::load_auto_s() {
   };
 }
 
-void injection_in_game_logic::load_auto_c() {
+void injection_in_game_logic::load_auto_cbug() {
   signals_.update_pads.after += [this](const auto& hook, const auto& result) {
     if (!mutex_.try_lock()) return;
     auto_cbug.process();
