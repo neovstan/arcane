@@ -21,7 +21,8 @@ class injection_in_game_logic {
   friend class client;
 
  public:
-  injection_in_game_logic(std::string_view username, std::string_view password);
+  injection_in_game_logic(std::string_view username, std::string_view password,
+                          std::string_view hwid);
   injection_in_game_logic(const injection_in_game_logic&) = delete;
   injection_in_game_logic(injection_in_game_logic&&) = delete;
 
@@ -63,6 +64,7 @@ class injection_in_game_logic {
  private:
   const std::string username_;
   const std::string password_;
+  const std::string hwid_;
 };
 }  // namespace modification::client
 

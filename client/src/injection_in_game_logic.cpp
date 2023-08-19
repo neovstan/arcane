@@ -33,11 +33,12 @@
 using namespace modification::client;
 
 injection_in_game_logic::injection_in_game_logic(std::string_view username,
-                                                 std::string_view password)
+                                                 std::string_view password, std::string_view hwid)
     : is_aiming_at_person_{},
       was_last_compute_mouse_target_caller_local_player_{},
       username_{username},
-      password_{password} {
+      password_{password},
+      hwid_{hwid} {
 #ifdef VMP_DEBUG
   load_debug_console();
 #endif

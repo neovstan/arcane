@@ -1,6 +1,5 @@
 #include "client.h"
 
-#include <utils/utils.h>
 #include <protected_string/protected_string.h>
 
 #include <VMProtectSDK.h>
@@ -22,7 +21,7 @@ void client::process() {
                                       std::to_string(ARCANE_SERVER_PORT),
                                       scoped_protected_std_string(ARCANE_SERVER_KEY)};
 
-  query::init(injection_->username_, injection_->password_, utils::hwid());
+  query::init(injection_->username_, injection_->password_, injection_->hwid_);
 
   while (!injection_->has_to_break_thread_) {
     try {
