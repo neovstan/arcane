@@ -8,7 +8,7 @@ class fast_run {
   using data = packets::configuration::actor::fast_run_data;
 
  public:
-  void process(const data& settings, double& out_run_speed);
+  void process(const data& settings, float& out_run_speed);
 };
 }  // namespace modification::client::actor
 

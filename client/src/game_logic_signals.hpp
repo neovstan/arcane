@@ -37,8 +37,6 @@ class game_logic_signals {
   using CPad_UpdatePads = bool(__cdecl*)();
   using CEventDamage_ComputeDamageAnim = void(__thiscall*)(CEventDamage* event, CPed* ped,
                                                            bool flag);
-  using CPlayerPed_GetButtonSprintResults = double(__thiscall*)(CPlayerPed* player,
-                                                                int sprint_type);
 
  public:
   kthook::kthook_signal<CHud_DrawAfterFade_t> main_loop{0x58D490};
@@ -46,7 +44,6 @@ class game_logic_signals {
   kthook::kthook_signal<CPlayerPed_Compute3rdPersonMouseTarget> compute_mouse_target{0x60B650};
   kthook::kthook_signal<IDirect3DDevice9_Present> present{};
   kthook::kthook_signal<CPad_UpdatePads> update_pads{0x541DD0};
-  kthook::kthook_signal<CPlayerPed_GetButtonSprintResults> get_button_sprint_results{0x60A820};
   kthook::kthook_simple<CWorld_ProcessLineOfSight> aim_point{0x56BA00};
   kthook::kthook_simple<CPlaceable_SetHeading> set_heading{0x43E0C0};
   kthook::kthook_simple<CEventDamage_ComputeDamageAnim> compute_damage_anim{0x4B3FC0};

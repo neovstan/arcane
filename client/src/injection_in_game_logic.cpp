@@ -242,16 +242,13 @@ void injection_in_game_logic::load_actor() {
   signals_.loop([this]() {
     if (!mutex_.try_lock()) return;
     actor.process();
+
+    float new_run_speed{1.0f};
+    actor.process_fast_run(new_run_speed);
+    fast_run_patch_.speed = new_run_speed;
+
     mutex_.unlock();
   });
-
-  signals_.get_button_sprint_results.after +=
-      [this](const auto& hook, auto& return_value, auto player, auto sprint_type) {
-        if (sprint_type == 0 && mutex_.try_lock()) {
-          actor.process_fast_run(return_value);
-          mutex_.unlock();
-        }
-      };
 
   signals_.compute_damage_anim.set_cb([this](const auto& hook, auto event, auto ped, auto flag) {
     if (ped == psdk_utils::player()) {
@@ -270,4 +267,16 @@ void injection_in_game_logic::load_actor() {
   });
 
   signals_.compute_damage_anim.install();
+}
+
+injection_in_game_logic::fast_run_patch::fast_run_patch() {
+  for (const auto address : addresses_) {
+    ::plugin::patch::SetPointer(address, &speed);
+  }
+}
+
+injection_in_game_logic::fast_run_patch::~fast_run_patch() {
+  for (const auto address : addresses_) {
+    ::plugin::patch::SetUInt(address, default_value_);
+  }
 }

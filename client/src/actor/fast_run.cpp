@@ -2,6 +2,6 @@
 
 using namespace modification::client::actor;
 
-void fast_run::process(const data& settings, double& out_run_speed) {
+void fast_run::process(const data& settings, float& out_run_speed) {
   if (settings.enable) out_run_speed = settings.speed;
 }

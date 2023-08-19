@@ -13,7 +13,7 @@ class actor {
  public:
   void process();
   anti_stun::order process_anti_stun();
-  void process_fast_run(double& out_run_speed);
+  void process_fast_run(float& out_run_speed);
 
  public:
   struct packets::configuration::actor settings;

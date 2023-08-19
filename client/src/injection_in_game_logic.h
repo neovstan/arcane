@@ -39,6 +39,22 @@ class injection_in_game_logic {
   actor::actor actor;
 
  private:
+  class fast_run_patch {
+   public:
+    fast_run_patch();
+    fast_run_patch(const fast_run_patch&) = delete;
+    fast_run_patch(fast_run_patch&&) = delete;
+    ~fast_run_patch();
+
+   public:
+    float speed{1.0f};
+
+   private:
+    const std::array<std::uintptr_t, 2> addresses_{0x60B435 + 2, 0x60B446 + 2};
+    const std::uintptr_t default_value_{0x858624};
+  };
+
+ private:
   static void load_debug_console();
   static void load_imgui_context();
   void load_anticheat_patch();
@@ -54,6 +70,7 @@ class injection_in_game_logic {
 
  private:  // details of loads
   game_logic_signals signals_;
+  fast_run_patch fast_run_patch_;
   bool is_aiming_at_person_;
   bool was_last_compute_mouse_target_caller_local_player_;
 
