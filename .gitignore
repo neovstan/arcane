@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /build/
 /cmake-build-release/
+/CMakeUserPresets.json
