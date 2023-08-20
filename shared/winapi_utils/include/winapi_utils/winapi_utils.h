@@ -6,10 +6,12 @@
 
 #include <windows.h>
 
+#include "details.hpp"
+
 namespace winapi_utils {
 HANDLE find_process_handle_by_sha256_hash(std::string_view hash);
 HANDLE find_process_handle_by_pattern(std::uintptr_t address, std::string_view pattern);
-std::string hwid();
+details::PTLS_ENTRY get_tls_entry();
 }  // namespace winapi_utils
 
 #endif  // WINAPI_UTILS_WINAPI_UTILS_H

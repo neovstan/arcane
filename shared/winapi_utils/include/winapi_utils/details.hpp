@@ -1,9 +1,10 @@
-#ifndef UNLOADER_H
-#define UNLOADER_H
+#ifndef WINAPI_UTILS_DETAILS_HPP
+#define WINAPI_UTILS_DETAILS_HPP
 
-#include <utils/utils.h>
 #include <windows.h>
 
+namespace winapi_utils {
+namespace details {
 typedef struct _UNICODE_STRING {
   USHORT Length;
   USHORT MaximumLength;
@@ -30,33 +31,7 @@ typedef struct _TLS_ENTRY {
   PLDR_DATA_TABLE_ENTRY ModuleEntry;
   SIZE_T Index;
 } TLS_ENTRY, *PTLS_ENTRY;
+}  // namespace details
+}  // namespace winapi_utils
 
-struct node_data {
-  MEMORY_BASIC_INFORMATION mbi{};
-  node_data* next;
-};
-
-struct shellcode_data {
-  node_data* first_node;
-  PTLS_ENTRY tls_list_addr;
-  PTLS_ENTRY tls_node_addr;
-  decltype(VirtualFree)* virtual_free;
-  decltype(free)* free;
-};
-
-class unloader {
-  static PTLS_ENTRY get_tls_entry_ptr();
-  static unsigned long __stdcall shellcode(shellcode_data* data);
-
-  uintptr_t mod_base_ = 0;
-  void* mod_tls_ = 0;
-
- public:
-  static bool initialize(HMODULE mod);
-  static void execute();
-
- private:
-  static unloader this_;
-};
-
-#endif  // UNLOADER_H
+#endif  // WINAPI_UTILS_DETAILS_HPP
