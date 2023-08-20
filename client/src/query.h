@@ -19,9 +19,8 @@ struct query_data {
 
 class query {
  public:
-  static void init(const std::string& username, const std::string& password,
-                   const std::string& hwid);
-  static std::string send(socket& socket, const std::string& query);
+  static void init(std::string_view username, std::string_view password, std::string_view hwid);
+  static std::string send(socket& socket, std::string_view query);
 
  private:
   static std::string username_;

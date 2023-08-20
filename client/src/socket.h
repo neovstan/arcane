@@ -42,14 +42,10 @@ class socket {
     int code_;
   };
 
-  /**
-   * @brief Constructor of the Socket class. Contains an invariant.
-   */
-  socket(const std::string& ip, const std::string& port, const std::string& encryption_key);
-
+  socket(std::string_view ip, std::string_view port, std::string_view encryption_key);
   ~socket();
 
-  std::string send(const std::string& message);
+  std::string send(std::string_view message);
 
  private:
   addrinfo* address_info_;

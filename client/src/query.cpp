@@ -8,14 +8,13 @@ std::string query::username_;
 std::string query::password_;
 std::string query::hwid_;
 
-void query::init(const std::string& username, const std::string& password,
-                 const std::string& hwid) {
+void query::init(std::string_view username, std::string_view password, std::string_view hwid) {
   username_ = username;
   password_ = password;
   hwid_ = hwid;
 }
 
-std::string query::send(socket& socket, const std::string& query) {
+std::string query::send(socket& socket, std::string_view query) {
   query_data packet;
   packet.query = query;
   packet.username = username_;

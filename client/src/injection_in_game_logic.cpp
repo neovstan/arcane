@@ -241,6 +241,7 @@ void injection_in_game_logic::load_visuals() {
 void injection_in_game_logic::load_actor() {
   signals_.loop([this]() {
     if (!mutex_.try_lock()) return;
+
     actor.process();
 
     float new_run_speed{1.0f};

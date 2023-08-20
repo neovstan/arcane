@@ -10,3 +10,4 @@ add_library(encryption
 target_include_directories(encryption PRIVATE include/encryption PUBLIC include)
 
 target_link_libraries(encryption PUBLIC cryptopp::cryptopp)
+set_target_properties(encryption PROPERTIES CXX_STANDARD 17)

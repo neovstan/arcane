@@ -1,9 +1,9 @@
 #ifndef ARCANE_CLIENT_SRC_PLUGIN_H
 #define ARCANE_CLIENT_SRC_PLUGIN_H
 
-#include <windows.h>
-
 #include <stdexcept>
+
+#include <windows.h>
 
 namespace modification::client {
 class plugin {
@@ -27,14 +27,14 @@ class plugin {
 
    private:
     struct initialization_data {
-      HMODULE module_handle{};
-      SIZE_T size_of_image{};
-      const char* data{};
-    } data_;
+      HMODULE module_handle;
+      SIZE_T size_of_image;
+      const char* data;
+    } data_{};
   };
 
   static information& properties() {
-    static information instance{};
+    static information instance;
     return instance;
   }
 };
@@ -61,7 +61,7 @@ class singleton {
   };
 
   static T& instance() {
-    static T instance{};
+    static T instance;
     return instance;
   }
 };
