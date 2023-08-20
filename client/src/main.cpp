@@ -1,7 +1,5 @@
 #include "main.h"
 
-#include <utils/utils.h>
-
 modification::client::main::main() {
 #ifdef VMP_DEBUG
   injection_ = std::make_shared<injection_in_game_logic>(
@@ -18,6 +16,7 @@ modification::client::main::main() {
 #endif
 
   client_ = std::make_unique<class client>(injection_);
+  unload_ = std::make_unique<class unload>(plugin::properties().module_handle());
 }
 
 modification::client::main::~main() {

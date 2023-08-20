@@ -13,7 +13,7 @@ void unload::execute() {
   const auto allocated = VirtualAlloc(nullptr, 1024, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
   if (!allocated) throw std::runtime_error{"virtual alloc failed"};
 
-  std::memcpy(allocated, shellcode, 1024);
+  std::memcpy(allocated, reinterpret_cast<void*>(&shellcode), 1024);
 
   const auto data = reinterpret_cast<shellcode_data*>(std::malloc(sizeof(shellcode_data)));
   if (!data) throw std::runtime_error{"malloc failed"};
