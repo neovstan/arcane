@@ -7,12 +7,15 @@
 #include "anti_stun.h"
 #include "fast_run.h"
 #include "spread_control.h"
+#include "infinite_clip.h"
 
 namespace modification::client::actor {
 class actor {
  public:
   void process();
   anti_stun::order process_anti_stun();
+  infinite_clip::order process_infinite_clip();
+
   void process_fast_run(float& out_run_speed);
 
  public:
@@ -23,6 +26,7 @@ class actor {
   anti_stun anti_stun;
   fast_run fast_run;
   spread_control spread_control;
+  infinite_clip infinite_clip;
 };
 }  // namespace modification::client::actor
 

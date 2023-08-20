@@ -252,6 +252,15 @@ void injection_in_game_logic::load_actor() {
     mutex_.unlock();
   });
 
+  signals_.weapon_fire.after += [this](const auto& hook, auto& return_value,
+                                       auto weapon, auto owner, auto&&... args) {
+    if (return_value == false || owner != psdk_utils::player()) return;
+    const auto order = actor.process_infinite_clip();
+    if (order == decltype(order)::not_decrease_ammo_in_clip && weapon->m_nAmmoInClip != weapon->m_nTotalAmmo) {
+      weapon->m_nAmmoInClip += 1;
+    }
+  };
+
   signals_.compute_damage_anim.set_cb([this](const auto& hook, auto event, auto ped, auto flag) {
     if (ped == psdk_utils::player()) {
       while (!mutex_.try_lock()) continue;

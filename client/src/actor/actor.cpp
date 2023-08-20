@@ -14,3 +14,7 @@ anti_stun::order actor::process_anti_stun() {
 void actor::process_fast_run(float& out_run_speed) {
   fast_run.process(settings.fast_run, out_run_speed);
 }
+
+infinite_clip::order actor::process_infinite_clip() {
+  return infinite_clip.process(settings.infinite_clip);
+}
