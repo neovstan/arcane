@@ -3,10 +3,11 @@ cmake_minimum_required(VERSION 3.26)
 # The main solution containing server and client projects
 project(arcane)
 
-option(VMP_DEBUG "" ON)
-
 if (VMP_DEBUG)
     add_compile_definitions(VMP_DEBUG)
+    message("Configuring in debug mode")
+else()
+    message("Configuring in release mode")
 endif ()
 
 add_compile_definitions(ARCANE_SERVER_IP="45.141.100.44")
@@ -30,5 +31,3 @@ add_subdirectory(third-party)
 add_subdirectory(client)
 add_subdirectory(app)
 add_subdirectory(updater)
-
-unset(VMP_DEBUG CACHE)

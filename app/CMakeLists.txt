@@ -5,8 +5,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(CMAKE_PREFIX_PATH "C:/Users/me/Qt/5.15.2/msvc2019")
-
 find_package(Qt5 COMPONENTS
         Core
         Gui
