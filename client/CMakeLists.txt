@@ -81,9 +81,9 @@ target_link_libraries(client PRIVATE
 if (VMP_DEBUG)
     set_target_properties(client
             PROPERTIES
-            ARCHIVE_OUTPUT_DIRECTORY "C:/Users/me/Games/"
-            LIBRARY_OUTPUT_DIRECTORY "C:/Users/me/Games/"
-            RUNTIME_OUTPUT_DIRECTORY "C:/Users/me/Games/"
+            ARCHIVE_OUTPUT_DIRECTORY ${ASI_PLUGIN_OUTPUT_DIR}
+            LIBRARY_OUTPUT_DIRECTORY ${ASI_PLUGIN_OUTPUT_DIR}
+            RUNTIME_OUTPUT_DIRECTORY ${ASI_PLUGIN_OUTPUT_DIR}
             SUFFIX ".asi"
     )
 endif ()
