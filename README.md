@@ -32,7 +32,7 @@ git submodule update --init --remote --recursive
 conan install . --output-folder=build --build=missing
 cmake --preset conan-default
 cd build
-cmake .. -DQT_PATH="your qt path" -DVMP_DEBUG=1
+cmake .. -DQT_PATH="your qt path" -DASI_PLUGIN_OUTPUT_DIR="your gta path" -DVMP_DEBUG=1
 ```
 Then open the project folder in Visual Studio 2022
 
