@@ -10,6 +10,7 @@ class CEventDamage;
 class CColPoint;
 class CEntity;
 class CPlaceable;
+class CAutomobile;
 class IDirect3DDevice9;
 
 namespace modification::client {
@@ -37,6 +38,7 @@ class game_logic_signals {
   using CPad_UpdatePads = bool(__cdecl*)();
   using CEventDamage_ComputeDamageAnim = void(__thiscall*)(CEventDamage* event, CPed* ped,
                                                            bool flag);
+  using CAutomobile_NitrousControl = void(__thiscall*)(CAutomobile* automobile, char set_boosts);
 
  public:
   kthook::kthook_signal<CHud_DrawAfterFade_t> main_loop{0x58D490};
@@ -44,6 +46,7 @@ class game_logic_signals {
   kthook::kthook_signal<CPlayerPed_Compute3rdPersonMouseTarget> compute_mouse_target{0x60B650};
   kthook::kthook_signal<IDirect3DDevice9_Present> present{};
   kthook::kthook_signal<CPad_UpdatePads> update_pads{0x541DD0};
+  kthook::kthook_signal<CAutomobile_NitrousControl> nitrous_control{0x6A3EA0};
   kthook::kthook_simple<CWorld_ProcessLineOfSight> aim_point{0x56BA00};
   kthook::kthook_simple<CPlaceable_SetHeading> set_heading{0x43E0C0};
   kthook::kthook_simple<CEventDamage_ComputeDamageAnim> compute_damage_anim{0x4B3FC0};

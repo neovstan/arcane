@@ -12,6 +12,7 @@
 #include "shooting/vector_aimbot.h"
 
 #include "visuals/visuals.h"
+#include "vehicle/vehicle.h"
 #include "actor/actor.h"
 
 #include "client.h"
@@ -37,6 +38,7 @@ class injection_in_game_logic {
 
  public:
   actor::actor actor;
+  vehicle::vehicle vehicle;
 
  private:
   class fast_run_patch {
@@ -66,6 +68,7 @@ class injection_in_game_logic {
   void load_auto_shot();
   void load_auto_cbug();
   void load_visuals();
+  void load_vehicle();
   void load_actor();
 
  private:  // details of loads
