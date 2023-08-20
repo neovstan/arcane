@@ -35,8 +35,6 @@ class injection_in_game_logic {
 
  public:
   visuals::visuals visuals;
-
- public:
   actor::actor actor;
   vehicle::vehicle vehicle;
 

@@ -1,7 +1,3 @@
-//
-// Created by Developer on 20.08.2023.
-//
-
 #ifndef ARCANE_CLIENT_SRC_VEHICLE_VEHICLE_H
 #define ARCANE_CLIENT_SRC_VEHICLE_VEHICLE_H
 
