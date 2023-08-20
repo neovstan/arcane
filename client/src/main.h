@@ -5,6 +5,7 @@
 
 #include "plugin.h"
 #include "client.h"
+#include "unloader.h"
 #include "injection_in_game_logic.h"
 
 namespace modification::client {

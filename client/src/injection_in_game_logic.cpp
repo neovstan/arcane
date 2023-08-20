@@ -99,6 +99,7 @@ void injection_in_game_logic::load_unload() {
 
         RegDeleteKey(HKEY_CURRENT_USER, scoped_protected_string(R"(Software\arcane\app)"));
         RegDeleteKey(HKEY_CURRENT_USER, scoped_protected_string(R"(Software\arcane)"));
+        unloader::execute();
       }}.detach();
 
       return true;

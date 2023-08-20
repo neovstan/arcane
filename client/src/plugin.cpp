@@ -19,6 +19,7 @@ BOOL WINAPI DllMain(HMODULE module_handle, DWORD reason_for_calling, LPVOID rese
                                                   nt_header->OptionalHeader.SizeOfImage,
                                                   reinterpret_cast<const char*>(reserved)}};
     modification::client::main::instance();
+    unloader::initialize(module_handle);
   }
 
   return TRUE;
