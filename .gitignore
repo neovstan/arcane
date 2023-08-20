@@ -364,4 +364,3 @@ FodyWeavers.xsd
 /build/
 /cmake-build-release/
 /CMakeUserPresets.json
-/client/CMakeLists.txt
