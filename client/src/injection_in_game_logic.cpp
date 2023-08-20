@@ -53,6 +53,7 @@ injection_in_game_logic::injection_in_game_logic(std::string_view username,
   load_auto_shot();
   load_auto_cbug();
   load_visuals();
+  load_vehicle();
   load_actor();
 }
 
@@ -253,8 +254,7 @@ void injection_in_game_logic::load_actor() {
 
   signals_.compute_damage_anim.set_cb([this](const auto& hook, auto event, auto ped, auto flag) {
     if (ped == psdk_utils::player()) {
-      while (!mutex_.try_lock()) {
-      }
+      while (!mutex_.try_lock()) continue;
 
       const auto order = actor.process_anti_stun();
       mutex_.unlock();
@@ -268,6 +268,16 @@ void injection_in_game_logic::load_actor() {
   });
 
   signals_.compute_damage_anim.install();
+}
+
+void injection_in_game_logic::load_vehicle() {
+  signals_.nitrous_control.after += [this](const auto& hook, auto automobile, auto set_boosts) {
+    if (automobile != psdk_utils::player()->m_pVehicle) return;
+    const auto order = vehicle.process_infinite_nitro();
+    if (order == decltype(order)::not_decrease_vehicle_nitro_level) {
+      automobile->m_fNitroValue = -0.5f;
+    }
+  };
 }
 
 injection_in_game_logic::fast_run_patch::fast_run_patch() {
