@@ -24,15 +24,48 @@ You can see some of it in the third-party folder. Some modules are connected via
 ## Why CMake?
 Because it provides great opportunities to separate modules, thus allowing to simplify the architecture of the project and not to mix parts that should not overlap and know something about each other.
 ## How can I build?
-Just clone this repo and run the following command (you have to select a conan profile with platform x86):
 ```
+git clone https://github.com/neovstan/arcane.git
+cd arcane
+git submodule update --init --remote --recursive
 conan install . --output-folder=build --build=missing
 ```
-You can then run the CMake build configuration with the desired generator (Visual Studio 17 2022 is recommended).  
-Don't forget to specify in the cmake call parameters:
-```
--DCMAKE_TOOLCHAIN_FILE="build/conan_toolchain.cmake"
-```
+<details>
+  <summary>Add this to CMakeUserPresets.json</summary>
+  
+  ```
+  "configurePresets": [
+      {
+          "name": "release",
+          "inherits": "conan-default",
+          "cacheVariables": {
+              "CMAKE_PREFIX_PATH": "your path to qt",
+              "VMP_DEBUG": "OFF"
+          }
+      },
+      {
+          "name": "debug",
+          "inherits": "conan-default",
+          "cacheVariables": {
+              "CMAKE_PREFIX_PATH": "your path to qt",
+              "VMP_DEBUG": "ON"
+          }
+      }
+  ],
+  "buildPresets": [
+      {
+          "name": "release",
+          "configurePreset": "release"
+      },
+      {
+          "name": "debug",
+          "configurePreset": "debug"
+      }
+  ]
+  ```
+</details>
+Then open the project folder in Visual Studio 2022 and specify the build configuration.
+
 ## 
 ### Available functionality
 * **Shooting**
