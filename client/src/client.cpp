@@ -65,6 +65,9 @@ void client::process() {
       injection_->auto_shot.settings = configuration.auto_shot;
       injection_->visuals.settings = configuration.visuals;
       injection_->actor.settings = configuration.actor;
+
+      using namespace std::chrono_literals;
+      std::this_thread::sleep_for(1s);
     } catch (const socket::exception& e) {
     } catch (const std::exception& e) {
     }
