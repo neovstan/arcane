@@ -1,7 +1,7 @@
 add_subdirectory(psdk_utils)
 add_subdirectory(samp_utils)
+add_subdirectory(utils)
 add_subdirectory(winapi_utils)
 add_subdirectory(data_representation)
-add_subdirectory(utils)
 add_subdirectory(protected_string)
 add_subdirectory(arcane_packets)

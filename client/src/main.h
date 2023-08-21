@@ -5,6 +5,7 @@
 
 #include "plugin.h"
 #include "client.h"
+#include "unload.h"
 #include "injection_in_game_logic.h"
 
 namespace modification::client {
@@ -16,6 +17,7 @@ class main : public singleton<main> {
 
   std::shared_ptr<injection_in_game_logic> injection_;
   std::unique_ptr<client> client_;
+  std::unique_ptr<unload> unload_;
 
  public:
   std::tuple<bool, shooting::enemy_finder::settings> vector_aimbot_finder_settings(
@@ -29,8 +31,12 @@ class main : public singleton<main> {
             injection_->silent_aimbot.get_settings(mode)};
   }
 
-  const std::unique_ptr<client>& client() const {
+  [[nodiscard]] const std::unique_ptr<client>& client() const {
     return client_;
+  }
+
+  [[nodiscard]] const std::unique_ptr<unload>& unload() const {
+    return unload_;
   }
 };
 }  // namespace modification::client

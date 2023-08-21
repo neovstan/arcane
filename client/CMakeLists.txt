@@ -17,6 +17,8 @@ add_library(client SHARED
         src/query.h
         src/client.cpp
         src/client.h
+        src/unload.cpp
+        src/unload.h
         src/game_logic_signals.hpp
         src/injection_in_game_logic.cpp
         src/injection_in_game_logic.h
