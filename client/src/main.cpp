@@ -1,5 +1,7 @@
 #include "main.h"
 
+#include <utils/utils.h>
+
 modification::client::main::main() {
 #ifdef VMP_DEBUG
   injection_ = std::make_shared<injection_in_game_logic>(
