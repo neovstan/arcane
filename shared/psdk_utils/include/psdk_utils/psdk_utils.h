@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include <CAutomobile.h>
 #include <CPlayerPed.h>
 #include <CPed.h>
 

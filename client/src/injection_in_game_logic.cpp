@@ -53,6 +53,7 @@ injection_in_game_logic::injection_in_game_logic(std::string_view username,
   load_auto_shot();
   load_auto_cbug();
   load_visuals();
+  load_vehicle();
   load_actor();
 }
 
@@ -112,23 +113,17 @@ void injection_in_game_logic::load_unload() {
 
 void injection_in_game_logic::load_vector_aimbot() {
   signals_.loop([this]() {
-    if (!mutex_.try_lock()) return;
     vector_aimbot.process();
-    mutex_.unlock();
   });
 }
 
 void injection_in_game_logic::load_silent_aimbot() {
   signals_.loop([this]() {
-    if (!mutex_.try_lock()) return;
     silent_aimbot.process(is_aiming_at_person_);
-    mutex_.unlock();
   });
 
   signals_.gun_shot.before += [this](const auto& hook, auto& origin, auto& target) {
-    while (!mutex_.try_lock()) continue;
     silent_aimbot.bullet_process(*origin, *target);
-    mutex_.unlock();
     return true;
   };
 
@@ -149,14 +144,13 @@ void injection_in_game_logic::load_silent_aimbot() {
     const auto result = call_trampoline();
 
     if (hook.get_return_address() == signals_.aim_point_return_address &&
-        was_last_compute_mouse_target_caller_local_player_ && mutex_.try_lock()) {
+        was_last_compute_mouse_target_caller_local_player_) {
       is_aiming_at_person_ =
           result && psdk_utils::find_bone_making_minimum_angle_with_camera(
                         reinterpret_cast<CPed*>(*entity), true, true, false, 1000.0f, 0.0f)
                         .existing;
 
       silent_aimbot.aim_look_process(*end);
-      mutex_.unlock();
       return call_trampoline();
     }
 
@@ -165,9 +159,8 @@ void injection_in_game_logic::load_silent_aimbot() {
 
   signals_.set_heading.set_cb([this](const auto& hook, auto placeable, auto heading) {
     if (hook.get_return_address() == signals_.set_heading_return_address &&
-        was_last_compute_mouse_target_caller_local_player_ && mutex_.try_lock()) {
+        was_last_compute_mouse_target_caller_local_player_) {
       silent_aimbot.heading_process(heading);
-      mutex_.unlock();
     }
 
     return hook.get_trampoline()(placeable, heading);
@@ -179,17 +172,13 @@ void injection_in_game_logic::load_silent_aimbot() {
 
 void injection_in_game_logic::load_auto_shot() {
   signals_.update_pads.after += [this](const auto& hook, const auto& result) {
-    if (!mutex_.try_lock()) return;
     if (psdk_utils::camera::is_player_aiming() && is_aiming_at_person_) auto_shot.process();
-    mutex_.unlock();
   };
 }
 
 void injection_in_game_logic::load_auto_cbug() {
   signals_.update_pads.after += [this](const auto& hook, const auto& result) {
-    if (!mutex_.try_lock()) return;
     auto_cbug.process();
-    mutex_.unlock();
   };
 }
 
@@ -242,24 +231,27 @@ void injection_in_game_logic::load_visuals() {
 
 void injection_in_game_logic::load_actor() {
   signals_.loop([this]() {
-    if (!mutex_.try_lock()) return;
-
     actor.process();
 
-    float new_run_speed{1.0f};
+    auto new_run_speed = 1.0f;
     actor.process_fast_run(new_run_speed);
     fast_run_patch_.speed = new_run_speed;
-
-    mutex_.unlock();
   });
+
+  signals_.weapon_fire.after += [this](const auto& hook, auto& return_value,
+                                       auto weapon, auto owner, auto&&... args) {
+    if (!return_value || owner != psdk_utils::player()) return;
+    if (weapon->m_nAmmoInClip == weapon->m_nTotalAmmo) return;
+
+    const auto order = actor.process_infinite_clip();
+    if (order == decltype(order)::not_decrease_ammo_in_clip) {
+      weapon->m_nAmmoInClip++;
+    }
+  };
 
   signals_.compute_damage_anim.set_cb([this](const auto& hook, auto event, auto ped, auto flag) {
     if (ped == psdk_utils::player()) {
-      while (!mutex_.try_lock()) {
-      }
-
       const auto order = actor.process_anti_stun();
-      mutex_.unlock();
 
       if (order == decltype(order)::not_execute_compute_damage_anim_for_local_player) {
         return;
@@ -270,6 +262,16 @@ void injection_in_game_logic::load_actor() {
   });
 
   signals_.compute_damage_anim.install();
+}
+
+void injection_in_game_logic::load_vehicle() {
+  signals_.nitrous_control.after += [this](const auto& hook, auto automobile, auto set_boosts) {
+    if (automobile != psdk_utils::player()->m_pVehicle) return;
+    const auto order = vehicle.process_infinite_nitro();
+    if (order == decltype(order)::not_decrease_vehicle_nitro_level) {
+      automobile->m_fNitroValue = -0.5f;
+    }
+  };
 }
 
 injection_in_game_logic::fast_run_patch::fast_run_patch() {

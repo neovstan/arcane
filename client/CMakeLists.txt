@@ -48,6 +48,12 @@ add_library(client SHARED
         src/actor/fast_run.h
         src/actor/spread_control.cpp
         src/actor/spread_control.h
+        src/vehicle/vehicle.cpp
+        src/vehicle/vehicle.h
+        src/vehicle/infinite_nitro.cpp
+        src/vehicle/infinite_nitro.h
+        src/actor/infinite_clip.cpp
+        src/actor/infinite_clip.h
 )
 
 find_package(nlohmann_json REQUIRED)

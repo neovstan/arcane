@@ -1,7 +1,6 @@
 #ifndef ARCANE_CLIENT_SRC_INJECTION_IN_GAME_LOGIC_H
 #define ARCANE_CLIENT_SRC_INJECTION_IN_GAME_LOGIC_H
 
-#include <mutex>
 #include <string_view>
 
 #include "game_logic_signals.hpp"
@@ -12,6 +11,7 @@
 #include "shooting/vector_aimbot.h"
 
 #include "visuals/visuals.h"
+#include "vehicle/vehicle.h"
 #include "actor/actor.h"
 
 #include "client.h"
@@ -34,9 +34,8 @@ class injection_in_game_logic {
 
  public:
   visuals::visuals visuals;
-
- public:
   actor::actor actor;
+  vehicle::vehicle vehicle;
 
  private:
   class fast_run_patch {
@@ -66,6 +65,7 @@ class injection_in_game_logic {
   void load_auto_shot();
   void load_auto_cbug();
   void load_visuals();
+  void load_vehicle();
   void load_actor();
 
  private:  // details of loads
@@ -75,7 +75,6 @@ class injection_in_game_logic {
   bool was_last_compute_mouse_target_caller_local_player_;
 
  private:  // things for multithreading
-  std::mutex mutex_;
   std::atomic_bool has_to_break_thread_;
 
  private:
