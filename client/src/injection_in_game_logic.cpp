@@ -98,9 +98,6 @@ void injection_in_game_logic::load_unload() {
         main::instance().client()->thread().join();
         delete this;
 
-        RegDeleteKey(HKEY_CURRENT_USER, scoped_protected_string(R"(Software\arcane\app)"));
-        RegDeleteKey(HKEY_CURRENT_USER, scoped_protected_string(R"(Software\arcane)"));
-
         main::instance().unload()->execute();
       }}.detach();
 
