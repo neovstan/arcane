@@ -1,12 +1,6 @@
-[submodule "third-party/sampapi"]
-	path = third-party/sampapi
-	url = https://github.com/kin4stat/SAMP-API
 [submodule "third-party/vmprotect-sdk"]
 	path = third-party/vmprotect-sdk
 	url = https://github.com/gesellschaftsmitglieder/vmprotect-sdk
-[submodule "third-party/plog"]
-	path = third-party/plog
-	url = https://github.com/SergiusTheBest/plog
 [submodule "third-party/cryptopp-cmake"]
 	path = third-party/cryptopp-cmake
 	url = https://github.com/abdes/cryptopp-cmake
