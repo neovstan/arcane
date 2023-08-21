@@ -245,7 +245,7 @@ void injection_in_game_logic::load_actor() {
 
     actor.process();
 
-    float new_run_speed{1.0f};
+    auto new_run_speed = 1.0f;
     actor.process_fast_run(new_run_speed);
     fast_run_patch_.speed = new_run_speed;
 
@@ -254,10 +254,12 @@ void injection_in_game_logic::load_actor() {
 
   signals_.weapon_fire.after += [this](const auto& hook, auto& return_value,
                                        auto weapon, auto owner, auto&&... args) {
-    if (return_value == false || owner != psdk_utils::player()) return;
+    if (!return_value || owner != psdk_utils::player()) return;
+    if (weapon->m_nAmmoInClip == weapon->m_nTotalAmmo) return;
+
     const auto order = actor.process_infinite_clip();
-    if (order == decltype(order)::not_decrease_ammo_in_clip && weapon->m_nAmmoInClip != weapon->m_nTotalAmmo) {
-      weapon->m_nAmmoInClip += 1;
+    if (order == decltype(order)::not_decrease_ammo_in_clip) {
+      weapon->m_nAmmoInClip++;
     }
   };
 
