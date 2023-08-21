@@ -5,6 +5,10 @@
 
 namespace utils {
 std::string hwid();
+namespace memory {
+bool compare_data(uint8_t* data, const char* bytes, const char* mask);
+uintptr_t find_pattern(const char* name, const char* bytes, const char* mask);
+}
 }  // namespace utils
 
 #endif  // UTILS_UTILS_H

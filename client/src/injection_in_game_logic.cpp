@@ -57,6 +57,12 @@ injection_in_game_logic::injection_in_game_logic(std::string_view username,
   load_actor();
 }
 
+injection_in_game_logic::~injection_in_game_logic() {
+  ImGui_ImplDX9_Shutdown();
+  ImGui_ImplWin32_Shutdown();
+  ImGui::DestroyContext();
+}
+
 void injection_in_game_logic::load_debug_console() {
   AllocConsole();
   const auto file = std::freopen("CONOUT$", "w", stdout);
@@ -98,8 +104,7 @@ void injection_in_game_logic::load_unload() {
         main::instance().client()->thread().join();
         delete this;
 
-        RegDeleteKey(HKEY_CURRENT_USER, scoped_protected_string(R"(Software\arcane\app)"));
-        RegDeleteKey(HKEY_CURRENT_USER, scoped_protected_string(R"(Software\arcane)"));
+        main::instance().unload()->execute();
       }}.detach();
 
       return true;
@@ -261,7 +266,6 @@ void injection_in_game_logic::load_actor() {
 
   signals_.compute_damage_anim.install();
 }
-
 void injection_in_game_logic::load_vehicle() {
   signals_.nitrous_control.after += [this](const auto& hook, auto automobile, auto set_boosts) {
     if (automobile != psdk_utils::player()->m_pVehicle) return;
