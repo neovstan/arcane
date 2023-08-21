@@ -19,7 +19,7 @@ add_compile_definitions(ARCANE_SERVER_PORT=4289)
 add_compile_definitions(USE_PROTECTED_STRINGS=1)
 
 # To compile a static MSVC runtime environment
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 
 # To undefine max and min in order to use std::min and std::max
 add_compile_definitions(NOMINMAX)

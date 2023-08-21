@@ -13,3 +13,6 @@
 [submodule "shared/arcane_packets"]
 	path = shared/arcane_packets
 	url = https://github.com/neovstan/arcane_packets
+[submodule "third-party/SAMP-API"]
+	path = third-party/SAMP-API
+	url = https://github.com/neovstan/SAMP-API.git

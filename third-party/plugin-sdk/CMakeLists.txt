@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(plugin-sdk LANGUAGES C CXX)
 
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 
 function(set_debug_postfix target)
   set_target_properties(${target} PROPERTIES DEBUG_POSTFIX "_d")
