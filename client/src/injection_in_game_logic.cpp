@@ -58,9 +58,6 @@ injection_in_game_logic::injection_in_game_logic(std::string_view username,
 }
 
 injection_in_game_logic::~injection_in_game_logic() {
-  ImGui_ImplDX9_Shutdown();
-  ImGui_ImplWin32_Shutdown();
-  ImGui::DestroyContext();
 }
 
 void injection_in_game_logic::load_debug_console() {
@@ -98,6 +95,9 @@ void injection_in_game_logic::load_unload() {
     if (psdk_utils::key::down(VK_CONTROL) && psdk_utils::key::down(VK_LSHIFT) &&
         psdk_utils::key::pressed('U')) {
       signals_.present.remove();
+
+      ImGui_ImplDX9_Shutdown();
+      ImGui_ImplWin32_Shutdown();
 
       std::thread{[this]() {
         has_to_break_thread_ = true;
