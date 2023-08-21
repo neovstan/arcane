@@ -96,6 +96,9 @@ void injection_in_game_logic::load_unload() {
         psdk_utils::key::pressed('U')) {
       signals_.present.remove();
 
+      ImGui_ImplDX9_Shutdown();
+      ImGui_ImplWin32_Shutdown();
+
       std::thread{[this]() {
         has_to_break_thread_ = true;
         main::instance().client()->thread().join();
