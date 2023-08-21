@@ -58,9 +58,6 @@ injection_in_game_logic::injection_in_game_logic(std::string_view username,
 }
 
 injection_in_game_logic::~injection_in_game_logic() {
-  ImGui_ImplDX9_Shutdown();
-  ImGui_ImplWin32_Shutdown();
-  ImGui::DestroyContext();
 }
 
 void injection_in_game_logic::load_debug_console() {

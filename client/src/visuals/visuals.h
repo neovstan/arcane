@@ -21,6 +21,7 @@ class visuals {
 
  public:
   visuals();
+  ~visuals();
 
   void initialize();
   void process();
