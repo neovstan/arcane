@@ -33,7 +33,7 @@ void unload::execute() {
 
     *node = reinterpret_cast<node_data*>(std::malloc(sizeof(node_data)));
 
-    if (*node == nullptr) return;
+    if (!*node) return;
 
     std::memset(*node, 0, sizeof(node_data));
     (*node)->mbi = mbi;
@@ -64,7 +64,7 @@ unsigned long __stdcall unload::shellcode(shellcode_data* data) {
 
   auto node = data->first_node;
 
-  while (node != nullptr) {
+  while (node) {
     data->virtual_free(node->mbi.BaseAddress, 0, MEM_RELEASE);
     auto next = node->next;
     data->free(node);
@@ -72,6 +72,7 @@ unsigned long __stdcall unload::shellcode(shellcode_data* data) {
   }
 
   data->free(data);
+
   return EXIT_SUCCESS;
 }
 
