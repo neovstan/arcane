@@ -9,6 +9,7 @@ class CPlayerPed;
 class CEventDamage;
 class CColPoint;
 class CEntity;
+class CWeapon;
 class CPlaceable;
 class CAutomobile;
 class IDirect3DDevice9;
@@ -38,6 +39,15 @@ class game_logic_signals {
   using CPad_UpdatePads = bool(__cdecl*)();
   using CEventDamage_ComputeDamageAnim = void(__thiscall*)(CEventDamage* event, CPed* ped,
                                                            bool flag);
+
+  using CWeapon_Fire = bool(__thiscall*)(CWeapon* weapon,
+                                          CPed* owner,
+                                          psdk_utils::local_vector* target,
+                                          psdk_utils::local_vector* start,
+                                          CEntity* victim,
+                                          psdk_utils::local_vector* pp_target,
+                                          psdk_utils::local_vector* target_pos);
+
   using CAutomobile_NitrousControl = void(__thiscall*)(CAutomobile* automobile, char set_boosts);
 
  public:
@@ -47,6 +57,7 @@ class game_logic_signals {
   kthook::kthook_signal<IDirect3DDevice9_Present> present{};
   kthook::kthook_signal<CPad_UpdatePads> update_pads{0x541DD0};
   kthook::kthook_signal<CAutomobile_NitrousControl> nitrous_control{0x6A3EA0};
+  kthook::kthook_signal<CWeapon_Fire> weapon_fire{0x742300};
   kthook::kthook_simple<CWorld_ProcessLineOfSight> aim_point{0x56BA00};
   kthook::kthook_simple<CPlaceable_SetHeading> set_heading{0x43E0C0};
   kthook::kthook_simple<CEventDamage_ComputeDamageAnim> compute_damage_anim{0x4B3FC0};

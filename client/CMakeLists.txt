@@ -50,6 +50,8 @@ add_library(client SHARED
         src/vehicle/vehicle.h
         src/vehicle/infinite_nitro.cpp
         src/vehicle/infinite_nitro.h
+        src/actor/infinite_clip.cpp
+        src/actor/infinite_clip.h
 )
 
 find_package(nlohmann_json REQUIRED)
