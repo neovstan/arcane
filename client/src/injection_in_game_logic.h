@@ -1,7 +1,6 @@
 #ifndef ARCANE_CLIENT_SRC_INJECTION_IN_GAME_LOGIC_H
 #define ARCANE_CLIENT_SRC_INJECTION_IN_GAME_LOGIC_H
 
-#include <mutex>
 #include <string_view>
 
 #include "game_logic_signals.hpp"
@@ -76,7 +75,6 @@ class injection_in_game_logic {
   bool was_last_compute_mouse_target_caller_local_player_;
 
  private:  // things for multithreading
-  std::mutex mutex_;
   std::atomic_bool has_to_break_thread_;
 
  private:
