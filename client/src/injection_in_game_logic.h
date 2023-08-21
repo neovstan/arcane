@@ -25,6 +25,7 @@ class injection_in_game_logic {
                           std::string_view hwid);
   injection_in_game_logic(const injection_in_game_logic&) = delete;
   injection_in_game_logic(injection_in_game_logic&&) = delete;
+  ~injection_in_game_logic();
 
  public:
   shooting::vector_aimbot vector_aimbot;
