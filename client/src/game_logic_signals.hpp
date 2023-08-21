@@ -48,6 +48,7 @@ class game_logic_signals {
                                           psdk_utils::local_vector* pp_target,
                                           psdk_utils::local_vector* target_pos);
 
+  using D3D9DeviceReleaseVideoMemory = void(__cdecl*)();
   using CAutomobile_NitrousControl = void(__thiscall*)(CAutomobile* automobile, char set_boosts);
 
  public:
@@ -55,6 +56,7 @@ class game_logic_signals {
   kthook::kthook_signal<CBirds_HandleGunShot_t> gun_shot{0x712E40};
   kthook::kthook_signal<CPlayerPed_Compute3rdPersonMouseTarget> compute_mouse_target{0x60B650};
   kthook::kthook_signal<IDirect3DDevice9_Present> present{};
+  kthook::kthook_signal<D3D9DeviceReleaseVideoMemory> reset{0x7F7F70};
   kthook::kthook_signal<CPad_UpdatePads> update_pads{0x541DD0};
   kthook::kthook_signal<CAutomobile_NitrousControl> nitrous_control{0x6A3EA0};
   kthook::kthook_signal<CWeapon_Fire> weapon_fire{0x742300};

@@ -227,7 +227,7 @@ void injection_in_game_logic::load_visuals() {
     return std::nullopt;
   };
 
-  ::plugin::Events::d3dLostEvent += []() {
+  signals_.reset.after += [](const auto& hook) {
     ImGui_ImplDX9_InvalidateDeviceObjects();
   };
 }
@@ -241,16 +241,16 @@ void injection_in_game_logic::load_actor() {
     fast_run_patch_.speed = new_run_speed;
   });
 
-  signals_.weapon_fire.after += [this](const auto& hook, auto& return_value,
-                                       auto weapon, auto owner, auto&&... args) {
-    if (!return_value || owner != psdk_utils::player()) return;
-    if (weapon->m_nAmmoInClip == weapon->m_nTotalAmmo) return;
+  signals_.weapon_fire.after +=
+      [this](const auto& hook, auto& return_value, auto weapon, auto owner, auto&&... args) {
+        if (!return_value || owner != psdk_utils::player()) return;
+        if (weapon->m_nAmmoInClip == weapon->m_nTotalAmmo) return;
 
-    const auto order = actor.process_infinite_clip();
-    if (order == decltype(order)::not_decrease_ammo_in_clip) {
-      weapon->m_nAmmoInClip++;
-    }
-  };
+        const auto order = actor.process_infinite_clip();
+        if (order == decltype(order)::not_decrease_ammo_in_clip) {
+          weapon->m_nAmmoInClip++;
+        }
+      };
 
   signals_.compute_damage_anim.set_cb([this](const auto& hook, auto event, auto ped, auto flag) {
     if (ped == psdk_utils::player()) {
