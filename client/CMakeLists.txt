@@ -60,6 +60,9 @@ add_library(client SHARED
         src/actor/infinite_clip.h
         src/actor/disable_camera_reset.cpp
         src/actor/disable_camera_reset.h
+        src/actor/infinite_ammo.cpp
+        src/actor/infinite_ammo.h
+        src/actor/infinite_ammo.h
 )
 
 find_package(nlohmann_json REQUIRED)

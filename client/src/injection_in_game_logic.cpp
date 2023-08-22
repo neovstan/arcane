@@ -241,11 +241,15 @@ void injection_in_game_logic::load_actor() {
   signals_.weapon_fire.after +=
       [this](const auto& hook, auto& return_value, auto weapon, auto owner, auto&&... args) {
         if (!return_value || owner != psdk_utils::player()) return;
-        if (weapon->m_nAmmoInClip == weapon->m_nTotalAmmo) return;
+    const auto order_ammo = actor.process_infinite_ammo();
 
-        const auto order = actor.process_infinite_clip();
-        if (order == decltype(order)::not_decrease_ammo_in_clip) {
-          weapon->m_nAmmoInClip++;
+        if (order_ammo == decltype(order_ammo)::not_decrease_ammo) weapon->m_nTotalAmmo++;
+
+        if (weapon->m_nAmmoInClip != weapon->m_nTotalAmmo) {
+          const auto order_clip = actor.process_infinite_clip();
+          if (order_clip == decltype(order_clip)::not_decrease_ammo_in_clip) {
+            weapon->m_nAmmoInClip++;
+          }
         }
       };
 
