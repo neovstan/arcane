@@ -24,6 +24,12 @@ visuals::visuals::visuals()
       framerate_update_time_{} {
 }
 
+visuals::~visuals() {
+  samp_utils::execute([&](auto version) {
+    samp_utils::invoke<decltype(version)>::set_nametag_visibility_status(true);
+  });
+}
+
 void visuals::initialize() {
   const auto& io = ImGui::GetIO();
   const auto fs = cmrc::fonts::get_filesystem();
@@ -343,7 +349,6 @@ void visuals::draw_flat_box_in_space(const psdk_utils::local_vector& center, flo
 ImDrawList* visuals::draw() {
   return ImGui::GetForegroundDrawList();
 }
-
 ImVec2 visuals::imvec2(const psdk_utils::local_vector& in) {
   return ImVec2{in.x(), in.y()};
 }
