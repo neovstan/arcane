@@ -54,6 +54,23 @@ class injection_in_game_logic {
     const std::uintptr_t default_value_{0x858624};
   };
 
+  class camera_reset_patch {
+   public:
+    camera_reset_patch(){};
+    camera_reset_patch(const camera_reset_patch&) = delete;
+    camera_reset_patch(camera_reset_patch&&) = delete;
+    ~camera_reset_patch();
+
+   public:
+    void horizontal();
+    void vertical();
+    void restore();
+
+   private:
+    const std::array<std::uintptr_t, 3> addresses_{0x5231A6, 0x52322D, 0x5233BA};
+    const std::uint8_t default_value_{0x75};
+  };
+
  private:
   static void load_debug_console();
   static void load_imgui_context();
@@ -72,6 +89,7 @@ class injection_in_game_logic {
  private:  // details of loads
   game_logic_signals signals_;
   fast_run_patch fast_run_patch_;
+  camera_reset_patch camera_reset_patch_;
   bool is_aiming_at_person_;
   bool was_last_compute_mouse_target_caller_local_player_;
 

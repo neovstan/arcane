@@ -54,6 +54,8 @@ add_library(client SHARED
         src/vehicle/infinite_nitro.h
         src/actor/infinite_clip.cpp
         src/actor/infinite_clip.h
+        src/actor/disable_camera_reset.cpp
+        src/actor/disable_camera_reset.h
 )
 
 find_package(nlohmann_json REQUIRED)
