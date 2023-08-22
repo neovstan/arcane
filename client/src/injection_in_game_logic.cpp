@@ -272,13 +272,13 @@ void injection_in_game_logic::load_actor() {
         const auto order = actor.process_camera_reset();
 
         switch (order) {
-          case actor::disable_camera_reset::order::not_restore_camera_horizontal:
+          case actor::disable_camera_reset::order::not_reset_camera_horizontal:
             camera_reset_patch_.horizontal();
             break;
-          case actor::disable_camera_reset::order::not_restore_camera_vertical:
+          case actor::disable_camera_reset::order::not_reset_camera_vertical:
             camera_reset_patch_.vertical();
             break;
-          case actor::disable_camera_reset::order::not_restore_camera_all:
+          case actor::disable_camera_reset::order::not_reset_camera_all:
             camera_reset_patch_.horizontal();
             camera_reset_patch_.vertical();
           default:

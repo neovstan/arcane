@@ -10,9 +10,9 @@ class disable_camera_reset {
  public:
   enum class order : int {
     no,
-    not_restore_camera_horizontal,
-    not_restore_camera_vertical,
-    not_restore_camera_all
+    not_reset_camera_horizontal,
+    not_reset_camera_vertical,
+    not_reset_camera_all
   };
 
  public:
