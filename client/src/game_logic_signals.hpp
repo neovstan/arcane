@@ -5,6 +5,7 @@
 #include <psdk_utils/local_vector.h>
 
 class CPed;
+class CCam;
 class CPlayerPed;
 class CEventDamage;
 class CColPoint;
@@ -40,6 +41,9 @@ class game_logic_signals {
   using CEventDamage_ComputeDamageAnim = void(__thiscall*)(CEventDamage* event, CPed* ped,
                                                            bool flag);
 
+  using CCam_Process_FollowPed = void(__thiscall*)(CCam* camera, float* a2, int a3, int a4, int a5,
+                                                   bool a6);
+
   using CWeapon_Fire = bool(__thiscall*)(CWeapon* weapon,
                                           CPed* owner,
                                           psdk_utils::local_vector* target,
@@ -60,6 +64,7 @@ class game_logic_signals {
   kthook::kthook_signal<CPad_UpdatePads> update_pads{0x541DD0};
   kthook::kthook_signal<CAutomobile_NitrousControl> nitrous_control{0x6A3EA0};
   kthook::kthook_signal<CWeapon_Fire> weapon_fire{0x742300};
+  kthook::kthook_simple<CCam_Process_FollowPed> process_follow_ped{0x522D40};
   kthook::kthook_simple<CWorld_ProcessLineOfSight> aim_point{0x56BA00};
   kthook::kthook_simple<CPlaceable_SetHeading> set_heading{0x43E0C0};
   kthook::kthook_simple<CEventDamage_ComputeDamageAnim> compute_damage_anim{0x4B3FC0};

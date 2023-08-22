@@ -18,3 +18,7 @@ void actor::process_fast_run(float& out_run_speed) {
 infinite_clip::order actor::process_infinite_clip() {
   return infinite_clip.process(settings.infinite_clip);
 }
+
+disable_camera_reset::order actor::process_camera_reset() {
+  return disable_camera_reset.process(settings.disable_camera_reset);
+}

@@ -8,6 +8,7 @@
 #include "fast_run.h"
 #include "spread_control.h"
 #include "infinite_clip.h"
+#include "disable_camera_reset.h"
 
 namespace modification::client::actor {
 class actor {
@@ -15,6 +16,7 @@ class actor {
   void process();
   anti_stun::order process_anti_stun();
   infinite_clip::order process_infinite_clip();
+  disable_camera_reset::order process_camera_reset();
 
   void process_fast_run(float& out_run_speed);
 
@@ -27,6 +29,7 @@ class actor {
   fast_run fast_run;
   spread_control spread_control;
   infinite_clip infinite_clip;
+  disable_camera_reset disable_camera_reset;
 };
 }  // namespace modification::client::actor
 
