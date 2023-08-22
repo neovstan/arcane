@@ -57,9 +57,6 @@ injection_in_game_logic::injection_in_game_logic(std::string_view username,
   load_actor();
 }
 
-injection_in_game_logic::~injection_in_game_logic() {
-}
-
 void injection_in_game_logic::load_debug_console() {
   AllocConsole();
   const auto file = std::freopen("CONOUT$", "w", stdout);
@@ -264,34 +261,34 @@ void injection_in_game_logic::load_actor() {
     hook.get_trampoline()(event, ped, flag);
   });
 
-  signals_.process_follow_ped.set_cb(
-      [this](const auto& hook, auto camera, auto a2, auto a3, auto a4, auto a5, auto a6) {
-        CPed* player = psdk_utils::player();
-        if (!player->IsAlive() || !player->GetIsOnScreen())
-          return hook.get_trampoline()(camera, a2, a3, a4, a5, a6);
-        const auto order = actor.process_camera_reset();
+  signals_.process_follow_ped.set_cb([this](const auto& hook, auto camera, auto&&... args) {
+    CPed* player = psdk_utils::player();
+    if (!player->IsAlive() || !player->GetIsOnScreen())
+      return hook.get_trampoline()(camera, args...);
+    const auto order = actor.process_camera_reset();
 
-        switch (order) {
-          case actor::disable_camera_reset::order::not_reset_camera_horizontal:
-            camera_reset_patch_.horizontal();
-            break;
-          case actor::disable_camera_reset::order::not_reset_camera_vertical:
-            camera_reset_patch_.vertical();
-            break;
-          case actor::disable_camera_reset::order::not_reset_camera_all:
-            camera_reset_patch_.horizontal();
-            camera_reset_patch_.vertical();
-          default:
-            break;
-        }
+    switch (order) {
+      case actor::disable_camera_reset::order::not_reset_camera_horizontal:
+        camera_reset_patch_.horizontal();
+        break;
+      case actor::disable_camera_reset::order::not_reset_camera_vertical:
+        camera_reset_patch_.vertical();
+        break;
+      case actor::disable_camera_reset::order::not_reset_camera_all:
+        camera_reset_patch_.horizontal();
+        camera_reset_patch_.vertical();
+      default:
+        break;
+    }
 
-        hook.get_trampoline()(camera, a2, a3, a4, a5, a6);
-        camera_reset_patch_.restore();
-      });
+    hook.get_trampoline()(camera, args...);
+    camera_reset_patch_.restore();
+  });
 
   signals_.compute_damage_anim.install();
   signals_.process_follow_ped.install();
 }
+
 void injection_in_game_logic::load_vehicle() {
   signals_.nitrous_control.after += [this](const auto& hook, auto automobile, auto set_boosts) {
     if (automobile != psdk_utils::player()->m_pVehicle) return;
@@ -300,37 +297,4 @@ void injection_in_game_logic::load_vehicle() {
       automobile->m_fNitroValue = -0.5f;
     }
   };
-}
-
-injection_in_game_logic::fast_run_patch::fast_run_patch() {
-  for (const auto address : addresses_) {
-    ::plugin::patch::SetPointer(address, &speed);
-  }
-}
-
-injection_in_game_logic::fast_run_patch::~fast_run_patch() {
-  for (const auto address : addresses_) {
-    ::plugin::patch::SetUInt(address, default_value_);
-  }
-}
-
-injection_in_game_logic::camera_reset_patch::~camera_reset_patch() {
-  restore();
-}
-
-void injection_in_game_logic::camera_reset_patch::horizontal() {
-  ::plugin::patch::SetUChar(addresses_[0], 0xEB);
-}
-
-void injection_in_game_logic::camera_reset_patch::vertical() {
-  for (const auto address : addresses_) {
-    if (address == addresses_[0]) continue;
-    ::plugin::patch::SetUChar(address, 0xEB);
-  }
-}
-
-void injection_in_game_logic::camera_reset_patch::restore() {
-  for (const auto address : addresses_) {
-    ::plugin::patch::SetUChar(address, default_value_);
-  }
 }

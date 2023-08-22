@@ -5,6 +5,9 @@
 
 #include "game_logic_signals.hpp"
 
+#include "patches/fast_run.h"
+#include "patches/camera_reset.h"
+
 #include "shooting/auto_cbug.h"
 #include "shooting/auto_shot.h"
 #include "shooting/silent_aimbot.h"
@@ -25,7 +28,6 @@ class injection_in_game_logic {
                           std::string_view hwid);
   injection_in_game_logic(const injection_in_game_logic&) = delete;
   injection_in_game_logic(injection_in_game_logic&&) = delete;
-  ~injection_in_game_logic();
 
  public:
   shooting::vector_aimbot vector_aimbot;
@@ -37,39 +39,6 @@ class injection_in_game_logic {
   visuals::visuals visuals;
   actor::actor actor;
   vehicle::vehicle vehicle;
-
- private:
-  class fast_run_patch {
-   public:
-    fast_run_patch();
-    fast_run_patch(const fast_run_patch&) = delete;
-    fast_run_patch(fast_run_patch&&) = delete;
-    ~fast_run_patch();
-
-   public:
-    float speed{1.0f};
-
-   private:
-    const std::array<std::uintptr_t, 2> addresses_{0x60B435 + 2, 0x60B446 + 2};
-    const std::uintptr_t default_value_{0x858624};
-  };
-
-  class camera_reset_patch {
-   public:
-    camera_reset_patch(){};
-    camera_reset_patch(const camera_reset_patch&) = delete;
-    camera_reset_patch(camera_reset_patch&&) = delete;
-    ~camera_reset_patch();
-
-   public:
-    void horizontal();
-    void vertical();
-    void restore();
-
-   private:
-    const std::array<std::uintptr_t, 3> addresses_{0x5231A6, 0x52322D, 0x5233BA};
-    const std::uint8_t default_value_{0x75};
-  };
 
  private:
   static void load_debug_console();
@@ -88,8 +57,8 @@ class injection_in_game_logic {
 
  private:  // details of loads
   game_logic_signals signals_;
-  fast_run_patch fast_run_patch_;
-  camera_reset_patch camera_reset_patch_;
+  patches::fast_run fast_run_patch_;
+  patches::camera_reset camera_reset_patch_;
   bool is_aiming_at_person_;
   bool was_last_compute_mouse_target_caller_local_player_;
 

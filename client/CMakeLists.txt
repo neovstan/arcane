@@ -22,6 +22,10 @@ add_library(client SHARED
         src/game_logic_signals.hpp
         src/injection_in_game_logic.cpp
         src/injection_in_game_logic.h
+        src/patches/camera_reset.cpp
+        src/patches/camera_reset.h
+        src/patches/fast_run.cpp
+        src/patches/fast_run.h
         src/backends/imgui_impl_dx9.cpp
         src/backends/imgui_impl_dx9.h
         src/backends/imgui_impl_win32.cpp
