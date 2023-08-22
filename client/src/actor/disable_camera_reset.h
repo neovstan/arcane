@@ -8,7 +8,7 @@ class disable_camera_reset {
   using data = packets::configuration::actor::disable_camera_reset_data;
 
  public:
-  enum class order : int {
+  enum class order {
     no,
     not_reset_camera_horizontal,
     not_reset_camera_vertical,
