@@ -262,9 +262,10 @@ void injection_in_game_logic::load_actor() {
   });
 
   signals_.process_follow_ped.set_cb([this](const auto& hook, auto camera, auto&&... args) {
-    CPed* player = psdk_utils::player();
+    const auto player = psdk_utils::player();
     if (!player->IsAlive() || !player->GetIsOnScreen())
       return hook.get_trampoline()(camera, args...);
+    
     const auto order = actor.process_camera_reset();
 
     switch (order) {
