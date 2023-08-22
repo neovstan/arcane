@@ -7,8 +7,8 @@ disable_camera_reset::order disable_camera_reset::process(
   if (!settings.enable || (!settings.horizontal && !settings.vertical))
     return order::no;
   else if (settings.horizontal && settings.vertical)
-    return order::not_restore_camera_all;
+    return order::not_reset_camera_all;
 
-  return settings.horizontal ? order::not_restore_camera_horizontal
-                             : order::not_restore_camera_vertical;
+  return settings.horizontal ? order::not_reset_camera_horizontal
+                             : order::not_reset_camera_vertical;
 }
