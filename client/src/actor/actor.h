@@ -6,6 +6,7 @@
 #include "air_walking.h"
 #include "anti_stun.h"
 #include "fast_run.h"
+#include "infinite_run.h"
 #include "spread_control.h"
 #include "infinite_ammo.h"
 #include "infinite_clip.h"
@@ -16,6 +17,8 @@ class actor {
  public:
   void process();
   anti_stun::order process_anti_stun();
+
+  infinite_run::order process_infinite_run();
   infinite_ammo::order process_infinite_ammo();
   infinite_clip::order process_infinite_clip();
   disable_camera_reset::order process_camera_reset();
@@ -29,6 +32,7 @@ class actor {
   air_walking air_walking;
   anti_stun anti_stun;
   fast_run fast_run;
+  infinite_run infinite_run;
   spread_control spread_control;
   infinite_ammo infinite_ammo;
   infinite_clip infinite_clip;

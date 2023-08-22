@@ -63,6 +63,8 @@ add_library(client SHARED
         src/actor/infinite_ammo.cpp
         src/actor/infinite_ammo.h
         src/actor/infinite_ammo.h
+        src/actor/infinite_run.cpp
+        src/actor/infinite_run.h
 )
 
 find_package(nlohmann_json REQUIRED)

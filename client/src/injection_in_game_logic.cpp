@@ -290,8 +290,21 @@ void injection_in_game_logic::load_actor() {
     camera_reset_patch_.restore();
   });
 
+  signals_.handle_sprint_energy.set_cb([this](const auto& hook, auto ped, auto&&... args) {
+    if (ped == psdk_utils::player()) {
+      const auto order = actor.process_infinite_run();
+
+      if (order == decltype(order)::not_decrease_time_can_run) {
+        return true;
+      }
+    }
+
+    return hook.get_trampoline()(ped, args...);
+  });
+
   signals_.compute_damage_anim.install();
   signals_.process_follow_ped.install();
+  signals_.handle_sprint_energy.install();
 }
 
 void injection_in_game_logic::load_vehicle() {
