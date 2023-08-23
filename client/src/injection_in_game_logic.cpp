@@ -241,7 +241,7 @@ void injection_in_game_logic::load_actor() {
   signals_.weapon_fire.after +=
       [this](const auto& hook, auto& return_value, auto weapon, auto owner, auto&&... args) {
         if (!return_value || owner != psdk_utils::player()) return;
-    const auto order_ammo = actor.process_infinite_ammo();
+        const auto order_ammo = actor.process_infinite_ammo();
 
         if (order_ammo == decltype(order_ammo)::not_decrease_ammo) weapon->m_nTotalAmmo++;
 
@@ -269,7 +269,7 @@ void injection_in_game_logic::load_actor() {
     const auto player = psdk_utils::player();
     if (!player->IsAlive() || !player->GetIsOnScreen())
       return hook.get_trampoline()(camera, args...);
-    
+
     const auto order = actor.process_camera_reset();
 
     switch (order) {
