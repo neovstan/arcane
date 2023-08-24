@@ -65,6 +65,10 @@ add_library(client SHARED
         src/actor/infinite_ammo.h
         src/actor/infinite_run.cpp
         src/actor/infinite_run.h
+        src/vehicle/drive_on_water.cpp
+        src/vehicle/drive_on_water.h
+        src/patches/drive_on_water.cpp
+        src/patches/drive_on_water.h
 )
 
 find_package(nlohmann_json REQUIRED)

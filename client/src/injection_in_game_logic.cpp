@@ -315,4 +315,20 @@ void injection_in_game_logic::load_vehicle() {
       automobile->m_fNitroValue = -0.5f;
     }
   };
+
+  signals_.pre_render.set_cb([this](const auto& hook, auto automobile) {
+    if (automobile == psdk_utils::player()->m_pVehicle) {
+      const auto order = vehicle.process_drive_on_water();
+
+      if (order == decltype(order)::not_sink_vehicle) {
+        drive_on_water_.install();
+      }
+    }
+
+    auto result = hook.get_trampoline()(automobile);
+    drive_on_water_.restore();
+    return result;
+  });
+
+  signals_.pre_render.install();
 }

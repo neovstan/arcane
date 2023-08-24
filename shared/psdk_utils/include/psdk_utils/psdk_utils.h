@@ -5,6 +5,7 @@
 
 #include <CAutomobile.h>
 #include <CPlayerPed.h>
+#include <CCheat.h>
 #include <CPed.h>
 
 #include "local_vector.h"

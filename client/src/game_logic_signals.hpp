@@ -6,6 +6,7 @@
 
 class CPed;
 class CCam;
+class CMatrix;
 class CPlayerPed;
 class CEventDamage;
 class CColPoint;
@@ -55,6 +56,7 @@ class game_logic_signals {
 
   using D3D9DeviceReleaseVideoMemory = void(__cdecl*)();
   using CAutomobile_NitrousControl = void(__thiscall*)(CAutomobile* automobile, char set_boosts);
+  using CAutomobile_PreRender = CMatrix*(__thiscall*)(CAutomobile* automobile);
 
  public:
   kthook::kthook_signal<CHud_DrawAfterFade_t> main_loop{0x58D490};
@@ -70,6 +72,7 @@ class game_logic_signals {
   kthook::kthook_simple<CWorld_ProcessLineOfSight> aim_point{0x56BA00};
   kthook::kthook_simple<CPlaceable_SetHeading> set_heading{0x43E0C0};
   kthook::kthook_simple<CEventDamage_ComputeDamageAnim> compute_damage_anim{0x4B3FC0};
+  kthook::kthook_simple<CAutomobile_PreRender> pre_render{0x6AAB50};
 
   void single_shot(auto func) {
     main_loop.after += [func](const auto& hook) {
