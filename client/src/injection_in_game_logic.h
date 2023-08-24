@@ -60,7 +60,7 @@ class injection_in_game_logic {
   game_logic_signals signals_;
   patches::fast_run fast_run_patch_;
   patches::camera_reset camera_reset_patch_;
-  patches::drive_on_water drive_on_water_;
+  patches::drive_on_water drive_on_water_patch_;
   bool is_aiming_at_person_;
   bool was_last_compute_mouse_target_caller_local_player_;
 

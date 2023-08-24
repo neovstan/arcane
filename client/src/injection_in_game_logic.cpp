@@ -321,12 +321,12 @@ void injection_in_game_logic::load_vehicle() {
       const auto order = vehicle.process_drive_on_water();
 
       if (order == decltype(order)::not_sink_vehicle) {
-        drive_on_water_.install();
+        drive_on_water_patch_.install();
       }
     }
 
     auto result = hook.get_trampoline()(automobile);
-    drive_on_water_.restore();
+    drive_on_water_patch_.restore();
     return result;
   });
 

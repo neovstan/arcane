@@ -65,6 +65,7 @@ void client::process() {
       injection_->auto_shot.settings = configuration.auto_shot;
       injection_->visuals.settings = configuration.visuals;
       injection_->actor.settings = configuration.actor;
+      injection_->vehicle.settings = configuration.vehicle;
 
       using namespace std::chrono_literals;
       std::this_thread::sleep_for(1s);
