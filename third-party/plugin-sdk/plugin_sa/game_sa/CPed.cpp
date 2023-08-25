@@ -825,3 +825,7 @@ void CPed::SetModelIndex(unsigned int modelIndex)
 {
 	((void(__thiscall *)(CPed*,unsigned int))0x5E4880)(this, modelIndex);
 }
+int CPed::Teleport(CVector const &position) {
+        return ((int(__thiscall *)(CPed *, CVector, int))0x5E4110)(this,
+                                                                   position, 0);
+}

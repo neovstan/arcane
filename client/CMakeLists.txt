@@ -69,6 +69,8 @@ add_library(client SHARED
         src/vehicle/drive_on_water.h
         src/patches/drive_on_water.cpp
         src/patches/drive_on_water.h
+        src/vehicle/fast_exit.cpp
+        src/vehicle/fast_exit.h
 )
 
 find_package(nlohmann_json REQUIRED)

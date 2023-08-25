@@ -316,6 +316,20 @@ void injection_in_game_logic::load_vehicle() {
     }
   };
 
+  signals_.set_task.after += [this](const auto& hook, auto manager, auto&& args...) {
+    if (hook.get_return_address() != 0x5704C2) return;
+    const auto player = psdk_utils::player();
+
+    if (manager != &player->m_pIntelligence->m_TaskMgr) return;
+    const auto order = vehicle.process_fast_exit();
+
+    if (order == decltype(order)::no_vehicle_exit_anim) {
+      auto pos = player->m_matrix->pos;
+      pos.z += 2.f;
+      player->Teleport(pos);
+    }
+  };
+
   signals_.pre_render.set_cb([this](const auto& hook, auto automobile) {
     if (automobile == psdk_utils::player()->m_pVehicle) {
       const auto order = vehicle.process_drive_on_water();
