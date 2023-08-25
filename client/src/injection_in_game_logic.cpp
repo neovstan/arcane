@@ -245,13 +245,18 @@ void injection_in_game_logic::load_actor() {
 
         if (order_ammo == decltype(order_ammo)::not_decrease_ammo) weapon->m_nTotalAmmo++;
 
-        if (weapon->m_nAmmoInClip != weapon->m_nTotalAmmo) {
-          const auto order_clip = actor.process_infinite_clip();
-          if (order_clip == decltype(order_clip)::not_decrease_ammo_in_clip) {
-            weapon->m_nAmmoInClip++;
-          }
+        if (weapon->m_nAmmoInClip == weapon->m_nTotalAmmo) return;
+        const auto order_clip = actor.process_infinite_clip();
+
+        if (order_clip == decltype(order_clip)::not_decrease_ammo_in_clip) {
+          weapon->m_nAmmoInClip++;
         }
       };
+
+  signals_.process_control.before += [this](const auto& hook, auto ped) {
+    if (ped == psdk_utils::player()) actor.process_auto_reload();
+    return true;
+  };
 
   signals_.compute_damage_anim.set_cb([this](const auto& hook, auto event, auto ped, auto flag) {
     if (ped == psdk_utils::player()) {
@@ -316,18 +321,9 @@ void injection_in_game_logic::load_vehicle() {
     }
   };
 
-  signals_.set_task.after += [this](const auto& hook, auto manager, auto&& args...) {
-    if (hook.get_return_address() != 0x5704C2) return;
-    const auto player = psdk_utils::player();
-
-    if (manager != &player->m_pIntelligence->m_TaskMgr) return;
-    const auto order = vehicle.process_fast_exit();
-
-    if (order == decltype(order)::no_vehicle_exit_anim) {
-      auto pos = player->m_matrix->pos;
-      pos.z += 2.f;
-      player->Teleport(pos);
-    }
+  signals_.process_control.before += [this](const auto& hook, auto ped) {
+    if (ped == psdk_utils::player()) vehicle.process_fast_exit();
+    return true;
   };
 
   signals_.pre_render.set_cb([this](const auto& hook, auto automobile) {

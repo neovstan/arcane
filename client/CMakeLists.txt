@@ -71,6 +71,8 @@ add_library(client SHARED
         src/patches/drive_on_water.h
         src/vehicle/fast_exit.cpp
         src/vehicle/fast_exit.h
+        src/actor/auto_reload.cpp
+        src/actor/auto_reload.h
 )
 
 find_package(nlohmann_json REQUIRED)

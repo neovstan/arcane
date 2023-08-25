@@ -15,6 +15,10 @@ CPlayerPed* psdk_utils::player() {
   return reinterpret_cast<CPlayerPed*>(CPools::ms_pPedPool->GetAt(0));
 }
 
+CPlayerInfo* psdk_utils::player_info() {
+  return CWorld::Players;
+}
+
 std::vector<CPed*> psdk_utils::peds_around() {
   std::vector<CPed*> peds{};
   auto& ped_pool = CPools::ms_pPedPool;

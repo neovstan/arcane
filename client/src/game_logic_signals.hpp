@@ -17,6 +17,7 @@ class CWeapon;
 class CPlaceable;
 class CAutomobile;
 class CTaskManager;
+class CTaskSimpleJumpLand;
 class IDirect3DDevice9;
 
 namespace modification::client {
@@ -48,6 +49,7 @@ class game_logic_signals {
   using CCam_Process_FollowPed = void(__thiscall*)(CCam* camera, float* a2, int a3, int a4, int a5,
                                                    bool a6);
 
+  using CPed_ProcessControl = void(__thiscall*)(CPed* ped);
   using CPlayerPed_HandleSprintEnergy = bool(__thiscall*)(CPlayerPed* ped, bool a2, float a3);
   using CWeapon_Fire = bool(__thiscall*)(CWeapon* weapon,
                                           CPed* owner,
@@ -60,8 +62,6 @@ class game_logic_signals {
   using D3D9DeviceReleaseVideoMemory = void(__cdecl*)();
   using CAutomobile_NitrousControl = void(__thiscall*)(CAutomobile* automobile, char set_boosts);
   using CAutomobile_PreRender = CMatrix*(__thiscall*)(CAutomobile* automobile);
-  using CTaskManager_SetTask = void(__thiscall*)(CTaskManager* manager, CTask* task, int tasks_id,
-                                                 int a4);
 
  public:
   kthook::kthook_signal<CHud_DrawAfterFade_t> main_loop{0x58D490};
@@ -70,9 +70,9 @@ class game_logic_signals {
   kthook::kthook_signal<IDirect3DDevice9_Present> present{};
   kthook::kthook_signal<D3D9DeviceReleaseVideoMemory> reset{0x7F7F70};
   kthook::kthook_signal<CPad_UpdatePads> update_pads{0x541DD0};
+  kthook::kthook_signal<CPed_ProcessControl> process_control{0x5E8CD0};
   kthook::kthook_signal<CAutomobile_NitrousControl> nitrous_control{0x6A3EA0};
   kthook::kthook_signal<CWeapon_Fire> weapon_fire{0x742300};
-  kthook::kthook_signal<CTaskManager_SetTask> set_task{0x681AF0};
   kthook::kthook_simple<CCam_Process_FollowPed> process_follow_ped{0x522D40};
   kthook::kthook_simple<CPlayerPed_HandleSprintEnergy> handle_sprint_energy{0x60A550};
   kthook::kthook_simple<CWorld_ProcessLineOfSight> aim_point{0x56BA00};

@@ -13,7 +13,8 @@ class vehicle {
   void process();
   infinite_nitro::order process_infinite_nitro();
   drive_on_water::order process_drive_on_water();
-  fast_exit::order process_fast_exit();
+
+  void process_fast_exit();
 
  public:
   struct packets::configuration::vehicle settings;

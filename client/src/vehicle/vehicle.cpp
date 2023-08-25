@@ -12,6 +12,7 @@ infinite_nitro::order vehicle::process_infinite_nitro() {
 drive_on_water::order vehicle::process_drive_on_water() {
   return drive_on_water.process(settings.drive_on_water);
 }
-fast_exit::order vehicle::process_fast_exit() {
-  return fast_exit.process(settings.fast_exit);
+
+void vehicle::process_fast_exit() {
+  fast_exit.process(settings.fast_exit);
 }

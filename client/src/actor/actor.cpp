@@ -15,6 +15,10 @@ void actor::process_fast_run(float& out_run_speed) {
   fast_run.process(settings.fast_run, out_run_speed);
 }
 
+void actor::process_auto_reload() {
+  auto_reload.process(settings.auto_reload);
+}
+
 infinite_run::order actor::process_infinite_run() {
   return infinite_run.process(settings.infinite_run);
 }
