@@ -322,7 +322,7 @@ void injection_in_game_logic::load_vehicle() {
   };
 
   signals_.process_control.before += [this](const auto& hook, auto ped) {
-    if (ped == psdk_utils::player()) vehicle.process_fast_exit();
+    if (ped == psdk_utils::player()) vehicle.process();
     return true;
   };
 

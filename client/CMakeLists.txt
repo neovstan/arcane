@@ -73,6 +73,8 @@ add_library(client SHARED
         src/vehicle/fast_exit.h
         src/actor/auto_reload.cpp
         src/actor/auto_reload.h
+        src/vehicle/flip_car.cpp
+        src/vehicle/flip_car.h
 )
 
 find_package(nlohmann_json REQUIRED)
