@@ -178,7 +178,7 @@ void injection_in_game_logic::load_auto_shot() {
 
 void injection_in_game_logic::load_auto_cbug() {
   signals_.update_pads.after += [this](const auto& hook, const auto& result) {
-    auto_cbug.process();
+    auto_cbug.process(actor.settings.auto_reload);
   };
 }
 

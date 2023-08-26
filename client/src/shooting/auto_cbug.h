@@ -9,7 +9,7 @@ class auto_cbug {
  public:
   auto_cbug();
 
-  void process();
+  void process(bool is_auto_reload_enabled);
 
  public:
   struct packets::configuration::auto_cbug settings;
