@@ -1,20 +1,20 @@
-#ifndef ARCANE_CLIENT_SRC_VEHICLE_SLAP_CAR_H
-#define ARCANE_CLIENT_SRC_VEHICLE_SLAP_CAR_H
+#ifndef ARCANE_CLIENT_SRC_VEHICLE_ACCELERATION_H
+#define ARCANE_CLIENT_SRC_VEHICLE_ACCELERATION_H
 
 #include <arcane_packets/configuration.hpp>
 
 namespace modification::client::vehicle {
-class slap_car {
-  using data = packets::configuration::vehicle::slap_car_data;
+class acceleration {
+  using data = packets::configuration::vehicle::acceleration_data;
 
  public:
-  slap_car();
+  acceleration();
 
   void process(const data& settings);
 
  private:
   using clock = std::chrono::steady_clock;
-  enum class state { no, process_slap } state_;
+  enum class state { no, process_accelerate } state_;
 
  private:
   void update_state(state new_state);
@@ -24,4 +24,4 @@ class slap_car {
 };
 }  // namespace modification::client::vehicle
 
-#endif  // ARCANE_CLIENT_SRC_VEHICLE_SLAP_CAR_H
+#endif  // ARCANE_CLIENT_SRC_VEHICLE_ACCELERATION_H

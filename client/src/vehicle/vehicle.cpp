@@ -3,6 +3,7 @@
 using namespace modification::client::vehicle;
 
 void vehicle::process() {
+  acceleration.process(settings.acceleration);
   repair_car.process(settings.repair_car);
   fast_exit.process(settings.fast_exit);
   flip_car.process(settings.flip_car);

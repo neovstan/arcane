@@ -1,4 +1,4 @@
-#include "slap_car.h"
+#include "acceleration.h"
 
 #include <imgui.h>
 #include <psdk_utils/psdk_utils.h>
@@ -6,10 +6,10 @@
 
 using namespace modification::client::vehicle;
 
-slap_car::slap_car() : state_{}, state_update_time_{} {
+acceleration::acceleration() : state_{}, state_update_time_{} {
 }
 
-void slap_car::process(const slap_car::data& settings) {
+void acceleration::process(const acceleration::data& settings) {
   if (!settings.enable || samp_utils::is_cursor_enabled()) return;
 
   const auto vehicle = psdk_utils::player()->m_pVehicle;
@@ -22,22 +22,21 @@ void slap_car::process(const slap_car::data& settings) {
       duration_cast<milliseconds>(clock::now() - state_update_time_).count();
 
   if (state_ == state::no && psdk_utils::key::down(settings.key)) {
-    update_state(state::process_slap);
+    update_state(state::process_accelerate);
   }
 
   const auto multiplier = 15.0f / psdk_utils::math::sqrt(ImGui::GetIO().Framerate);
-  const auto duration_to_slap = 6 * multiplier;
+  const auto duration_to_slap = 250 * multiplier;
 
-  if (state_ == state::process_slap && time_elapsed_from_state_update > duration_to_slap) {
-    auto pos = vehicle->GetPosition();
-    vehicle->SetPosn(pos.x, pos.y, pos.z + 0.18f);
-    vehicle->SetOrientation(0.f, 0.f, vehicle->GetHeading());
-    vehicle->m_vecMoveSpeed.z = 0.f;
+  if (state_ == state::process_accelerate && time_elapsed_from_state_update > duration_to_slap) {
+    auto angle = vehicle->GetHeading();
+    vehicle->m_vecMoveSpeed.x += settings.additional_acceleration * sin(angle) * -1;
+    vehicle->m_vecMoveSpeed.y += settings.additional_acceleration * cosf(angle);
     update_state(state::no);
   }
 }
 
-void slap_car::update_state(slap_car::state new_state) {
+void acceleration::update_state(acceleration::state new_state) {
   state_ = new_state;
   state_update_time_ = std::chrono::steady_clock::now();
 }
