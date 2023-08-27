@@ -18,7 +18,6 @@ class auto_reload {
   void update_state(state new_state);
 
  private:
-  unsigned char last_slot_;
   clock::time_point state_update_time_;
 };
 }  // namespace modification::client::actor

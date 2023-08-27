@@ -5,7 +5,7 @@
 
 using namespace modification::client::actor;
 
-auto_reload::auto_reload() : state_{}, state_update_time_{}, last_slot_{} {
+auto_reload::auto_reload() : state_{}, state_update_time_{} {
 }
 
 void auto_reload::process(bool enabled) {
@@ -13,13 +13,15 @@ void auto_reload::process(bool enabled) {
   auto slot = player->m_nActiveWeaponSlot;
   auto weapon = player->m_aWeapons[slot];
 
+  static auto last_slot = slot;
+
   if (!enabled || weapon.m_nType == 25 || ((slot < 2 || slot > 5) && state_ == state::no)) return;
 
   using namespace std::chrono;
 
   if (state_ == state::no && weapon.m_nAmmoInClip == 1 &&
       weapon.m_nAmmoInClip != weapon.m_nTotalAmmo) {
-    last_slot_ = slot;
+    last_slot = slot;
     update_state(state::switch_to_prev);
   }
 
@@ -31,13 +33,13 @@ void auto_reload::process(bool enabled) {
   const auto duration_switch_to_prev = 125 * multiplier, duration_switch_back = 200 * multiplier;
 
   if (state_ == state::switch_to_prev && time_elapsed_from_state_update > duration_switch_to_prev) {
-    player->SetCurrentWeapon(last_slot_ - 1);
-    player->m_aWeapons[last_slot_].Reload(player);
+    player->SetCurrentWeapon(last_slot - 1);
+    player->m_aWeapons[last_slot].Reload(player);
     update_state(state::switch_back);
   } else if (state_ == state::switch_back &&
              time_elapsed_from_state_update > duration_switch_back) {
-    player->m_aWeapons[last_slot_ - 1].Reload(player);
-    player->SetCurrentWeapon(last_slot_);
+    player->m_aWeapons[last_slot - 1].Reload(player);
+    player->SetCurrentWeapon(last_slot);
     update_state(state::no);
   }
 }

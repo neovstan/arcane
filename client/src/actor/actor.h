@@ -6,6 +6,7 @@
 #include "air_walking.h"
 #include "anti_stun.h"
 #include "fast_run.h"
+#include "heavy_fist.h"
 #include "auto_reload.h"
 #include "infinite_run.h"
 #include "spread_control.h"
@@ -25,7 +26,7 @@ class actor {
   disable_camera_reset::order process_camera_reset();
 
   void process_fast_run(float& out_run_speed);
-  void process_auto_reload();
+  void process_control();
 
  public:
   struct packets::configuration::actor settings;
@@ -34,6 +35,7 @@ class actor {
   air_walking air_walking;
   anti_stun anti_stun;
   fast_run fast_run;
+  heavy_fist heavy_fist;
   auto_reload auto_reload;
   infinite_run infinite_run;
   spread_control spread_control;

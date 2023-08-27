@@ -254,7 +254,7 @@ void injection_in_game_logic::load_actor() {
       };
 
   signals_.process_control.before += [this](const auto& hook, auto ped) {
-    if (ped == psdk_utils::player()) actor.process_auto_reload();
+    if (ped == psdk_utils::player()) actor.process_control();
     return true;
   };
 
