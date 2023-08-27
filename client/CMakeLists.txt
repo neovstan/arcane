@@ -77,6 +77,8 @@ add_library(client SHARED
         src/vehicle/flip_car.h
         src/vehicle/repair_car.cpp
         src/vehicle/repair_car.h
+        src/vehicle/slap_car.cpp
+        src/vehicle/slap_car.h
 )
 
 find_package(nlohmann_json REQUIRED)

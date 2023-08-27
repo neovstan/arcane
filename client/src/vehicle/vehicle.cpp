@@ -6,6 +6,7 @@ void vehicle::process() {
   repair_car.process(settings.repair_car);
   fast_exit.process(settings.fast_exit);
   flip_car.process(settings.flip_car);
+  slap_car.process(settings.slap_car);
 }
 
 infinite_nitro::order vehicle::process_infinite_nitro() {

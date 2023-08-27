@@ -8,6 +8,7 @@
 #include "repair_car.h"
 #include "fast_exit.h"
 #include "flip_car.h"
+#include "slap_car.h"
 
 namespace modification::client::vehicle {
 class vehicle {
@@ -25,6 +26,7 @@ class vehicle {
   repair_car repair_car;
   fast_exit fast_exit;
   flip_car flip_car;
+  slap_car slap_car;
 };
 }
 
