@@ -5,6 +5,7 @@
 
 #include "infinite_nitro.h"
 #include "drive_on_water.h"
+#include "repair_car.h"
 #include "fast_exit.h"
 #include "flip_car.h"
 
@@ -21,6 +22,7 @@ class vehicle {
  private:
   infinite_nitro infinite_nitro;
   drive_on_water drive_on_water;
+  repair_car repair_car;
   fast_exit fast_exit;
   flip_car flip_car;
 };

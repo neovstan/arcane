@@ -33,6 +33,7 @@ auto execute(T func) {
   }
 }
 
+bool is_cursor_enabled();
 void patch_anticheat();
 
 std::unordered_map<CPed*, sampapi::ID>& get_players();

@@ -75,6 +75,8 @@ add_library(client SHARED
         src/actor/auto_reload.h
         src/vehicle/flip_car.cpp
         src/vehicle/flip_car.h
+        src/vehicle/repair_car.cpp
+        src/vehicle/repair_car.h
 )
 
 find_package(nlohmann_json REQUIRED)

@@ -1,11 +1,12 @@
 #include "flip_car.h"
 
 #include <psdk_utils/psdk_utils.h>
+#include <samp_utils/samp_utils.h>
 
 using namespace modification::client::vehicle;
 
 void flip_car::process(const flip_car::data& settings) {
-  if (!settings.enable) return;
+  if (!settings.enable || samp_utils::is_cursor_enabled()) return;
 
   auto player = psdk_utils::player();
 
