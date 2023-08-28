@@ -6,6 +6,7 @@
 #include "air_walking.h"
 #include "anti_stun.h"
 #include "fast_run.h"
+#include "fake_death.h"
 #include "heavy_fist.h"
 #include "auto_reload.h"
 #include "infinite_run.h"
@@ -37,6 +38,7 @@ class actor {
   air_walking air_walking;
   anti_stun anti_stun;
   fast_run fast_run;
+  fake_death fake_death;
   heavy_fist heavy_fist;
   auto_reload auto_reload;
   infinite_run infinite_run;
