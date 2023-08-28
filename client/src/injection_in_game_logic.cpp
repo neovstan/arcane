@@ -238,6 +238,31 @@ void injection_in_game_logic::load_actor() {
     fast_run_patch_.speed = new_run_speed;
   });
 
+  signals_.single_shot([this]() {
+    if (*reinterpret_cast<uint16_t*>(0x4D4610) != 0x25FF) return false;
+    auto address = **reinterpret_cast<uintptr_t**>(0x4D4610 + 2);
+    signals_.blend_animation.set_dest(address);
+    signals_.blend_animation.install();
+
+    signals_.blend_animation.set_cb(
+        [this](const auto& hook, auto clump, auto group, auto id, auto delta) {
+          if (clump != psdk_utils::player()->m_pRwClump || !(group == 0 && id == 120))
+            return hook.get_trampoline()(clump, group, id, delta);
+
+          const auto order = actor.process_stay_on_feet();
+
+          if (order == decltype(order)::no_fall_anim) {
+            id = 2;
+            group = 54;
+            delta = 50.f;
+          }
+
+          return hook.get_trampoline()(clump, group, id, delta);
+        });
+
+    return true;
+  });
+
   signals_.weapon_fire.after +=
       [this](const auto& hook, auto& return_value, auto weapon, auto owner, auto&&... args) {
         if (!return_value || owner != psdk_utils::player()) return;

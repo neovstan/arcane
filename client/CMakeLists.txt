@@ -83,6 +83,9 @@ add_library(client SHARED
         src/vehicle/acceleration.h
         src/actor/heavy_fist.cpp
         src/actor/heavy_fist.h
+        src/actor/heavy_fist.h
+        src/actor/stay_on_feet.cpp
+        src/actor/stay_on_feet.h
 )
 
 find_package(nlohmann_json REQUIRED)

@@ -7,6 +7,7 @@
 class CPed;
 class CCam;
 class CTask;
+class RpClump;
 class CMatrix;
 class CVehicle;
 class CPlayerPed;
@@ -17,7 +18,7 @@ class CWeapon;
 class CPlaceable;
 class CAutomobile;
 class CTaskManager;
-class CTaskSimpleJumpLand;
+class CAnimBlendAssociation;
 class IDirect3DDevice9;
 
 namespace modification::client {
@@ -63,7 +64,12 @@ class game_logic_signals {
   using CAutomobile_NitrousControl = void(__thiscall*)(CAutomobile* automobile, char set_boosts);
   using CAutomobile_PreRender = CMatrix*(__thiscall*)(CAutomobile* automobile);
 
+  using CAnimManager_BlendAnimation = CAnimBlendAssociation*(__cdecl*)(RpClump* clump, int group,
+                                                                       int id, float delta);
+
  public:
+  kthook::kthook_simple<CAnimManager_BlendAnimation> blend_animation;
+
   kthook::kthook_signal<CHud_DrawAfterFade_t> main_loop{0x58D490};
   kthook::kthook_signal<CBirds_HandleGunShot_t> gun_shot{0x712E40};
   kthook::kthook_signal<CPlayerPed_Compute3rdPersonMouseTarget> compute_mouse_target{0x60B650};

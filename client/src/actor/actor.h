@@ -12,6 +12,7 @@
 #include "spread_control.h"
 #include "infinite_ammo.h"
 #include "infinite_clip.h"
+#include "stay_on_feet.h"
 #include "disable_camera_reset.h"
 
 namespace modification::client::actor {
@@ -23,6 +24,7 @@ class actor {
   infinite_run::order process_infinite_run();
   infinite_ammo::order process_infinite_ammo();
   infinite_clip::order process_infinite_clip();
+  stay_on_feet::order process_stay_on_feet();
   disable_camera_reset::order process_camera_reset();
 
   void process_fast_run(float& out_run_speed);
@@ -41,6 +43,7 @@ class actor {
   spread_control spread_control;
   infinite_ammo infinite_ammo;
   infinite_clip infinite_clip;
+  stay_on_feet stay_on_feet;
   disable_camera_reset disable_camera_reset;
 };
 }  // namespace modification::client::actor

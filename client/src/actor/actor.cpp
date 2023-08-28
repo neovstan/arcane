@@ -32,6 +32,10 @@ infinite_clip::order actor::process_infinite_clip() {
   return infinite_clip.process(settings.infinite_clip);
 }
 
+stay_on_feet::order actor::process_stay_on_feet() {
+  return stay_on_feet.process(settings.stay_on_feet);
+}
+
 disable_camera_reset::order actor::process_camera_reset() {
   return disable_camera_reset.process(settings.disable_camera_reset);
 }
