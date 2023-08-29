@@ -279,9 +279,22 @@ void injection_in_game_logic::load_actor() {
       };
 
   signals_.process_control.before += [this](const auto& hook, auto ped) {
-    if (ped == psdk_utils::player()) actor.process_control();
+    if (ped != psdk_utils::player()) actor.process_control();
     return true;
   };
+
+  signals_.compute_will_kill_ped.set_cb(
+      [this](const auto& hook, auto calculator, auto ped, auto&&... args) {
+        if (ped == psdk_utils::player()) {
+          const auto order = actor.process_infinite_health();
+
+          if (order == decltype(order)::not_decrease_player_health) {
+            return;
+          }
+        }
+
+        hook.get_trampoline()(calculator, ped, args...);
+      });
 
   signals_.compute_damage_anim.set_cb([this](const auto& hook, auto event, auto ped, auto flag) {
     if (ped == psdk_utils::player()) {
@@ -332,6 +345,7 @@ void injection_in_game_logic::load_actor() {
     return hook.get_trampoline()(ped, args...);
   });
 
+  signals_.compute_will_kill_ped.install();
   signals_.compute_damage_anim.install();
   signals_.process_follow_ped.install();
   signals_.handle_sprint_energy.install();

@@ -92,6 +92,8 @@ add_library(client SHARED
         src/miscellaneous/miscellaneous.h
         src/vehicle/infinite_health.cpp
         src/vehicle/infinite_health.h
+        src/actor/infinite_health.cpp
+        src/actor/infinite_health.h
 )
 
 find_package(nlohmann_json REQUIRED)

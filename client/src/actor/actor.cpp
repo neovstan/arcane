@@ -25,6 +25,10 @@ infinite_run::order actor::process_infinite_run() {
   return infinite_run.process(settings.infinite_run);
 }
 
+infinite_health::order actor::process_infinite_health() {
+  return infinite_health.process(settings.infinite_health);
+}
+
 infinite_ammo::order actor::process_infinite_ammo() {
   return infinite_ammo.process(settings.infinite_ammo);
 }
