@@ -67,6 +67,14 @@ class game_logic_signals {
   using CAnimManager_BlendAnimation = CAnimBlendAssociation*(__cdecl*)(RpClump* clump, int group,
                                                                        int id, float delta);
 
+  using CVehicle_VehicleDamage = void(__thiscall*)(CVehicle* vehicle, float damage, uint16_t comp,
+                                                   void* damager, RwV3d* col_coors, RwV3d* col_dir,
+                                                   unsigned int weapon);
+
+  using CVehicle_BurstTyre = bool(__thiscall*)(CVehicle* vehicle, uint8_t comp_id, bool unk);
+  using CVehicle_CanVehicleBeDamaged = bool(__thiscall*)(CVehicle* vehicle, CEntity* damager,
+                                                         unsigned int weapon, unsigned char* unk);
+
  public:
   kthook::kthook_simple<CAnimManager_BlendAnimation> blend_animation;
 
@@ -84,6 +92,11 @@ class game_logic_signals {
   kthook::kthook_simple<CWorld_ProcessLineOfSight> aim_point{0x56BA00};
   kthook::kthook_simple<CPlaceable_SetHeading> set_heading{0x43E0C0};
   kthook::kthook_simple<CEventDamage_ComputeDamageAnim> compute_damage_anim{0x4B3FC0};
+  kthook::kthook_simple<CVehicle_CanVehicleBeDamaged> can_vehicle_be_damaged{0x6D1280};
+  kthook::kthook_simple<CVehicle_VehicleDamage> vehicle_damage_automobile{0x6A7650};
+  kthook::kthook_simple<CVehicle_VehicleDamage> vehicle_damage_bike{0x6B8EC0};
+  kthook::kthook_simple<CVehicle_BurstTyre> burst_tyre_automobile{0x6A32B0};
+  kthook::kthook_simple<CVehicle_BurstTyre> burst_tyre_bike{0x6BEB20};
   kthook::kthook_simple<CAutomobile_PreRender> pre_render{0x6AAB50};
 
   void single_shot(auto func) {

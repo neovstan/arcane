@@ -3,6 +3,7 @@
 
 #include <arcane_packets/configuration.hpp>
 
+#include "infinite_health.h"
 #include "infinite_nitro.h"
 #include "drive_on_water.h"
 #include "acceleration.h"
@@ -15,6 +16,8 @@ namespace modification::client::vehicle {
 class vehicle {
  public:
   void process();
+
+  infinite_health::order process_infinite_health();
   infinite_nitro::order process_infinite_nitro();
   drive_on_water::order process_drive_on_water();
 
@@ -22,6 +25,7 @@ class vehicle {
   struct packets::configuration::vehicle settings;
 
  private:
+  infinite_health infinite_health;
   infinite_nitro infinite_nitro;
   drive_on_water drive_on_water;
   acceleration acceleration;

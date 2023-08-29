@@ -88,6 +88,10 @@ add_library(client SHARED
         src/actor/stay_on_feet.h
         src/actor/fake_death.cpp
         src/actor/fake_death.h
+        src/miscellaneous/miscellaneous.cpp
+        src/miscellaneous/miscellaneous.h
+        src/vehicle/infinite_health.cpp
+        src/vehicle/infinite_health.h
 )
 
 find_package(nlohmann_json REQUIRED)

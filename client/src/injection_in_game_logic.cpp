@@ -351,6 +351,49 @@ void injection_in_game_logic::load_vehicle() {
     return true;
   };
 
+  signals_.can_vehicle_be_damaged.set_cb([this](const auto& hook, auto veh, auto&&... args) {
+    if (veh == psdk_utils::player()->m_pVehicle) {
+      const auto order = vehicle.process_infinite_health();
+      if (order == decltype(order)::not_decrease_vehicle_health) {
+        return false;
+      }
+    }
+    return hook.get_trampoline()(veh, args...);
+  });
+
+  signals_.vehicle_damage_automobile.set_cb([this](const auto& hook, auto veh, auto&&... args) {
+    if (veh != psdk_utils::player()->m_pVehicle) return hook.get_trampoline()(veh, args...);
+
+    const auto original_value = veh->m_nVehicleFlags.bCanBeDamaged;
+    const auto order = vehicle.process_infinite_health();
+
+    if (order == decltype(order)::not_decrease_vehicle_health) {
+      veh->m_nVehicleFlags.bCanBeDamaged = false;
+    }
+
+    hook.get_trampoline()(veh, args...);
+    veh->m_nVehicleFlags.bCanBeDamaged = original_value;
+  });
+
+  signals_.vehicle_damage_bike.set_cb(signals_.vehicle_damage_automobile.get_callback());
+
+  signals_.burst_tyre_automobile.set_cb([this](const auto& hook, auto veh, auto&&... args) {
+    if (veh != psdk_utils::player()->m_pVehicle) return hook.get_trampoline()(veh, args...);
+
+    const auto original_value = veh->m_nVehicleFlags.bCanBeDamaged;
+    const auto order = vehicle.process_infinite_health();
+
+    if (order == decltype(order)::not_decrease_vehicle_health) {
+      veh->m_nVehicleFlags.bTyresDontBurst = false;
+    }
+
+    bool result = hook.get_trampoline()(veh, args...);
+    veh->m_nVehicleFlags.bTyresDontBurst = original_value;
+    return result;
+  });
+
+  signals_.burst_tyre_bike.set_cb(signals_.burst_tyre_automobile.get_callback());
+
   signals_.pre_render.set_cb([this](const auto& hook, auto automobile) {
     if (automobile == psdk_utils::player()->m_pVehicle) {
       const auto order = vehicle.process_drive_on_water();
@@ -365,5 +408,10 @@ void injection_in_game_logic::load_vehicle() {
     return result;
   });
 
+  signals_.can_vehicle_be_damaged.install();
+  signals_.vehicle_damage_automobile.install();
+  signals_.vehicle_damage_bike.install();
+  signals_.burst_tyre_automobile.install();
+  signals_.burst_tyre_bike.install();
   signals_.pre_render.install();
 }

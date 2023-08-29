@@ -10,6 +10,10 @@ void vehicle::process() {
   slap_car.process(settings.slap_car);
 }
 
+infinite_health::order vehicle::process_infinite_health() {
+  return infinite_health.process(settings.infinite_health);
+}
+
 infinite_nitro::order vehicle::process_infinite_nitro() {
   return infinite_nitro.process(settings.infinite_nitro);
 }

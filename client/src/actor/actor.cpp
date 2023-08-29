@@ -16,8 +16,8 @@ void actor::process_fast_run(float& out_run_speed) {
 }
 
 void actor::process_control() {
+  // fake_death.process(settings.fake_death);
   auto_reload.process(settings.auto_reload);
-  fake_death.process(settings.fake_death);
   heavy_fist.process(settings.heavy_fist);
 }
 
