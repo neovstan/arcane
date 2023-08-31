@@ -9,6 +9,6 @@ void fake_death::process(const fake_death::data& settings) {
   if (!settings.enable || samp_utils::is_cursor_enabled()) return;
 
   if (psdk_utils::key::pressed(settings.key)) {
-    psdk_utils::player()->m_fHealth = 0.f;
+    psdk_utils::player()->m_fHealth = 0.0f;
   }
 }

@@ -1,42 +1,62 @@
 #include "acceleration.h"
 
-#include <imgui.h>
 #include <psdk_utils/psdk_utils.h>
 #include <samp_utils/samp_utils.h>
 
 using namespace modification::client::vehicle;
 
-acceleration::acceleration() : state_{}, state_update_time_{} {
+acceleration::acceleration() : time_{clock::now()}, velocity_{} {
 }
 
-void acceleration::process(const acceleration::data& settings) {
-  if (!settings.enable || samp_utils::is_cursor_enabled()) return;
-
-  const auto vehicle = psdk_utils::player()->m_pVehicle;
-
-  if (vehicle == nullptr) return;
-
-  using namespace std::chrono;
-
-  const auto time_elapsed_from_state_update =
-      duration_cast<milliseconds>(clock::now() - state_update_time_).count();
-
-  if (state_ == state::no && psdk_utils::key::down(settings.key)) {
-    update_state(state::process_accelerate);
+void acceleration::process(const data& settings) {
+  const auto vehicle = get_vehicle(settings);
+  if (!vehicle) {
+    maintain_validity();
+    return;
   }
 
-  const auto multiplier = 15.0f / psdk_utils::math::sqrt(ImGui::GetIO().Framerate);
-  const auto duration_to_slap = 250 * multiplier;
+  const psdk_utils::local_vector velocity{vehicle->m_vecMoveSpeed};
 
-  if (state_ == state::process_accelerate && time_elapsed_from_state_update > duration_to_slap) {
-    auto angle = vehicle->GetHeading();
-    vehicle->m_vecMoveSpeed.x += settings.additional_acceleration * sin(angle) * -1;
-    vehicle->m_vecMoveSpeed.y += settings.additional_acceleration * cosf(angle);
-    update_state(state::no);
+  if (psdk_utils::key::down(settings.key)) {
+    const auto delta_time = get_delta_time();
+    const auto acceleration = (velocity - velocity_) / delta_time;
+
+    const auto difference = velocity.r() - velocity_.r();
+    const auto multiplier = 1.0f + settings.additional_acceleration;
+
+    const psdk_utils::polar_vector new_acceleration{
+        acceleration.a_xy(), acceleration.r() * (difference > 0.0f ? multiplier : 1.0f)};
+
+    vehicle->m_vecMoveSpeed = velocity_ + (new_acceleration * delta_time).local();
   }
+
+  velocity_ = velocity;
 }
 
-void acceleration::update_state(acceleration::state new_state) {
-  state_ = new_state;
-  state_update_time_ = std::chrono::steady_clock::now();
+void acceleration::maintain_validity() {
+  velocity_ = {};
+  time_ = clock::now();
+}
+
+CVehicle* acceleration::get_vehicle(const data& settings) {
+  if (!settings.enable) return nullptr;
+
+  const auto player = psdk_utils::player();
+  if (!player) return nullptr;
+
+  const auto vehicle = player->m_pVehicle;
+  if (samp_utils::is_cursor_enabled() || !vehicle) return nullptr;
+
+  return vehicle;
+}
+
+float acceleration::get_delta_time() {
+  const auto now = clock::now();
+
+  const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - time_);
+  const auto delta_time = psdk_utils::math::clamp(0.0f, float(duration.count()) / 1000.0f, 0.2f);
+
+  time_ = now;
+
+  return delta_time;
 }

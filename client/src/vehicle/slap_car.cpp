@@ -13,8 +13,7 @@ void slap_car::process(const slap_car::data& settings) {
   if (!settings.enable || samp_utils::is_cursor_enabled()) return;
 
   const auto vehicle = psdk_utils::player()->m_pVehicle;
-
-  if (vehicle == nullptr) return;
+  if (!vehicle) return;
 
   using namespace std::chrono;
 
@@ -26,7 +25,7 @@ void slap_car::process(const slap_car::data& settings) {
   }
 
   const auto multiplier = 15.0f / psdk_utils::math::sqrt(ImGui::GetIO().Framerate);
-  const auto duration_to_slap = 6 * multiplier;
+  const auto duration_to_slap = 6.0f * multiplier;
 
   if (state_ == state::process_slap && time_elapsed_from_state_update > duration_to_slap) {
     auto pos = vehicle->GetPosition();

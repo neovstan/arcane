@@ -18,8 +18,8 @@ class heavy_fist {
   void update_state(state new_state);
 
  private:
-  unsigned char last_slot_;
   clock::time_point state_update_time_;
+  unsigned char last_mode_;
 };
 }  // namespace modification::client::actor
 

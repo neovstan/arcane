@@ -239,8 +239,11 @@ void injection_in_game_logic::load_actor() {
   });
 
   signals_.single_shot([this]() {
-    if (*reinterpret_cast<uint16_t*>(0x4D4610) != 0x25FF) return false;
-    auto address = **reinterpret_cast<uintptr_t**>(0x4D4610 + 2);
+    using patch = ::plugin::patch;
+
+    if (patch::GetUShort(0x4D4610) != 0x25FF) return false;
+
+    const auto address = patch::GetUInt(patch::GetInt(0x4D4610 + 2));
     signals_.blend_animation.set_dest(address);
     signals_.blend_animation.install();
 
@@ -401,7 +404,7 @@ void injection_in_game_logic::load_vehicle() {
       veh->m_nVehicleFlags.bTyresDontBurst = false;
     }
 
-    bool result = hook.get_trampoline()(veh, args...);
+    const auto result = hook.get_trampoline()(veh, args...);
     veh->m_nVehicleFlags.bTyresDontBurst = original_value;
     return result;
   });
@@ -417,7 +420,7 @@ void injection_in_game_logic::load_vehicle() {
       }
     }
 
-    auto result = hook.get_trampoline()(automobile);
+    const auto result = hook.get_trampoline()(automobile);
     drive_on_water_patch_.restore();
     return result;
   });

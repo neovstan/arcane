@@ -12,6 +12,9 @@ class air_walking {
   using data = packets::configuration::actor::air_walking_data;
 
  public:
+  air_walking();
+
+ public:
   void process(const data& settings);
 
  private:

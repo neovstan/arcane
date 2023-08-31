@@ -8,12 +8,11 @@ using namespace modification::client::vehicle;
 void repair_car::process(const repair_car::data& settings) {
   if (!settings.enable || samp_utils::is_cursor_enabled()) return;
 
-  auto vehicle = psdk_utils::player()->m_pVehicle;
-
-  if (vehicle == nullptr) return;
+  const auto vehicle = psdk_utils::player()->m_pVehicle;
+  if (!vehicle) return;
 
   if (psdk_utils::key::pressed(settings.key)) {
-    vehicle->m_fHealth = 1000.f;
+    vehicle->m_fHealth = 1000.0f;
     vehicle->Fix();
   }
 }
