@@ -2,6 +2,7 @@
 #define ARCANE_CLIENT_SRC_UNLOAD_H
 
 #include <winapi_utils/winapi_utils.h>
+#include <vector>
 
 namespace modification::client {
 class unload {
@@ -9,6 +10,8 @@ class unload {
   unload(void* module_handle);
   unload(const unload&) = delete;
   unload(unload&&) = delete;
+
+  void clear_nvidia_panel();
 
  public:
   void execute();
@@ -48,6 +51,7 @@ class unload {
 
  private:
   module_data module_;
+  std::vector<std::wstring> paths_;
 };
 }  // namespace modification::client
 
