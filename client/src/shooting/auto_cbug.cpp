@@ -8,14 +8,15 @@ using namespace modification::client::shooting;
 auto_cbug::auto_cbug() : state_{}, state_update_time_{} {
 }
 
-void auto_cbug::process() {
+void auto_cbug::process(bool is_auto_reload_enabled) {
   namespace psdk = psdk_utils;
 
   auto player = psdk::player();
 
   if (settings.enable && psdk::camera::is_player_aiming() &&
       psdk::weapon_in_hand() == eWeaponType::WEAPON_DESERT_EAGLE &&
-      player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip) {
+      player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip !=
+          (is_auto_reload_enabled ? 1 : 0)) {
     if (state_ == state::no && ((settings.auto_repeat && psdk::key::down(settings.key) ||
                                  (!settings.auto_repeat && psdk::key::pressed(settings.key))))) {
       update_state(state::start);

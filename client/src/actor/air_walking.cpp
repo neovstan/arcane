@@ -4,6 +4,9 @@
 
 using namespace modification::client::actor;
 
+air_walking::air_walking() : time_{clock::now()}, speed_{} {
+}
+
 void air_walking::process(const data& settings) {
   if (!settings.enable) {
     maintain_validity();
@@ -85,7 +88,6 @@ void air_walking::move(const psdk_utils::local_vector& vec) {
   auto player = psdk_utils::player();
   player->SetPosn(psdk_utils::local_vector{player->GetPosition()} + vec);
 }
-
 bool air_walking::is_player_ready_to_move() {
   auto player = psdk_utils::player();
   if (!(player->IsPointerValid() && player->IsAlive())) return false;

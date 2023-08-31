@@ -377,6 +377,7 @@ public:
     void SetWeaponSkill(eWeaponType weaponType, char skill);
     void ClearLook();
     bool TurnBody();
+    int Teleport(CVector const &position);
     bool IsPointerValid();
     void GetBonePosition(RwV3d& outPosition, unsigned int boneId, bool updateSkinBones);
     CObject* GiveObjectToPedToHold(int modelIndex, unsigned char replace);

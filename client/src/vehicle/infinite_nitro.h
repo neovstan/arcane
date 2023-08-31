@@ -1,5 +1,5 @@
-#ifndef ARCANE_INFINITE_NITRO_H
-#define ARCANE_INFINITE_NITRO_H
+#ifndef ARCANE_CLIENT_SRC_VEHICLE_INFINITE_NITRO_H
+#define ARCANE_CLIENT_SRC_VEHICLE_INFINITE_NITRO_H
 
 namespace modification::client::vehicle {
 class infinite_nitro {
@@ -9,6 +9,6 @@ class infinite_nitro {
  public:
   order process(bool enabled);
 };
-}
+}  // namespace modification::client::vehicle
 
-#endif //ARCANE_INFINITE_NITRO_H
+#endif  // ARCANE_CLIENT_SRC_VEHICLE_INFINITE_NITRO_H

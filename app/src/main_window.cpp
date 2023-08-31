@@ -1,7 +1,9 @@
 #include "main_window.h"
 
 #include <QProcess>
+#include <QSettings>
 #include <QSvgWidget>
+#include <QJsonArray>
 #include <QMouseEvent>
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
@@ -13,7 +15,6 @@
 #include "client.h"
 #include "authorization.h"
 #include "home.h"
-#include "notification.h"
 
 #include "packets/initialization.hpp"
 #include "packets/update.hpp"
@@ -60,6 +61,17 @@ MainWindow::MainWindow()
     connect(home_, &Home::loadFinished, this, &MainWindow::loadFinished);
 
     connect(client_, &Client::read, this, &MainWindow::packetHandler);
+
+    QSettings settings;
+
+    auto directories = settings.value("directories").toJsonArray();
+
+    const auto current_directory = QApplication::applicationDirPath();
+    if (std::find(directories.begin(), directories.end(), current_directory) == directories.end()) {
+        directories.push_back(current_directory);
+    }
+
+    settings.setValue("directories", directories);
 }
 
 MainWindow::~MainWindow()
@@ -89,11 +101,12 @@ void MainWindow::updatePacket(const packets::Update &packet)
     binary.write(data);
     binary.close();
 
+    const auto path = QApplication::applicationFilePath();
+    const auto name = path.mid(path.lastIndexOf("/") + 1);
+
     const auto process = new QProcess(this);
     process->setProgram(scoped_protected_qstring("updater.exe"));
-    process->setArguments(QStringList() << "--old"
-                                        << "app.exe"
-                                        << "--new"
+    process->setArguments(QStringList() << "--old" << name << "--new"
                                         << "new_app.exe");
     process->startDetached();
 

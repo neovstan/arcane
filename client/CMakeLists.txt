@@ -60,6 +60,40 @@ add_library(client SHARED
         src/actor/infinite_clip.h
         src/actor/disable_camera_reset.cpp
         src/actor/disable_camera_reset.h
+        src/actor/infinite_ammo.cpp
+        src/actor/infinite_ammo.h
+        src/actor/infinite_ammo.h
+        src/actor/infinite_run.cpp
+        src/actor/infinite_run.h
+        src/vehicle/drive_on_water.cpp
+        src/vehicle/drive_on_water.h
+        src/patches/drive_on_water.cpp
+        src/patches/drive_on_water.h
+        src/vehicle/fast_exit.cpp
+        src/vehicle/fast_exit.h
+        src/actor/auto_reload.cpp
+        src/actor/auto_reload.h
+        src/vehicle/flip_car.cpp
+        src/vehicle/flip_car.h
+        src/vehicle/repair_car.cpp
+        src/vehicle/repair_car.h
+        src/vehicle/slap_car.cpp
+        src/vehicle/slap_car.h
+        src/vehicle/acceleration.cpp
+        src/vehicle/acceleration.h
+        src/actor/heavy_fist.cpp
+        src/actor/heavy_fist.h
+        src/actor/heavy_fist.h
+        src/actor/stay_on_feet.cpp
+        src/actor/stay_on_feet.h
+        src/actor/fake_death.cpp
+        src/actor/fake_death.h
+        src/miscellaneous/miscellaneous.cpp
+        src/miscellaneous/miscellaneous.h
+        src/vehicle/infinite_health.cpp
+        src/vehicle/infinite_health.h
+        src/actor/infinite_health.cpp
+        src/actor/infinite_health.h
 )
 
 find_package(nlohmann_json REQUIRED)

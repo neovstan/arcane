@@ -20,6 +20,10 @@ samp_utils::version samp_utils::get_version() {
   }
 }
 
+bool samp_utils::is_cursor_enabled() {
+  return *reinterpret_cast<uint8_t*>(0x541DF9) == 0x90;
+}
+
 void samp_utils::patch_anticheat() {
   const auto version = samp_utils::get_version();
   const auto base = sampapi::GetBase();

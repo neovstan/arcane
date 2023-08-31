@@ -178,7 +178,7 @@ void injection_in_game_logic::load_auto_shot() {
 
 void injection_in_game_logic::load_auto_cbug() {
   signals_.update_pads.after += [this](const auto& hook, const auto& result) {
-    auto_cbug.process();
+    auto_cbug.process(actor.settings.auto_reload);
   };
 }
 
@@ -238,16 +238,66 @@ void injection_in_game_logic::load_actor() {
     fast_run_patch_.speed = new_run_speed;
   });
 
+  signals_.single_shot([this]() {
+    using patch = ::plugin::patch;
+
+    if (patch::GetUShort(0x4D4610) != 0x25FF) return false;
+
+    const auto address = patch::GetUInt(patch::GetInt(0x4D4610 + 2));
+    signals_.blend_animation.set_dest(address);
+    signals_.blend_animation.install();
+
+    signals_.blend_animation.set_cb(
+        [this](const auto& hook, auto clump, auto group, auto id, auto delta) {
+          if (clump != psdk_utils::player()->m_pRwClump || !(group == 0 && id == 120))
+            return hook.get_trampoline()(clump, group, id, delta);
+
+          const auto order = actor.process_stay_on_feet();
+
+          if (order == decltype(order)::no_fall_anim) {
+            id = 2;
+            group = 54;
+            delta = 50.f;
+          }
+
+          return hook.get_trampoline()(clump, group, id, delta);
+        });
+
+    return true;
+  });
+
   signals_.weapon_fire.after +=
       [this](const auto& hook, auto& return_value, auto weapon, auto owner, auto&&... args) {
         if (!return_value || owner != psdk_utils::player()) return;
-        if (weapon->m_nAmmoInClip == weapon->m_nTotalAmmo) return;
+        const auto order_ammo = actor.process_infinite_ammo();
 
-        const auto order = actor.process_infinite_clip();
-        if (order == decltype(order)::not_decrease_ammo_in_clip) {
+        if (order_ammo == decltype(order_ammo)::not_decrease_ammo) weapon->m_nTotalAmmo++;
+
+        if (weapon->m_nAmmoInClip == weapon->m_nTotalAmmo) return;
+        const auto order_clip = actor.process_infinite_clip();
+
+        if (order_clip == decltype(order_clip)::not_decrease_ammo_in_clip) {
           weapon->m_nAmmoInClip++;
         }
       };
+
+  signals_.process_control.before += [this](const auto& hook, auto ped) {
+    if (ped != psdk_utils::player()) actor.process_control();
+    return true;
+  };
+
+  signals_.compute_will_kill_ped.set_cb(
+      [this](const auto& hook, auto calculator, auto ped, auto&&... args) {
+        if (ped == psdk_utils::player()) {
+          const auto order = actor.process_infinite_health();
+
+          if (order == decltype(order)::not_decrease_player_health) {
+            return;
+          }
+        }
+
+        hook.get_trampoline()(calculator, ped, args...);
+      });
 
   signals_.compute_damage_anim.set_cb([this](const auto& hook, auto event, auto ped, auto flag) {
     if (ped == psdk_utils::player()) {
@@ -265,7 +315,7 @@ void injection_in_game_logic::load_actor() {
     const auto player = psdk_utils::player();
     if (!player->IsAlive() || !player->GetIsOnScreen())
       return hook.get_trampoline()(camera, args...);
-    
+
     const auto order = actor.process_camera_reset();
 
     switch (order) {
@@ -286,8 +336,22 @@ void injection_in_game_logic::load_actor() {
     camera_reset_patch_.restore();
   });
 
+  signals_.handle_sprint_energy.set_cb([this](const auto& hook, auto ped, auto&&... args) {
+    if (ped == psdk_utils::player()) {
+      const auto order = actor.process_infinite_run();
+
+      if (order == decltype(order)::not_decrease_time_can_run) {
+        return true;
+      }
+    }
+
+    return hook.get_trampoline()(ped, args...);
+  });
+
+  signals_.compute_will_kill_ped.install();
   signals_.compute_damage_anim.install();
   signals_.process_follow_ped.install();
+  signals_.handle_sprint_energy.install();
 }
 
 void injection_in_game_logic::load_vehicle() {
@@ -298,4 +362,73 @@ void injection_in_game_logic::load_vehicle() {
       automobile->m_fNitroValue = -0.5f;
     }
   };
+
+  signals_.process_control.before += [this](const auto& hook, auto ped) {
+    if (ped == psdk_utils::player()) vehicle.process();
+    return true;
+  };
+
+  signals_.can_vehicle_be_damaged.set_cb([this](const auto& hook, auto veh, auto&&... args) {
+    if (veh == psdk_utils::player()->m_pVehicle) {
+      const auto order = vehicle.process_infinite_health();
+      if (order == decltype(order)::not_decrease_vehicle_health) {
+        return false;
+      }
+    }
+    return hook.get_trampoline()(veh, args...);
+  });
+
+  signals_.vehicle_damage_automobile.set_cb([this](const auto& hook, auto veh, auto&&... args) {
+    if (veh != psdk_utils::player()->m_pVehicle) return hook.get_trampoline()(veh, args...);
+
+    const auto original_value = veh->m_nVehicleFlags.bCanBeDamaged;
+    const auto order = vehicle.process_infinite_health();
+
+    if (order == decltype(order)::not_decrease_vehicle_health) {
+      veh->m_nVehicleFlags.bCanBeDamaged = false;
+    }
+
+    hook.get_trampoline()(veh, args...);
+    veh->m_nVehicleFlags.bCanBeDamaged = original_value;
+  });
+
+  signals_.vehicle_damage_bike.set_cb(signals_.vehicle_damage_automobile.get_callback());
+
+  signals_.burst_tyre_automobile.set_cb([this](const auto& hook, auto veh, auto&&... args) {
+    if (veh != psdk_utils::player()->m_pVehicle) return hook.get_trampoline()(veh, args...);
+
+    const auto original_value = veh->m_nVehicleFlags.bCanBeDamaged;
+    const auto order = vehicle.process_infinite_health();
+
+    if (order == decltype(order)::not_decrease_vehicle_health) {
+      veh->m_nVehicleFlags.bTyresDontBurst = false;
+    }
+
+    const auto result = hook.get_trampoline()(veh, args...);
+    veh->m_nVehicleFlags.bTyresDontBurst = original_value;
+    return result;
+  });
+
+  signals_.burst_tyre_bike.set_cb(signals_.burst_tyre_automobile.get_callback());
+
+  signals_.pre_render.set_cb([this](const auto& hook, auto automobile) {
+    if (automobile == psdk_utils::player()->m_pVehicle) {
+      const auto order = vehicle.process_drive_on_water();
+
+      if (order == decltype(order)::not_sink_vehicle) {
+        drive_on_water_patch_.install();
+      }
+    }
+
+    const auto result = hook.get_trampoline()(automobile);
+    drive_on_water_patch_.restore();
+    return result;
+  });
+
+  signals_.can_vehicle_be_damaged.install();
+  signals_.vehicle_damage_automobile.install();
+  signals_.vehicle_damage_bike.install();
+  signals_.burst_tyre_automobile.install();
+  signals_.burst_tyre_bike.install();
+  signals_.pre_render.install();
 }

@@ -5,6 +5,7 @@
 
 #include <CAutomobile.h>
 #include <CPlayerPed.h>
+#include <CWorld.h>
 #include <CPed.h>
 
 #include "local_vector.h"
@@ -21,6 +22,7 @@ namespace psdk_utils {
 enum game_key_state { no, down = 128 };
 
 CPlayerPed* player();
+CPlayerInfo* player_info();
 std::vector<CPed*> peds_around();
 bool is_ped_playing_anim(CPed* ped, const char* anim);
 bool is_ped_stunned(CPed* ped);
