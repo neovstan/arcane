@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("arcane");
     app.setOrganizationDomain("arcane.su");
     app.setApplicationName("app");
-    app.setApplicationVersion("2");
+    app.setApplicationVersion("3");
 
     QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Helvetica-Bold.ttf");

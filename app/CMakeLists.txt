@@ -18,7 +18,7 @@ find_package(Qt5 COMPONENTS
 
 find_package(nlohmann_json REQUIRED)
 
-add_executable(app WIN32
+add_executable(app
         rc/app.rc
         rc/app.qrc
         src/main.cpp
