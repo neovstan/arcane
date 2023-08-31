@@ -2,7 +2,7 @@
 #include <QFontDatabase>
 
 #include "main_window.h"
-
+#include <QDebug>
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Helvetica-Bold.ttf");
-
+    
     arcane::app::MainWindow w;
     w.show();
 
