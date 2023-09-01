@@ -17,6 +17,7 @@
 #include "visuals/visuals.h"
 #include "vehicle/vehicle.h"
 #include "actor/actor.h"
+#include "miscellaneous/miscellaneous.h"
 
 #include "client.h"
 
@@ -40,6 +41,7 @@ class injection_in_game_logic {
   visuals::visuals visuals;
   actor::actor actor;
   vehicle::vehicle vehicle;
+  miscellaneous::miscellaneous miscellaneous;
 
  private:
   static void load_debug_console();

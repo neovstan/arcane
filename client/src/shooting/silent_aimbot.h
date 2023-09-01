@@ -20,6 +20,8 @@ class silent_aimbot {
   enemy_finder::settings get_settings(psdk_utils::weapon::mode number);
 
  public:
+  std::vector<packets::configuration::model_group> model_groups;
+  std::vector<std::string> friendly_nicknames;
   std::unordered_map<psdk_utils::weapon::mode, packets::configuration::silent_aimbot> settings;
 
  private:

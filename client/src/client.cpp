@@ -28,8 +28,13 @@ void client::process() {
       const auto answer = query::send(socket, scoped_protected_std_string("settings"));
       auto document = nlohmann::json::parse(answer);
 
-      packets::configuration configuration;
-      from_json(document, configuration);
+      packets::user_json user_json;
+      from_json(document, user_json);
+
+      const auto configuration = user_json.patterns.front();
+
+      injection_->vector_aimbot.friendly_nicknames = user_json.friendly_nicknames;
+      injection_->vector_aimbot.model_groups = configuration.groups;
 
       injection_->vector_aimbot.settings[psdk_utils::weapon::mode::pistols] =
           configuration.vector_aimbot_pistols;
@@ -45,6 +50,9 @@ void client::process() {
 
       injection_->vector_aimbot.settings[psdk_utils::weapon::mode::rifles] =
           configuration.vector_aimbot_rifles;
+
+      injection_->silent_aimbot.friendly_nicknames = user_json.friendly_nicknames;
+      injection_->silent_aimbot.model_groups = configuration.groups;
 
       injection_->silent_aimbot.settings[psdk_utils::weapon::mode::pistols] =
           configuration.silent_aimbot_pistols;
@@ -66,6 +74,7 @@ void client::process() {
       injection_->visuals.settings = configuration.visuals;
       injection_->actor.settings = configuration.actor;
       injection_->vehicle.settings = configuration.vehicle;
+      injection_->miscellaneous.settings = configuration.miscellaneous;
 
       using namespace std::chrono_literals;
       std::this_thread::sleep_for(1s);
