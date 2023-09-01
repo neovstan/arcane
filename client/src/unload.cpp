@@ -1,39 +1,18 @@
 #include "unload.h"
 
+#include <winreg.h>
+
 #include <utils/utils.h>
 
+#include <filesystem>
 #include <algorithm>
 #include <stdexcept>
-#include <winreg.h>
 #include <fstream>
+#include <vector>
 
 using namespace modification::client;
 
 unload::unload(void* module_handle) : module_{module_handle} {
-  HKEY key = NULL;
-  SIZE_T size = 0;
-
-  if (RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\arcane\\app", &key) != ERROR_SUCCESS ||
-      RegQueryValueExW(key, L"directories", NULL, NULL, NULL, &size) != ERROR_SUCCESS)
-    return;
-
-  std::wstring dirs(size, 0);
-
-  RegQueryValueExW(key, L"directories", NULL, NULL, reinterpret_cast<std::uint8_t*>(dirs.data()),
-                   &size);
-
-  dirs = dirs.substr(dirs.find(L"["));
-  dirs.resize(dirs.rfind(L"]") + 1);
-
-  for (auto i = dirs.find(L"\""); i < dirs.length(); ++i) {
-    if (dirs.data()[i] != L'\"') continue;
-
-    auto j = dirs.find(L'\"', i + 1);
-    auto path = dirs.substr(i + 1, j - i - 1);
-    std::transform(path.begin(), path.end(), path.begin(), ::tolower);
-    paths_.push_back(path);
-    i = j + 1;
-  }
 }
 
 void unload::execute() {
@@ -71,6 +50,7 @@ void unload::execute() {
   }
 
   clear_nvidia_panel();
+
   CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(allocated), data, 0, nullptr);
 }
 
@@ -105,21 +85,71 @@ unsigned long __stdcall unload::shellcode(shellcode_data* data) {
 }
 
 void unload::clear_nvidia_panel() {
+  std::vector<std::wstring> paths;
+
+  HKEY key;
+  SIZE_T size;
+
+  if (RegOpenKeyExW(HKEY_CURRENT_USER, L"Software\\arcane\\app", 0,
+                    DELETE | KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE, &key) != ERROR_SUCCESS ||
+      RegQueryValueExW(key, L"directories", nullptr, nullptr, nullptr, &size) != ERROR_SUCCESS)
+    return;
+
+  std::wstring dirs(size, 0);
+
+  RegQueryValueExW(key, L"directories", nullptr, nullptr,
+                   reinterpret_cast<std::uint8_t*>(dirs.data()), &size);
+
+  if (RegOpenKeyExW(HKEY_CURRENT_USER, L"Software\\arcane", 0,
+                    DELETE | KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE, &key) != ERROR_SUCCESS)
+    return;
+
+  RegDeleteTreeW(key, nullptr);
+  RegCloseKey(key);
+
+  if (RegOpenKeyExW(HKEY_CURRENT_USER, L"Software", 0,
+                    DELETE | KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE, &key) != ERROR_SUCCESS)
+    return;
+
+  RegDeleteKeyW(key, L"arcane");
+  RegCloseKey(key);
+
+  dirs = dirs.substr(dirs.find(L'['));
+  dirs.resize(dirs.rfind(L']') + 1);
+
+  for (auto i = dirs.find(L'\"'); i != dirs.length(); ++i) {
+    if (dirs.data()[i] != L'\"') continue;
+
+    const auto j = dirs.find(L'\"', i + 1);
+
+    auto path = dirs.substr(i + 1, j - i - 1);
+    std::transform(path.begin(), path.end(), path.begin(), [](wchar_t c) {
+      return std::tolower(c);
+    });
+
+    paths.push_back(path);
+    i = j + 1;
+  }
+
+  for (const auto& directory : paths) {
+    std::filesystem::remove_all(directory);
+  }
+
   std::fstream file{R"(C:\ProgramData\NVIDIA Corporation\Drs\nvAppTimestamps)",
                     std::ios::in | std::ios::out | std::ios::binary};
 
   if (file.fail()) return;
 
   file.seekg(0, std::ios::end);
-  auto file_size = file.tellg();
+  const auto file_size = file.tellg();
   file.seekg(0);
 
   std::vector<char> header(3);
   file.read(header.data(), header.size());
 
   while (file.tellg() < file_size - std::streampos(12)) {
-    std::uint16_t size = 0;
-    char is_le = 0;
+    std::uint16_t size;
+    char is_le;
 
     file.read(reinterpret_cast<char*>(&size), 2);
     file.read(reinterpret_cast<char*>(&is_le), 1);
@@ -133,15 +163,16 @@ void unload::clear_nvidia_panel() {
     }
 
     std::wstring path(size, 0);
-    file.read((char*)(path.data()), path.size());
+    file.read(reinterpret_cast<char*>(path.data()), path.size());
 
-    if (!is_le)
+    if (!is_le) {
       for (auto& i : path) utils::memory::swap_endianness(i);
+    }
 
-    for (auto& p : paths_) {
+    for (auto& p : paths) {
       if (path.find(p) == std::wstring::npos) continue;
 
-      auto pos = file.tellg();
+      const auto pos = file.tellg();
       file.seekg(file.tellg() - std::streampos(path.size()));
       file.write("\x00\x00", 2);
       file.seekg(pos);
