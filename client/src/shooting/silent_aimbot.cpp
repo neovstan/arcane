@@ -161,8 +161,8 @@ enemy_finder::settings silent_aimbot::get_settings(psdk_utils::weapon::mode numb
           s.stomach,
           s.right_knee,
           s.left_knee,
-          s.model_groups,
-          s.friendly_nicknames,
+          model_groups,
+          friendly_nicknames,
           use_target_range_instead_of_weapons_};
 }
 

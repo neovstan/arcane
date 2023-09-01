@@ -5,7 +5,7 @@
 modification::client::main::main() {
 #ifdef VMP_DEBUG
   injection_ = std::make_shared<injection_in_game_logic>(
-      "neovstan", "5e6ff6c601541e6c7cccac523647b79354f0e745894c3d4b94edc24a396211bc",
+      "neovstan", "Dofragen84!",
       "0262776b8774d72c53a53d12c4146a55291bd60fd27f80b7a5db8e0f1feee896");
 #else
   const std::string data{plugin::properties().data()};
@@ -19,6 +19,8 @@ modification::client::main::main() {
 
   client_ = std::make_unique<class client>(injection_);
   unload_ = std::make_unique<class unload>(plugin::properties().module_handle());
+
+  unload_->clear_prefetch();
 }
 
 modification::client::main::~main() {

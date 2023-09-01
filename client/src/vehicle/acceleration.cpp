@@ -17,17 +17,31 @@ void acceleration::process(const data& settings) {
 
   const psdk_utils::local_vector velocity{vehicle->m_vecMoveSpeed};
 
+  const auto position = vehicle->GetPosition();
+  const auto ground_height =
+      CWorld::FindGroundZFor3DCoord(position.x, position.y, position.z, nullptr, nullptr);
+
+  if (position.z - ground_height > 1.0f) {
+    maintain_validity();
+    velocity_ = velocity;
+    return;
+  }
+
   if (psdk_utils::key::down(settings.key)) {
     const auto delta_time = get_delta_time();
     const auto acceleration = (velocity - velocity_) / delta_time;
 
-    const auto difference = velocity.r() - velocity_.r();
     const auto multiplier = 1.0f + settings.additional_acceleration;
 
-    const psdk_utils::polar_vector new_acceleration{
-        acceleration.a_xy(), acceleration.r() * (difference > 0.0f ? multiplier : 1.0f)};
+    const psdk_utils::polar_vector new_acceleration{acceleration.a_xy(),
+                                                    acceleration.r() * multiplier};
 
-    vehicle->m_vecMoveSpeed = velocity_ + (new_acceleration * delta_time).local();
+    const auto are_velocity_and_acceleration_vectors_co_directional =
+        velocity.angle(new_acceleration.local()) < 10.0f;
+
+    if (are_velocity_and_acceleration_vectors_co_directional) {
+      vehicle->m_vecMoveSpeed = velocity_ + (new_acceleration * delta_time).local();
+    }
   }
 
   velocity_ = velocity;

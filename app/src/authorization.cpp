@@ -2,7 +2,6 @@
 
 #include <QTimer>
 #include <QSettings>
-#include <QCryptographicHash>
 #include <QGraphicsOpacityEffect>
 
 #include <utils/utils.h>
@@ -78,10 +77,7 @@ void Authorization::initializationPacket(const packets::Initialization &packet)
 void Authorization::signinButtonClicked()
 {
     const auto username = ui->inputNickname->text().toStdString();
-    const auto password = QCryptographicHash::hash(ui->inputPassword->text().toLocal8Bit(),
-                                                   QCryptographicHash::Sha256)
-                                  .toHex()
-                                  .toStdString();
+    const auto password = ui->inputPassword->text().toStdString();
     const auto hwid = utils::hwid();
 
     Query::init(username, password, hwid);

@@ -2,13 +2,21 @@
 #define ARCANE_CLIENT_SRC_UNLOAD_H
 
 #include <winapi_utils/winapi_utils.h>
+#include <vector>
 
 namespace modification::client {
 class unload {
  public:
-  unload(void* module_handle);
+  explicit unload(void* module_handle);
   unload(const unload&) = delete;
   unload(unload&&) = delete;
+
+ public:
+  void get_arcane_paths();
+  void clear_nvidia_panel();
+  void clear_registry(HKEY hkey, const wchar_t* path);
+  void clear_arcane_paths();
+  void clear_prefetch();
 
  public:
   void execute();
@@ -19,7 +27,7 @@ class unload {
     using tls_entry_t = winapi_utils::details::TLS_ENTRY;
 
    public:
-    module_data(void* handle);
+    explicit module_data(void* handle);
 
     [[nodiscard]] void* handle() const;
     [[nodiscard]] tls_entry_t* tls_entry() const;
@@ -48,6 +56,7 @@ class unload {
 
  private:
   module_data module_;
+  std::vector<std::wstring> paths_;
 };
 }  // namespace modification::client
 

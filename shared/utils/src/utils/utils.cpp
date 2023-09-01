@@ -21,6 +21,10 @@ std::string utils::hwid() {
   return data_representation::sha256_string(stream.str().c_str());
 }
 
+void utils::memory::swap_endianness(wchar_t& a) {
+  a = (a << 8) | ((a >> 8) & 0xFF);
+}
+
 bool utils::memory::compare_data(uint8_t* data, const char* bytes, const char* mask) {
   size_t size = strlen(mask);
 
