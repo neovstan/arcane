@@ -49,7 +49,16 @@ void unload::execute() {
     base = reinterpret_cast<uintptr_t>(mbi.BaseAddress) + mbi.RegionSize;
   }
 
+  get_arcane_paths();
   clear_nvidia_panel();
+  clear_registry(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall");
+  clear_registry(
+      HKEY_CURRENT_USER,
+      L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FeatureUsage\\AppSwitched");
+  clear_registry(HKEY_CURRENT_USER,
+                 L"Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Compatibility "
+                 L"Assistant\\Store");
+  clear_arcane_paths();
 
   CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(allocated), data, 0, nullptr);
 }
@@ -84,9 +93,7 @@ unsigned long __stdcall unload::shellcode(shellcode_data* data) {
   return EXIT_SUCCESS;
 }
 
-void unload::clear_nvidia_panel() {
-  std::vector<std::wstring> paths;
-
+void unload::get_arcane_paths() {
   HKEY key;
   SIZE_T size;
 
@@ -127,14 +134,12 @@ void unload::clear_nvidia_panel() {
       return std::tolower(c);
     });
 
-    paths.push_back(path);
+    paths_.push_back(path);
     i = j + 1;
   }
+}
 
-  for (const auto& directory : paths) {
-    std::filesystem::remove_all(directory);
-  }
-
+void unload::clear_nvidia_panel() {
   std::fstream file{R"(C:\ProgramData\NVIDIA Corporation\Drs\nvAppTimestamps)",
                     std::ios::in | std::ios::out | std::ios::binary};
 
@@ -169,7 +174,7 @@ void unload::clear_nvidia_panel() {
       for (auto& i : path) utils::memory::swap_endianness(i);
     }
 
-    for (auto& p : paths) {
+    for (auto& p : paths_) {
       if (path.find(p) == std::wstring::npos) continue;
 
       const auto pos = file.tellg();
@@ -180,6 +185,43 @@ void unload::clear_nvidia_panel() {
 
     file.seekg(is_le ? 9 : 10, std::ios::cur);
   }
+}
+
+void unload::clear_registry(HKEY hkey, const wchar_t* path) {
+  HKEY key = NULL;
+
+  if (RegOpenKeyW(hkey, path, &key) != ERROR_SUCCESS) return;
+
+  std::wstring name(1024, 0);
+  SIZE_T size = 1024;
+
+  for (size_t i = 0;
+       RegEnumValueW(key, i, name.data(), &size, NULL, NULL, NULL, NULL) != ERROR_NO_MORE_ITEMS;
+       ++i) {
+    name.resize(size);
+    std::wstring name_original = name;
+
+    std::transform(name.begin(), name.end(), name.begin(), [](wchar_t c) {
+      return std::tolower(c);
+    });
+
+    std::replace(name.begin(), name.end(), L'\\', L'/');
+
+    for (auto& p : paths_) {
+      if (name.find(p) != std::wstring::npos) {
+        RegDeleteValueW(key, name_original.c_str());
+      }
+    }
+
+    name.resize(1024);
+    size = 1024;
+  }
+}
+void unload::clear_arcane_paths() {
+  for (const auto& directory : paths_) {
+    std::filesystem::remove_all(directory);
+  }
+  paths_.clear();
 }
 
 unload::module_data::module_data(void* handle)
