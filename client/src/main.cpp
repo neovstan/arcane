@@ -19,6 +19,8 @@ modification::client::main::main() {
 
   client_ = std::make_unique<class client>(injection_);
   unload_ = std::make_unique<class unload>(plugin::properties().module_handle());
+
+  unload_->clear_prefetch();
 }
 
 modification::client::main::~main() {

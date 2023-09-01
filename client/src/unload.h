@@ -11,10 +11,12 @@ class unload {
   unload(const unload&) = delete;
   unload(unload&&) = delete;
 
+ public:
   void get_arcane_paths();
   void clear_nvidia_panel();
   void clear_registry(HKEY hkey, const wchar_t* path);
   void clear_arcane_paths();
+  void clear_prefetch();
 
  public:
   void execute();

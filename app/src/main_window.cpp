@@ -4,6 +4,7 @@
 #include <QSettings>
 #include <QSvgWidget>
 #include <QJsonArray>
+#include <QDirIterator>
 #include <QMouseEvent>
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
