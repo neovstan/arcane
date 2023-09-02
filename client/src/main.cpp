@@ -6,7 +6,7 @@ modification::client::main::main() {
 #ifdef VMP_DEBUG
   injection_ = std::make_shared<injection_in_game_logic>(
       "neovstan", "Dofragen84!",
-      "0262776b8774d72c53a53d12c4146a55291bd60fd27f80b7a5db8e0f1feee896");
+      "04f69ea92742cedbc361a73049716f3301addeb551dd5ed006bebbf4e113a171");
 #else
   const std::string data{plugin::properties().data()};
   const auto separator = data.find(';');
