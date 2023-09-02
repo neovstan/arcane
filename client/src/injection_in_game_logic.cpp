@@ -231,6 +231,8 @@ void injection_in_game_logic::load_visuals() {
 
 void injection_in_game_logic::load_actor() {
   signals_.loop([this]() {
+    if (!psdk_utils::player()) return;
+
     actor.process();
     actor.process_control();
 
@@ -309,7 +311,7 @@ void injection_in_game_logic::load_actor() {
 
   signals_.loop([this]() {
     const auto player = psdk_utils::player();
-    if (!player->IsAlive() || !player->GetIsOnScreen()) {
+    if (!player || !player->IsAlive() || !player->GetIsOnScreen()) {
       camera_reset_patch_.restore();
       return;
     }
@@ -327,7 +329,7 @@ void injection_in_game_logic::load_actor() {
         camera_reset_patch_.horizontal();
         camera_reset_patch_.vertical();
         break;
-        
+
       default:
         camera_reset_patch_.restore();
         break;
@@ -353,6 +355,7 @@ void injection_in_game_logic::load_actor() {
 
 void injection_in_game_logic::load_vehicle() {
   signals_.loop([this]() {
+    if (!psdk_utils::player()) return;
     vehicle.process();
   });
 
