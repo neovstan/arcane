@@ -232,6 +232,7 @@ void injection_in_game_logic::load_visuals() {
 void injection_in_game_logic::load_actor() {
   signals_.loop([this]() {
     actor.process();
+    actor.process_control();
 
     auto new_run_speed = 1.0f;
     actor.process_fast_run(new_run_speed);
@@ -281,11 +282,6 @@ void injection_in_game_logic::load_actor() {
         }
       };
 
-  signals_.process_control.before += [this](const auto& hook, auto ped) {
-    if (ped != psdk_utils::player()) actor.process_control();
-    return true;
-  };
-
   signals_.compute_will_kill_ped.set_cb(
       [this](const auto& hook, auto calculator, auto ped, auto&&... args) {
         if (ped == psdk_utils::player()) {
@@ -311,10 +307,12 @@ void injection_in_game_logic::load_actor() {
     hook.get_trampoline()(event, ped, flag);
   });
 
-  signals_.process_follow_ped.set_cb([this](const auto& hook, auto camera, auto&&... args) {
+  signals_.loop([this]() {
     const auto player = psdk_utils::player();
-    if (!player->IsAlive() || !player->GetIsOnScreen())
-      return hook.get_trampoline()(camera, args...);
+    if (!player->IsAlive() || !player->GetIsOnScreen()) {
+      camera_reset_patch_.restore();
+      return;
+    }
 
     const auto order = actor.process_camera_reset();
 
@@ -328,12 +326,12 @@ void injection_in_game_logic::load_actor() {
       case actor::disable_camera_reset::order::not_reset_camera_all:
         camera_reset_patch_.horizontal();
         camera_reset_patch_.vertical();
+        break;
+        
       default:
+        camera_reset_patch_.restore();
         break;
     }
-
-    hook.get_trampoline()(camera, args...);
-    camera_reset_patch_.restore();
   });
 
   signals_.handle_sprint_energy.set_cb([this](const auto& hook, auto ped, auto&&... args) {
@@ -350,22 +348,20 @@ void injection_in_game_logic::load_actor() {
 
   signals_.compute_will_kill_ped.install();
   signals_.compute_damage_anim.install();
-  signals_.process_follow_ped.install();
   signals_.handle_sprint_energy.install();
 }
 
 void injection_in_game_logic::load_vehicle() {
+  signals_.loop([this]() {
+    vehicle.process();
+  });
+
   signals_.nitrous_control.after += [this](const auto& hook, auto automobile, auto set_boosts) {
     if (automobile != psdk_utils::player()->m_pVehicle) return;
     const auto order = vehicle.process_infinite_nitro();
     if (order == decltype(order)::not_decrease_vehicle_nitro_level) {
       automobile->m_fNitroValue = -0.5f;
     }
-  };
-
-  signals_.process_control.before += [this](const auto& hook, auto ped) {
-    if (ped == psdk_utils::player()) vehicle.process();
-    return true;
   };
 
   signals_.can_vehicle_be_damaged.set_cb([this](const auto& hook, auto veh, auto&&... args) {
