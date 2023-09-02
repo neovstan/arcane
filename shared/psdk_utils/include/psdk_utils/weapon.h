@@ -11,7 +11,7 @@ inline eWeaponType weapon_in_hand() {
 }
 
 namespace weapon {
-enum class mode { pistols, shotguns, semi, assault, rifles, unknown };
+enum class mode : int { pistols, shotguns, semi, assault, rifles, unknown };
 inline mode get_mode(const eWeaponType weapon) {
   switch (weapon) {
     case WEAPON_PISTOL:

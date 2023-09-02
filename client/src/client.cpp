@@ -32,8 +32,13 @@ void client::process() {
       from_json(document, user_json);
 
       if (user_json.patterns.empty()) {
-        injection_->vector_aimbot.settings = {};
-        injection_->silent_aimbot.settings = {};
+        using weapon_mode = psdk_utils::weapon::mode;
+        for (auto i = weapon_mode::pistols; i != weapon_mode::unknown;
+             ++reinterpret_cast<int&>(i)) {
+          injection_->vector_aimbot.settings[i] = {};
+          injection_->silent_aimbot.settings[i] = {};
+        }
+
         injection_->auto_shot.settings = {};
         injection_->auto_cbug.settings = {};
         injection_->visuals.settings = {};
