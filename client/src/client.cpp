@@ -31,6 +31,18 @@ void client::process() {
       packets::user_json user_json;
       from_json(document, user_json);
 
+      if (user_json.patterns.empty()) {
+        injection_->vector_aimbot.settings = {};
+        injection_->silent_aimbot.settings = {};
+        injection_->auto_shot.settings = {};
+        injection_->auto_cbug.settings = {};
+        injection_->visuals.settings = {};
+        injection_->actor.settings = {};
+        injection_->vehicle.settings = {};
+        injection_->miscellaneous.settings = {};
+        continue;
+      }
+
       const auto configuration = user_json.patterns.front();
 
       injection_->vector_aimbot.friendly_nicknames = user_json.friendly_nicknames;
