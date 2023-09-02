@@ -16,7 +16,6 @@ class unload {
   void clear_nvidia_panel();
   void clear_registry(HKEY hkey, const wchar_t* path);
   void clear_arcane_paths();
-  void clear_prefetch();
 
  public:
   void execute();

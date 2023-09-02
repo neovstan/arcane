@@ -59,7 +59,6 @@ void unload::execute() {
                  L"Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Compatibility "
                  L"Assistant\\Store");
   clear_arcane_paths();
-  clear_prefetch();
 
   CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(allocated), data, 0, nullptr);
 }
@@ -224,15 +223,6 @@ void unload::clear_arcane_paths() {
     std::filesystem::remove_all(directory);
   }
   paths_.clear();
-}
-
-void unload::clear_prefetch() {
-  for (const auto& file : std::filesystem::recursive_directory_iterator{R"(C:\Windows\Prefetch)"}) {
-    const auto path = file.path().string();
-    if (path.find("UPDATER.EXE") != std::string::npos) {
-      std::filesystem::remove(file);
-    }
-  }
 }
 
 unload::module_data::module_data(void* handle)
