@@ -79,3 +79,22 @@ winapi_utils::details::PTLS_ENTRY winapi_utils::get_tls_entry() {
 
   return address ? *reinterpret_cast<details::PTLS_ENTRY*>(address + 3) : nullptr;
 }
+
+bool winapi_utils::is_process_elevated() {
+  HANDLE token;
+
+  if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &token)) {
+    CloseHandle(token);
+    return false;
+  }
+
+  TOKEN_ELEVATION elevation;
+  DWORD dwSize;
+
+  if (!GetTokenInformation(token, TokenElevation, &elevation, sizeof(elevation), &dwSize)) {
+    CloseHandle(token);
+    return false;
+  }
+
+  return elevation.TokenIsElevated;
+}

@@ -9,12 +9,14 @@
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
 
+#include <winapi_utils/winapi_utils.h>
 #include <protected_string/protected_string.h>
 
 #include "query.h"
 
 #include "client.h"
 #include "authorization.h"
+#include "notification.h"
 #include "home.h"
 
 #include "packets/initialization.hpp"
@@ -73,6 +75,10 @@ MainWindow::MainWindow()
     }
 
     settings.setValue("directories", directories);
+
+    if (!winapi_utils::is_process_elevated()) {
+        new Notification(tr("Please, run with the admin rights"), this);
+    }
 }
 
 MainWindow::~MainWindow()
