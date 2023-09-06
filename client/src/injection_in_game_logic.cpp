@@ -246,8 +246,11 @@ void injection_in_game_logic::load_actor() {
 
     if (patch::GetUShort(0x4D4610) != 0x25FF) return false;
 
-    const auto address = patch::GetUInt(patch::GetInt(0x4D4610 + 2));
-    signals_.blend_animation.set_dest(address);
+    if (patch::GetUChar(0x4D4617) != 0xE8) {  // ignore if rodina rp
+      const auto address = patch::GetUInt(patch::GetInt(0x4D4610 + 2));
+      signals_.blend_animation.set_dest(address);
+    }
+
     signals_.blend_animation.install();
 
     signals_.blend_animation.set_cb(
