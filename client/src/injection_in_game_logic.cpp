@@ -246,8 +246,11 @@ void injection_in_game_logic::load_actor() {
 
     if (patch::GetUShort(0x4D4610) != 0x25FF) return false;
 
-    const auto address = patch::GetUInt(patch::GetInt(0x4D4610 + 2));
-    signals_.blend_animation.set_dest(address);
+    if (patch::GetUChar(0x4D4617) != 0xE8) {
+      const auto address = patch::GetUInt(patch::GetInt(0x4D4610 + 2));
+      signals_.blend_animation.set_dest(address);
+    }  // rodina rp fix
+
     signals_.blend_animation.install();
 
     signals_.blend_animation.set_cb(
@@ -358,6 +361,13 @@ void injection_in_game_logic::load_vehicle() {
     if (!psdk_utils::player()) return;
     vehicle.process();
   });
+
+  using patch = ::plugin::patch;
+
+  if (patch::GetUChar(0x6AAB50) == 0xE9) {
+    auto dest = 0x6AAB50 + patch::GetUInt(0x6AAB50 + 1) + 5;
+    signals_.pre_render.set_dest(dest);
+  }  // amazing rp fix
 
   signals_.nitrous_control.after += [this](const auto& hook, auto automobile, auto set_boosts) {
     if (automobile != psdk_utils::player()->m_pVehicle) return;

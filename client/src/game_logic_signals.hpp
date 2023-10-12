@@ -78,8 +78,6 @@ class game_logic_signals {
                                                          unsigned int weapon, unsigned char* unk);
 
  public:
-  kthook::kthook_simple<CAnimManager_BlendAnimation> blend_animation;
-
   kthook::kthook_signal<CHud_DrawAfterFade_t> main_loop{0x58D490};
   kthook::kthook_signal<CBirds_HandleGunShot_t> gun_shot{0x712E40};
   kthook::kthook_signal<CPlayerPed_Compute3rdPersonMouseTarget> compute_mouse_target{0x60B650};
@@ -95,6 +93,7 @@ class game_logic_signals {
   kthook::kthook_simple<CPedDamageResponseCalculator_ComputeWillKillPed> compute_will_kill_ped{
       0x4B3210};
   kthook::kthook_simple<CVehicle_CanVehicleBeDamaged> can_vehicle_be_damaged{0x6D1280};
+  kthook::kthook_simple<CAnimManager_BlendAnimation> blend_animation{0x4D4610};
   kthook::kthook_simple<CVehicle_VehicleDamage> vehicle_damage_automobile{0x6A7650};
   kthook::kthook_simple<CVehicle_VehicleDamage> vehicle_damage_bike{0x6B8EC0};
   kthook::kthook_simple<CVehicle_BurstTyre> burst_tyre_automobile{0x6A32B0};
