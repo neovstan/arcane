@@ -1,6 +1,6 @@
 # arcane
 > Multifunctional modification as an in-game module for Grand Theft Auto: San Andreas with support for SA-MP.  
-> Currently under active development
+> Currently NOT under active development
 ## What's unique?
 The modification has an exclusively remote configuration system, thanks to which hacking of the module's licensing system to the user's computer is severely limited, since in this case there is no possibility to conveniently configure and share settings with other users.
 ## What libraries are used?
