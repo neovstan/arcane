@@ -14,7 +14,7 @@ set(CMAKE_GENERATOR_PLATFORM "Win32" CACHE STRING "" FORCE)
 
 add_compile_definitions(ARCANE_SERVER_IP="")
 add_compile_definitions(ARCANE_SERVER_KEY="")
-add_compile_definitions(ARCANE_SERVER_PORT=1111)
+add_compile_definitions(ARCANE_SERVER_PORT=444)
 
 add_compile_definitions(USE_PROTECTED_STRINGS=1)
 
