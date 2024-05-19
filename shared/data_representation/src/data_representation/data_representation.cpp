@@ -4,8 +4,8 @@
 #include <iomanip>  // std::setfill
 #include <sstream>  // std::ostringstream
 
-// SHA256_Init, SHA256_Update, SHA256_Final
-#include <openssl/sha.h>
+// SHA256::Init, SHA256::Update, SHA256::Final
+#include <cryptopp/sha.h>
 
 std::string data_representation::byte_array_as_hex_string(const std::vector<unsigned char>& in) {
   std::ostringstream stream{};
@@ -58,14 +58,16 @@ std::string data_representation::file_as_hex_string(std::string_view path) {
 
 std::string data_representation::sha256_string(const char* in) {
   const auto hash = [in]() {
-    unsigned char hash[SHA256_DIGEST_LENGTH]{};
+    using namespace CryptoPP;
 
-    SHA256_CTX context{};
-    SHA256_Init(&context);
-    SHA256_Update(&context, in, std::strlen(in));
-    SHA256_Final(hash, &context);
+    SHA256 hash;
+    std::string digest;
 
-    return std::vector<unsigned char>(hash, hash + sizeof(hash));
+    hash.Update(reinterpret_cast<const byte*>(in), std::strlen(in));
+    digest.resize(hash.DigestSize());
+    hash.Final(reinterpret_cast<byte*>(&digest[0]));
+
+    return std::vector<unsigned char>(digest.begin(), digest.end());
   }();
 
   return byte_array_as_hex_string(hash);
@@ -78,19 +80,21 @@ std::string data_representation::sha256_file(std::string_view path) {
   }
 
   const auto hash = [&file]() {
-    SHA256_CTX context{};
-    SHA256_Init(&context);
+    using namespace CryptoPP;
 
+    SHA256 hash;
     char buffer[1 << 12]{};
-    unsigned char hash[SHA256_DIGEST_LENGTH]{};
 
     while (file.good()) {
       file.read(buffer, sizeof(buffer));
-      SHA256_Update(&context, buffer, file.gcount());
+      hash.Update(reinterpret_cast<const byte*>(buffer), file.gcount());
     }
 
-    SHA256_Final(hash, &context);
-    return std::vector<unsigned char>(hash, hash + sizeof(hash));
+    std::string digest;
+    digest.resize(hash.DigestSize());
+    hash.Final(reinterpret_cast<byte*>(&digest[0]));
+
+    return std::vector<unsigned char>(digest.begin(), digest.end());
   }();
 
   return byte_array_as_hex_string(hash);
@@ -98,14 +102,16 @@ std::string data_representation::sha256_file(std::string_view path) {
 
 std::string data_representation::sha256_byte_array(const std::vector<unsigned char>& in) {
   const auto hash = [in]() {
-    unsigned char hash[SHA256_DIGEST_LENGTH];
+    using namespace CryptoPP;
 
-    SHA256_CTX context{};
-    SHA256_Init(&context);
-    SHA256_Update(&context, in.data(), in.size());
-    SHA256_Final(hash, &context);
+    SHA256 hash;
+    std::string digest;
 
-    return std::vector<unsigned char>(hash, hash + sizeof(hash));
+    hash.Update(reinterpret_cast<const byte*>(in.data()), in.size());
+    digest.resize(hash.DigestSize());
+    hash.Final(reinterpret_cast<byte*>(&digest[0]));
+
+    return std::vector<unsigned char>(digest.begin(), digest.end());
   }();
 
   return byte_array_as_hex_string(hash);

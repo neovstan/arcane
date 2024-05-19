@@ -96,9 +96,6 @@ add_library(client SHARED
         src/actor/infinite_health.h
 )
 
-find_package(nlohmann_json REQUIRED)
-find_package(imgui REQUIRED)
-
 cmrc_add_resource_library(
         fonts
         rc/fonts/jetbrains_mono_bold.ttf
@@ -108,7 +105,7 @@ cmrc_add_resource_library(
 target_link_libraries(client PRIVATE
         ws2_32
         wsock32
-        imgui::imgui
+        ImGui::imgui
         nlohmann_json::nlohmann_json
         pluginsdk::gtasa
         sampapi

@@ -16,3 +16,9 @@
 [submodule "third-party/SAMP-API"]
 	path = third-party/SAMP-API
 	url = https://github.com/neovstan/SAMP-API.git
+[submodule "third-party/nlohmann_json"]
+	path = third-party/nlohmann_json
+	url = https://github.com/nlohmann/json
+[submodule "third-party/imgui"]
+	path = third-party/imgui
+	url = https://github.com/giladreich/cmake-imgui
