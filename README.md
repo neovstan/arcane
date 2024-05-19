@@ -24,17 +24,13 @@ You can see some of it in the third-party folder. Some modules are connected via
 ## Why CMake?
 Because it provides great opportunities to separate modules, thus allowing to simplify the architecture of the project and not to mix parts that should not overlap and know something about each other.
 ## How can I build?
-Default conan profile must be x86 and release.
 ```
 git clone https://github.com/neovstan/arcane.git
 cd arcane
 git submodule update --init --remote --recursive
-conan install . --output-folder=build --build=missing
-cmake --preset conan-default
-cd build
-cmake .. -DQT_PATH="your qt path" -DASI_PLUGIN_OUTPUT_DIR="your gta path" -DVMP_DEBUG=1
+cmake -G "Visual Studio 17 2022" -A Win32 -DQT_PATH="C:\Qt\5.15.0\msvc2019" -DASI_PLUGIN_OUTPUT_DIR="C:\Users\carre\Games\GTA San Andreas" -DVMP_DEBUG=1 -S ./ -B "out"
 ```
-Then open the project folder in Visual Studio 2022
+Then open the project folder in Qt Creator / CLion / another IDE and import existing configuration `out`
 
 ## 
 ### Available functionality
