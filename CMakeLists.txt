@@ -4,9 +4,9 @@ cmake_minimum_required(VERSION 3.26)
 project(arcane)
 
 add_compile_options(
-    $<$<CONFIG:>:/MT>
-    $<$<CONFIG:Debug>:/MTd>
-    $<$<CONFIG:Release>:/MT>
+    $<$<CONFIG:>:/MD>
+    $<$<CONFIG:Debug>:/MDd>
+    $<$<CONFIG:Release>:/MD>
 )
 
 if (VMP_DEBUG)

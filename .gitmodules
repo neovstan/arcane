@@ -19,6 +19,6 @@
 [submodule "third-party/nlohmann_json"]
 	path = third-party/nlohmann_json
 	url = https://github.com/nlohmann/json
-[submodule "third-party/imgui"]
-	path = third-party/imgui
-	url = https://github.com/giladreich/cmake-imgui
+[submodule "third-party/cmake-imgui"]
+	path = third-party/cmake-imgui
+	url = https://github.com/neovstan/cmake-imgui
