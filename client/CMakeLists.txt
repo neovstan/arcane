@@ -26,10 +26,6 @@ add_library(client SHARED
         src/patches/camera_reset.h
         src/patches/fast_run.cpp
         src/patches/fast_run.h
-        src/backends/imgui_impl_dx9.cpp
-        src/backends/imgui_impl_dx9.h
-        src/backends/imgui_impl_win32.cpp
-        src/backends/imgui_impl_win32.h
         src/shooting/enemy_finder.cpp
         src/shooting/enemy_finder.h
         src/shooting/vector_aimbot.cpp

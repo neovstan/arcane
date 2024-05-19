@@ -68,12 +68,10 @@ void visuals::process() {
     if (settings.fov) fov(i, vector_aimbot_fov_color_, silent_aimbot_fov_color_);
   }
 
-  if (settings.hide_samp_nametag) {
-    samp_utils::execute([&](auto version) {
-      samp_utils::invoke<decltype(version)>::set_nametag_visibility_status(
-          !settings.hide_samp_nametag);
-    });
-  }
+  samp_utils::execute([&](auto version) {
+    samp_utils::invoke<decltype(version)>::set_nametag_visibility_status(
+        !settings.hide_samp_nametag);
+  });
 
   if (settings.framerate) framerate();
 }

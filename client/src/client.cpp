@@ -4,6 +4,8 @@
 
 #include <VMProtectSDK.h>
 
+#include <utility>
+
 #include "socket.h"
 #include "query.h"
 #include "injection_in_game_logic.h"
@@ -11,7 +13,7 @@
 using namespace modification::client;
 
 client::client(std::shared_ptr<injection_in_game_logic> injection)
-    : injection_{injection}, thread_{&client::process, this} {
+    : injection_{std::move(injection)}, thread_{&client::process, this} {
 }
 
 void client::process() {

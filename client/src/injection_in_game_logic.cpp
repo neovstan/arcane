@@ -25,8 +25,8 @@
 
 // local
 
-#include "backends/imgui_impl_dx9.h"
-#include "backends/imgui_impl_win32.h"
+#include <backends/imgui_impl_dx9.h>
+#include <backends/imgui_impl_win32.h>
 
 #include "main.h"
 
@@ -67,6 +67,9 @@ void injection_in_game_logic::load_imgui_context() {
 }
 
 void injection_in_game_logic::load_anticheat_patch() {
+  if (::plugin::patch::GetUChar(0x6AAB50) == 0xE9) // amazing fix
+    return;
+
   signals_.single_shot([]() {
     samp_utils::patch_anticheat();
   });
@@ -435,7 +438,10 @@ void injection_in_game_logic::load_vehicle() {
   });
 
   signals_.can_vehicle_be_damaged.install();
-  signals_.vehicle_damage_automobile.install();
+
+  if (patch::GetUChar(0x6AAB50) != 0xE9) // amazing fix
+    signals_.vehicle_damage_automobile.install();
+
   signals_.vehicle_damage_bike.install();
   signals_.burst_tyre_automobile.install();
   signals_.burst_tyre_bike.install();

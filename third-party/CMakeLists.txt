@@ -7,6 +7,9 @@ cmake_minimum_required(VERSION 3.16)
 # 3. In order to connect the library to the project, we have to call target_link_libraries(${PROJECT_NAME} PRIVATE <name>)
 
 option(INFOWARE_USE_D3D "" ON)
+set(IMGUI_WITH_BACKEND ON)
+set(IMGUI_BACKEND_PLATFORM WIN32)
+set(IMGUI_BACKEND_DX9 ON)
 
 add_subdirectory(cryptopp-cmake)
 add_subdirectory(plugin-sdk)
