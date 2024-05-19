@@ -28,10 +28,13 @@ Because it provides great opportunities to separate modules, thus allowing to si
 git clone https://github.com/neovstan/arcane.git
 cd arcane
 git submodule update --init --remote --recursive
-cmake -G "Visual Studio 17 2022" -A Win32 -DQT_PATH="path_to_qt_folder\5.15.0\msvc2019" -DASI_PLUGIN_OUTPUT_DIR="path" -DVMP_DEBUG=1 -S ./ -B out
-cmake --build out --config Release
 ```
-Then open the project folder in Qt Creator / CLion / another IDE and import existing configuration `out`
+Then open the project folder in CLion and set following settings of configuration.
+![image](https://github.com/neovstan/arcane/assets/138371982/381b6ac6-011f-40c7-85b0-5ea54bf09de4)
+![image](https://github.com/neovstan/arcane/assets/138371982/f5644422-6ba5-457d-83b2-c51e2d9cf68b)
+```
+-A Win32 -DQT_PATH="path_to_qt\5.15.0\msvc2019" -DASI_PLUGIN_OUTPUT_DIR="path_to_game" -DVMP_DEBUG=1
+```
 
 ## 
 ### Available functionality
